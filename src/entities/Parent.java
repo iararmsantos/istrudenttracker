@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package entities;
 
 /**
- *
- * @author iarar
+ * Purpose: To keep track of each student parents
+ * By: Iara Santos
+ * Date: 01/25/2022
  */
-public class Parent {
+public class Parent extends Person{
     
 }

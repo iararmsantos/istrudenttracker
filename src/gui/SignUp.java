@@ -229,15 +229,15 @@ public class SignUp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     Login lframe = new Login();
     private void btnSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignupActionPerformed
-        
-        
-        SignUp sFrame = new SignUp();
         lframe.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnSignupActionPerformed
 
     private void lblExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblExitMouseClicked
         lframe.setVisible(true);
+        SignUp sFrame = new SignUp();
+        sFrame.setVisible(false);
+        dispose();
     }//GEN-LAST:event_lblExitMouseClicked
 
     /**
