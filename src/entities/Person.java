@@ -1,3 +1,4 @@
+
 /*
  * This class will be the parent class for Teacher, Students and Parents classes
  * By: Iara Santos
@@ -7,18 +8,31 @@ package entities;
 
 public class Person {
     private int Id;
+    
     private String fName;
     private String lName;
+    private String phone;
     private String email;
 
     public Person() {
+        
+
     }
 
-    public Person(int Id, String fName, String lName, String email) {
-        this.Id = Id;
+    public Person(String fName, String lName, String phone, String email) {
+        
         this.fName = fName;
         this.lName = lName;
+        this.phone = phone;
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public int getId() {

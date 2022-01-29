@@ -10,13 +10,13 @@ import java.util.logging.Logger;
 
 public class DBMaria {
 
-    private static Connection c = null;
+    private static Connection c = null;       
 
     public static Connection getConnection() {
         if (c == null) {
             try {
                 Class.forName("org.mariadb.jdbc.Driver");
-                c = DriverManager.getConnection("jdbc:mariadb://localhost:3306/Books",
+                c = DriverManager.getConnection("jdbc:mariadb://localhost:3306/istracker",
             "root", "");
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -1,6 +1,6 @@
 package model;
 
-import db.DBPostgres;
+import db.DBMaria;
 import entities.Teacher;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,13 +47,13 @@ public class TeachersDB {
                     int id = rs.getInt(1);
                     obj.setId(id);
                 }
-                DBPostgres.closeResultSet(rs);
+                DBMaria.closeResultSet(rs);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBPostgres.closeStatement(st);
+            DBMaria.closeStatement(st);
         }
     }
 
@@ -73,7 +73,7 @@ public class TeachersDB {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBPostgres.closeStatement(st);
+            DBMaria.closeStatement(st);
         }
     }
 
@@ -88,7 +88,7 @@ public class TeachersDB {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBPostgres.closeStatement(st);
+            DBMaria.closeStatement(st);
         }
     }
 
@@ -114,8 +114,8 @@ public class TeachersDB {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBPostgres.closeStatement(st);
-            DBPostgres.closeResultSet(rs);
+            DBMaria.closeStatement(st);
+            DBMaria.closeResultSet(rs);
         }
         return null;
     }
@@ -143,8 +143,8 @@ public class TeachersDB {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBPostgres.closeStatement(st);
-            DBPostgres.closeResultSet(rs);
+            DBMaria.closeStatement(st);
+            DBMaria.closeResultSet(rs);
         }
         return null;
     }
@@ -185,8 +185,8 @@ public class TeachersDB {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBPostgres.closeStatement(st);
-            DBPostgres.closeResultSet(rs);
+            DBMaria.closeStatement(st);
+            DBMaria.closeResultSet(rs);
         }
         return null;
     }

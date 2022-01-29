@@ -278,7 +278,8 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_lblSignupMousePressed
 
     private void lblSignupMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSignupMouseEntered
-        lblSignup.setForeground(new Color(64,43,100));
+        lblSignup.setForeground(new Color(122,72,221));
+        
         lblSignup.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_lblSignupMouseEntered
 

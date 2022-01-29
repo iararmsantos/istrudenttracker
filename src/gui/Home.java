@@ -5,10 +5,16 @@
  */
 package gui;
 
+import entities.Parent;
+import entities.Student;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.JTableHeader;
 
 /**
@@ -20,6 +26,7 @@ public class Home extends javax.swing.JFrame {
     /**
      * Creates new form Home
      */
+    
     public Home() {
         initComponents();   
         
@@ -47,6 +54,10 @@ public class Home extends javax.swing.JFrame {
         
         //tblSearchResult
         configureTableHeader(tblSearchResult);
+        
+        //tblGradesAvg
+        configureTableHeader(tblGradesAvg);
+               
     }
 
     /**
@@ -88,7 +99,7 @@ public class Home extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txtStudentFName = new javax.swing.JTextField();
-        txtLStudentLName = new javax.swing.JTextField();
+        txtStudentLName = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         txtStudentPhone = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
@@ -212,10 +223,8 @@ public class Home extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-        setMaximumSize(new java.awt.Dimension(1280, 800));
         setMinimumSize(new java.awt.Dimension(1280, 800));
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(1280, 800));
         setSize(new java.awt.Dimension(1280, 800));
 
         jSplitSidePanel.setBorder(null);
@@ -537,10 +546,10 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        txtLStudentLName.setBackground(new java.awt.Color(255, 255, 255));
-        txtLStudentLName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtLStudentLName.setForeground(new java.awt.Color(54, 33, 89));
-        txtLStudentLName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(54, 33, 89)));
+        txtStudentLName.setBackground(new java.awt.Color(255, 255, 255));
+        txtStudentLName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtStudentLName.setForeground(new java.awt.Color(54, 33, 89));
+        txtStudentLName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(54, 33, 89)));
 
         jLabel18.setBackground(new java.awt.Color(255, 255, 255));
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -610,6 +619,11 @@ public class Home extends javax.swing.JFrame {
         btnInsertStudent.setMaximumSize(new java.awt.Dimension(37, 24));
         btnInsertStudent.setMinimumSize(new java.awt.Dimension(37, 24));
         btnInsertStudent.setPreferredSize(new java.awt.Dimension(37, 24));
+        btnInsertStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertStudentActionPerformed(evt);
+            }
+        });
 
         btnDelete.setBackground(new java.awt.Color(54, 33, 89));
         btnDelete.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -651,6 +665,7 @@ public class Home extends javax.swing.JFrame {
         txtStudentId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtStudentId.setForeground(new java.awt.Color(54, 33, 89));
         txtStudentId.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(54, 33, 89)));
+        txtStudentId.setEnabled(false);
 
         btnSaveStudent.setBackground(new java.awt.Color(54, 33, 89));
         btnSaveStudent.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -660,6 +675,11 @@ public class Home extends javax.swing.JFrame {
         btnSaveStudent.setMaximumSize(new java.awt.Dimension(37, 24));
         btnSaveStudent.setMinimumSize(new java.awt.Dimension(37, 24));
         btnSaveStudent.setPreferredSize(new java.awt.Dimension(37, 24));
+        btnSaveStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveStudentActionPerformed(evt);
+            }
+        });
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(54, 33, 89));
@@ -746,7 +766,6 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(jLabel18)
                             .addComponent(jLabel21)
                             .addComponent(txtStudentFName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtParentFName, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSearchStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(stdDetailsPanelLayout.createSequentialGroup()
@@ -755,16 +774,15 @@ public class Home extends javax.swing.JFrame {
                             .addGroup(stdDetailsPanelLayout.createSequentialGroup()
                                 .addGap(38, 38, 38)
                                 .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtParentLName, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jLabel12)
                                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtLStudentLName, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                                        .addComponent(txtStudentLName, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
                                         .addComponent(txtStudentEmail))
                                     .addComponent(btnInsertStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addComponent(jLabel24)
                     .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                        .addGap(251, 251, 251)
+                        .addComponent(jLabel24)
+                        .addGap(209, 209, 209)
                         .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtParentPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel22)))
@@ -776,7 +794,11 @@ public class Home extends javax.swing.JFrame {
                         .addComponent(btnSaveStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnUpdateStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel20))
+                    .addComponent(jLabel20)
+                    .addGroup(stdDetailsPanelLayout.createSequentialGroup()
+                        .addComponent(txtParentFName, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addComponent(txtParentLName, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -792,18 +814,18 @@ public class Home extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, stdDetailsPanelLayout.createSequentialGroup()
                 .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel14)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(50, Short.MAX_VALUE)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(115, 115, 115)
                         .addComponent(jLabel17)
                         .addGap(28, 28, 28)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(jLabel15)
-                        .addGap(18, 18, 18)
+                        .addGap(19, 19, 19)
+                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtStudentId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(21, 21, 21)
                         .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -812,7 +834,7 @@ public class Home extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtStudentFName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtLStudentLName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtStudentLName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel18)
@@ -826,17 +848,17 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(btnInsertStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSearchStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(enrollStudentSP, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(31, 31, 31)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel20)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
-                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel21)
-                            .addComponent(jLabel26))
+                        .addGap(22, 22, 22)
+                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel26, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtParentFName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtParentLName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtParentLName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtParentFName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30)
                         .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel24)
                             .addComponent(jLabel22))
@@ -2172,6 +2194,30 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtRelative2ActionPerformed
 
+    private void btnInsertStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertStudentActionPerformed
+        //get student data
+        temp = new Student();
+        
+        students.add(temp);
+        
+        txtStudentId.setText(Integer.toString(temp.getId()));
+        txtStudentFName.requestFocus();
+        
+    }//GEN-LAST:event_btnInsertStudentActionPerformed
+
+    private void btnSaveStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveStudentActionPerformed
+        try{
+            if(isValidData()){
+            getStudentData();
+            JOptionPane.showMessageDialog(this, "Student saved!");
+            clearStudentFields();
+            
+        } 
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_btnSaveStudentActionPerformed
+
     static void setColor(JPanel panel){
         panel.setBackground(new Color(85,65,118));
     }
@@ -2224,6 +2270,58 @@ public class Home extends javax.swing.JFrame {
                 //new Home().setVisible(true);
             }
         });
+    }
+    //txtParentFName
+    private boolean isValidData() {
+        return isPresent(txtStudentFName, "First Name") && isPresent(txtStudentLName, "Last Name") &&
+                isPresent(txtStudentPhone, "Student Phone") && isPresent(txtStudentEmail, "Student Email") &&
+                isPresent(txtParentFName, "Parent First Name") && isPresent(txtParentFName, "Parent Last Name") &&
+                isPresent(txtParentEmail, "Parent Email") && isPresent(txtParentPhone, "Parent Phone");
+    }
+    
+    private boolean isPresent(JTextField txtField, String title) {
+        if(txtField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, title + " is a required field");
+            txtField.requestFocus();
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    private void getStudentData() {
+        students.get(counter).setfName(txtStudentFName.getText());
+        students.get(counter).setlName(txtStudentLName.getText());
+        students.get(counter).setPhone(txtStudentPhone.getText());
+        students.get(counter).setEmail(txtStudentEmail.getText());
+        students.get(counter).setId(Integer.parseInt(txtStudentId.getText()));       
+        
+        parent = new Parent();
+        parent.setfName(txtParentFName.getText());
+        parent.setlName(txtParentLName.getText());
+        parent.setPhone(txtParentPhone.getText());
+        parent.setEmail(txtParentEmail.getText());
+        
+        students.get(counter).setParent(parent);
+        
+        System.out.println(students.get(counter).getfName());
+        System.out.println(students.get(counter).getParent().getlName());
+        
+        ++counter;
+        System.out.println(counter);
+    }
+    
+    private void clearStudentFields() {
+        txtStudentFName.setText("");
+        txtStudentLName.setText("");
+        txtStudentPhone.setText("");
+        txtStudentEmail.setText("");
+        txtStudentId.setText("");  
+        
+        txtParentFName.setText("");
+        txtParentLName.setText("");
+        txtParentPhone.setText("");
+        txtParentEmail.setText("");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2358,7 +2456,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JTextField txtCourseTitle;
     private javax.swing.JTextField txtCourseYear;
     private javax.swing.JTextField txtFullName;
-    private javax.swing.JTextField txtLStudentLName;
     private javax.swing.JTextArea txtNotes;
     private javax.swing.JTextField txtParentEmail;
     private javax.swing.JTextField txtParentFName;
@@ -2370,6 +2467,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JTextField txtStudentEmail;
     private javax.swing.JTextField txtStudentFName;
     private javax.swing.JTextField txtStudentId;
+    private javax.swing.JTextField txtStudentLName;
     private javax.swing.JTextField txtStudentPhone;
     private javax.swing.JTextField txtTeacherEmail;
     private javax.swing.JTextField txtTeacherFName;
@@ -2379,4 +2477,10 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel viewDetailPanel;
     private javax.swing.JPanel viewPanel;
     // End of variables declaration//GEN-END:variables
+
+    private List<Student> students = new ArrayList<>();
+    private Student temp;
+    private static int counter;    
+    private Parent parent;
+    
 }
