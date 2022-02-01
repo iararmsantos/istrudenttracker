@@ -18,25 +18,26 @@ import java.util.logging.Logger;
  * By: Iara Santos
  * Date: 01/25/2022
  */
-public class TeachersDB {    
+public class StudentsDB {    
 
     private Connection conn;
 
     //to call: TeachersDB tDB = new TeachersDB(DBPosgres.getConnection());
-    public TeachersDB(Connection conn) {
+    public StudentsDB(Connection conn) {
         this.conn = conn;
     }
 
     public void insert(Teacher obj) {
         PreparedStatement st = null;
-        String SQL = "INSERT INTO Teacher (first_name, last_name, phone, email) VALUES (?, ?, ?, ?)";
         try {
-            st = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            st = conn.prepareStatement(
+                    "INSERT INTO Student "
+                    + "(fName, lName, email) VALUES (?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
 
             st.setString(1, obj.getfName());
             st.setString(2, obj.getlName());
-            st.setString(3, obj.getPhone());
-            st.setString(4, obj.getEmail());
+            st.setString(3, obj.getEmail());
 
             int rowsAffected = st.executeUpdate();
 
@@ -155,7 +156,7 @@ public class TeachersDB {
 //            teacher.setfName(rs.getString("fName"));
 //            teacher.setlName(rs.getString("lName"));
 //        } catch (SQLException ex) {
-//            Logger.getLogger(TeachersDB.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(StudentsDB.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //
 //        return teacher;

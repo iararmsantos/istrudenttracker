@@ -8,6 +8,9 @@ package gui;
 import java.awt.Color;
 import java.awt.Cursor;
 import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
 
 /**
  *
@@ -245,22 +248,42 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    @SuppressWarnings("empty-statement")
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        String username = txtEmail.getText();
-        String password = txtPassword.getText();
-        Login lframe = new Login();
-        
-        if("iara".equals(username) && "183258".equals(password)){
-            Home hFrame = new Home();
-            
-            hFrame.setVisible(true);
-            
-            dispose();
-        }else{
+        ResultSet rs;
+        Connection conn;
+        try{
+            String email = txtEmail.getText();
+            String password = txtPassword.getText();
+            do{
+             conn = db.DBMaria.getConnection();
             
             
-            JOptionPane.showMessageDialog(lframe, "Email or Password Incorrect");
+            Statement smt = conn.createStatement();
+            
+            String sql = "SELECT * FROM Login WHERE email='"+email+"' and password='"+password+"'";
+            
+            rs = smt.executeQuery(sql);
+            
+            if(rs.next()){
+                dispose();
+                
+                Home hFrame = new Home();
+            
+                hFrame.setVisible(true);        
+                
+            }else{
+                JOptionPane.showMessageDialog(this, "Email or Password Incorrect");
+                txtEmail.setText("");
+                txtPassword.setText("");
+            }
+            }while(rs.wasNull());            
+           
+        }catch(Exception e){
+            e.printStackTrace();
         }
+        
+    
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void lblExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblExitMouseClicked

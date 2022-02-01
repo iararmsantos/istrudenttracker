@@ -6,5 +6,16 @@ package entities;
  * 
  */
 public class Teacher extends Person{
+    private static int count = 0;
+
+    public Teacher() {
+        setId(++count);
+    }
+
+    public Teacher(String fName, String lName, String phone, String email) {
+        super(fName, lName, phone, email);
+        setId(++count);
+    }
+    
     
 }
