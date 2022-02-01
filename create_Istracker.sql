@@ -11,6 +11,9 @@ USE istracker;
 CREATE TABLE Login
 (
 loginID INT PRIMARY KEY AUTO_INCREMENT,
+first_name VARCHAR(45) NOT NULL,
+last_Name  VARCHAR(45) NOT NULL,
+phone VARCHAR(45) NOT NULL,
 email VARCHAR(45) NOT NULL,
 password VARCHAR(45) NOT NULL
 );
@@ -37,7 +40,7 @@ CREATE TABLE Course
 CourseID INT PRIMARY KEY AUTO_INCREMENT,
 sectionID INT,
 title VARCHAR(45) NOT NULL,
-year INT,
+year INT NOT NULL,
 FOREIGN KEY (sectionID) REFERENCES Section(sectionID)
 );
 
@@ -56,7 +59,7 @@ parentID INT PRIMARY KEY AUTO_INCREMENT,
 first_name VARCHAR(45) NOT NULL,
 last_Name  VARCHAR(45) NOT NULL,
 phone VARCHAR(45) NOT NULL,
-email      VARCHAR(45)
+email VARCHAR(45) 
 );
 
 CREATE TABLE Student
@@ -66,7 +69,7 @@ gradeID INT,
 first_name VARCHAR(45) NOT NULL,
 last_Name  VARCHAR(45) NOT NULL,
 phone VARCHAR(45) NOT NULL,
-email      VARCHAR(45),
+email VARCHAR(45),
 FOREIGN KEY (gradeID) REFERENCES Grade(gradeID)
 );
 
@@ -86,12 +89,13 @@ FOREIGN KEY (sectionID) REFERENCES Section(sectionID),
 FOREIGN KEY (studentID) REFERENCES Student(studentID)
 );
 
-INSERT INTO Login(email, password)
+INSERT INTO Login(first_name, last_name, phone, email, password)
 VALUES
-('dumbledore@yahoo.com', '183258'),
-('minerva@gmail.com', 'minerva'),
-('ssnape@hogwarts.com', 'severus'),
-('wolf@hotmail.com', 'remo');
+('Alvo', 'Dumbledore', '9999999999','dumbledore@yahoo.com', "111"),
+('Minerva','McGonagall', '8888888888', 'minerva@gmail.com', "222"),
+('Severus', 'Snape', '7777777777', 'ssnape@hogwarts.com', "333"),
+('Remo', 'Lupin', '6666666666', 'wolf@hotmail.com', "444"),
+('Iara', 'Santos', '123123123', 'iara', '123');
 
 INSERT INTO Teacher(first_name, last_name, phone, email)
 VALUES
