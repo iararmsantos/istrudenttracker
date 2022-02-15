@@ -6,27 +6,32 @@
  */
 package entities;
 
-import java.util.List;
-
 public class Course {
     private int id;
     private String title;
     private int year;
-    private List<Section> section;
+    private Section section;
+    
     private static int count = 0;
 
     public Course() {
         setId(++count);
     }
 
-    public Course(int id, String title, int year, List<Section> section) {
-        this.id = id;
+    public Course(String title, int year) {
+        
+        this.title = title;
+        this.year = year;
+        setId(++count);
+    }
+
+    public Course(String title, int year, Section section) {        
         this.title = title;
         this.year = year;
         this.section = section;
         setId(++count);
     }
-
+    
     
 
     public int getId() {
@@ -51,15 +56,7 @@ public class Course {
 
     public void setYear(int year) {
         this.year = year;
-    }
-
-    public List<Section> getSection() {
-        return section;
-    }
-
-    public void setSection(List<Section> section) {
-        this.section = section;
-    }
+    }       
 
     public static int getCount() {
         return count;
@@ -69,7 +66,18 @@ public class Course {
         Course.count = count;
     }
 
-    
+    @Override
+    public String toString() {
+        return  title + " - " + year;
+    }
+
+    public Section getSection() {
+        return section;
+    }
+
+    public void setSection(Section section) {
+        this.section = section;
+    }
     
     
 }

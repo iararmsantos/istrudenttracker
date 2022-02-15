@@ -8,16 +8,19 @@ package entities;
  */
 public class Grade {
     private int gradeId;
-    private char letterGrade;
+    private String activity;    
     private double numberGrade;
+    private static int count = 0;
+    
 
     public Grade() {
+        setGradeId(++count);
     }
 
-    public Grade(int gradeId, char letterGrade, double numberGrade) {
-        this.gradeId = gradeId;
-        this.letterGrade = letterGrade;
+    public Grade(double numberGrade, String activity) {
+        setGradeId(++count);        
         this.numberGrade = numberGrade;
+        this.activity = activity;
     }
 
     public int getGradeId() {
@@ -28,12 +31,12 @@ public class Grade {
         this.gradeId = gradeId;
     }
 
-    public char getLetterGrade() {
-        return letterGrade;
+    public String getActivity() {
+        return activity;
     }
 
-    public void setLetterGrade(char letterGrade) {
-        this.letterGrade = letterGrade;
+    public void setActivity(String activity) {
+        this.activity = activity;
     }
 
     public double getNumberGrade() {

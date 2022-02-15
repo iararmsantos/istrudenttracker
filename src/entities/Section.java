@@ -12,9 +12,7 @@ import java.util.List;
 public class Section {
     private int sectionId;
     private Semester semester;
-    List<Grade> grades;
-    List<Enrollment> enroll;
-    
+    private Teacher teacher;      
     
     private static int count = 0;
 
@@ -22,12 +20,17 @@ public class Section {
         setSectionId(++count);
     }
 
-    public Section(int sectionId, Semester semester) {
-        this.sectionId = sectionId;
+    public Section(Semester semester) {        
         this.semester = semester;
-        List<Grade> grades;
         setSectionId(++count);
     }
+
+    public Section(Semester semester, Teacher teacher) {
+        this.semester = semester;
+        this.teacher = teacher;
+        setSectionId(++count);
+    }
+    
 
     public int getSectionId() {
         return sectionId;
@@ -53,22 +56,16 @@ public class Section {
         Section.count = count;
     }
 
-    public List<Grade> getGrades() {
-        return grades;
+    public Teacher getTeacher() {
+        return teacher;
     }
 
-    public void setGrades(List<Grade> grades) {
-        this.grades = grades;
-    }   
-
-    public List<Enrollment> getEnroll() {
-        return enroll;
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 
-    public void setEnroll(List<Enrollment> enroll) {
-        this.enroll = enroll;
-    }
     
+
 }
 
 

@@ -2,6 +2,7 @@
 package entities;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Purpose: entity that will save student personal data
@@ -10,7 +11,7 @@ import java.util.List;
 public class Student extends Person{
     private Parent[] parent;
     private static int count = 0;
-    private List<Grade> grades;
+    private Map<Section, Grade> grades;
     private List<Enrollment> enroll;
 
     public Student() {
@@ -39,14 +40,7 @@ public class Student extends Person{
         Student.count = count;
     }
 
-    public List<Grade> getGrades() {
-        return grades;
-    }
-
-    public void setGrades(List<Grade> grades) {
-        this.grades = grades;
-    }
-
+    
     public List<Enrollment> getEnroll() {
         return enroll;
     }

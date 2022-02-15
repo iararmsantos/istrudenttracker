@@ -1,6 +1,7 @@
 package model;
 
 import db.DBMaria;
+import entities.Student;
 import entities.Teacher;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,12 +14,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Purpose: it will responsible to manage communication between the Teacher class
- * and database
- * By: Iara Santos
- * Date: 01/25/2022
+ * Purpose: it will responsible to manage communication between the Teacher
+ * class and database By: Iara Santos Date: 01/25/2022
  */
-public class StudentsDB {    
+public class StudentsDB {
 
     private Connection conn;
 
@@ -27,34 +26,137 @@ public class StudentsDB {
         this.conn = conn;
     }
 
-    public void insert(Teacher obj) {
+    public List<Student> findbyCourseEnrolled(Integer id) {
+        List<Student> std = new ArrayList<>();
         PreparedStatement st = null;
+        ResultSet rs = null;
+        String query = "SELECT student.studentid, student.first_name, student.last_name, grade.activity FROM\n"
+                + "Student JOIN Enrollment ON student.studentID = Enrollment.EnrollmentID \n"
+                + "JOIN Course ON Enrollment.EnrollmentID = Course.sectionID\n"
+                + "JOIN Grade ON Course.sectionId = Grade.gradeId\n"
+                + "WHERE Course.courseID = ?";
         try {
-            st = conn.prepareStatement(
-                    "INSERT INTO Student "
-                    + "(fName, lName, email) VALUES (?, ?, ?)",
-                    Statement.RETURN_GENERATED_KEYS);
+            st = conn.prepareStatement(query);
+            st.setInt(1, id);
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                Student student = instantiateStudent(rs);
+                std.add(student);
+            }
+            return std;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void insert(Student obj) {        
+        PreparedStatement st = null;
+        String SQL = "INSERT INTO Student (first_name, last_name, phone, email) VALUES (?, ?, ?, ?)";
+        String SQLParents = "INSERT INTO Parent (first_name, last_name, phone, email) VALUES (?, ?, ?, ?)";
+        
+        String SQLStdPar = "INSERT INTO StudentParents (studentid, parentid) VALUES (?, ?)";
+        
+        try {
+            st = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
 
             st.setString(1, obj.getfName());
             st.setString(2, obj.getlName());
-            st.setString(3, obj.getEmail());
-
+            st.setString(3, obj.getPhone());
+            st.setString(4, obj.getEmail());        
+            
+            
             int rowsAffected = st.executeUpdate();
-
+            int std_id = 0;
             if (rowsAffected > 0) {
                 ResultSet rs = st.getGeneratedKeys();
                 if (rs.next()) {
                     int id = rs.getInt(1);
                     obj.setId(id);
-                }
-                DBMaria.closeResultSet(rs);
+                }  
+                rs.close();
+                
+                st.close();
             }
-
+            
+            st = conn.prepareStatement(SQLParents, Statement.RETURN_GENERATED_KEYS);            
+            
+            st.setString(1, obj.getParent()[0].getfName());
+            st.setString(2, obj.getParent()[0].getlName());
+            st.setString(3, obj.getParent()[0].getPhone());
+            st.setString(4, obj.getParent()[0].getEmail());
+            
+            int rowsAffectedPar1 = st.executeUpdate();
+            if (rowsAffectedPar1 > 0) {
+                ResultSet rs = st.getGeneratedKeys();
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    obj.getParent()[0].setId(id);
+                } 
+                rs.close();
+                
+                st.close();
+            }
+            
+            st = conn.prepareStatement(SQLParents, Statement.RETURN_GENERATED_KEYS);            
+            
+            st.setString(1, obj.getParent()[1].getfName());
+            st.setString(2, obj.getParent()[1].getlName());
+            st.setString(3, obj.getParent()[1].getPhone());
+            st.setString(4, obj.getParent()[1].getEmail());
+            
+            int rowsAffectedPar2 = st.executeUpdate();
+            if (rowsAffectedPar2 > 0) {
+                ResultSet rs = st.getGeneratedKeys();
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    obj.getParent()[1].setId(id);
+                }  
+                rs.close();
+                
+                st.close();
+            }
+            
+            st = conn.prepareStatement(SQLStdPar, Statement.RETURN_GENERATED_KEYS);            
+            
+            st.setInt(1, obj.getId());
+            st.setInt(2, obj.getParent()[0].getId());
+            
+            int rows = st.executeUpdate();
+            
+            st = conn.prepareStatement(SQLStdPar, Statement.RETURN_GENERATED_KEYS);            
+            
+            st.setInt(1, obj.getId());
+            st.setInt(2, obj.getParent()[1].getId());
+            
+            int rowsA = st.executeUpdate();           
+            
+            
+            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DBMaria.closeStatement(st);
+            
         }
+    }
+    
+    private Student instantiateStudent(ResultSet rs) {
+        Student student = new Student();
+        try {
+            student.setId(rs.getInt("studentid"));
+            student.setfName(rs.getString("first_name"));
+            student.setlName(rs.getString("last_name"));
+            student.setEmail(rs.getString("email"));
+            student.setPhone(rs.getString("phone"));
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(TeachersDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return student;
     }
 
 //    public void update(Teacher obj) {
@@ -190,5 +292,4 @@ public class StudentsDB {
 //        }
 //        return null;
 //    }
-
 }

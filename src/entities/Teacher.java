@@ -16,6 +16,11 @@ public class Teacher extends Person{
         super(fName, lName, phone, email);
         setId(++count);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s", this.getfName());
+    }
     
     
 }

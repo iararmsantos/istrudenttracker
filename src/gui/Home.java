@@ -7,6 +7,7 @@ package gui;
 
 import db.DBMaria;
 import entities.Course;
+import entities.Grade;
 import entities.Parent;
 import entities.Section;
 import entities.Semester;
@@ -23,6 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.JTableHeader;
+import model.CoursesDB;
+import model.StudentsDB;
 import model.TeachersDB;
 
 /**
@@ -62,7 +65,15 @@ public class Home extends javax.swing.JFrame {
         //tblGradesAvg
         configureTableHeader(tblGradesAvg);    
         
-        loadComboBox();
+        loadCmbSemesters();
+        teachers.add(new Teacher("Maria", "Smith", "12121212", "maria@gmail.com"));
+        teachers.add(new Teacher("Milton", "Smith", "12121212", "maria@gmail.com"));
+        teachers.add(new Teacher("Alice", "Smith", "12121212", "maria@gmail.com"));
+        teachers.add(new Teacher("Iara", "Smith", "12121212", "maria@gmail.com"));
+        loadCmbTeachers();
+        
+        courses.add(new Course("Portuguese", 2022, new Section(Semester.SUMMER, teachers.get(1)))); 
+        loadCmbCourses();
     }
 
     /**
@@ -193,12 +204,10 @@ public class Home extends javax.swing.JFrame {
         gradesDetailsPanel = new javax.swing.JPanel();
         jLabel34 = new javax.swing.JLabel();
         cmbCourses = new javax.swing.JComboBox<>();
-        jLabel35 = new javax.swing.JLabel();
-        txtActivity = new javax.swing.JTextField();
         btnSaveGrades = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblGrades = new javax.swing.JTable();
-        btnCreateActivity = new javax.swing.JButton();
+        btnSearchStd = new javax.swing.JButton();
         btnDeleteActivity = new javax.swing.JButton();
         btnUpdateGrades = new javax.swing.JButton();
         viewPanel = new javax.swing.JPanel();
@@ -938,7 +947,7 @@ public class Home extends javax.swing.JFrame {
             .addComponent(titlePanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1020, Short.MAX_VALUE)
             .addGroup(studentsPanelLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addComponent(stdDetailsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(stdDetailsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 985, Short.MAX_VALUE)
                 .addContainerGap())
         );
         studentsPanelLayout.setVerticalGroup(
@@ -1429,7 +1438,6 @@ public class Home extends javax.swing.JFrame {
         cmbTeachers.setBackground(new java.awt.Color(255, 255, 255));
         cmbTeachers.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cmbTeachers.setForeground(new java.awt.Color(54, 33, 89));
-        cmbTeachers.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnEnrollStdCourse.setBackground(new java.awt.Color(54, 33, 89));
         btnEnrollStdCourse.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -1589,17 +1597,6 @@ public class Home extends javax.swing.JFrame {
         cmbCourses.setBackground(new java.awt.Color(255, 255, 255));
         cmbCourses.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cmbCourses.setForeground(new java.awt.Color(54, 33, 89));
-        cmbCourses.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel35.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel35.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel35.setForeground(new java.awt.Color(54, 33, 89));
-        jLabel35.setText("Activity Name");
-
-        txtActivity.setBackground(new java.awt.Color(255, 255, 255));
-        txtActivity.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtActivity.setForeground(new java.awt.Color(54, 33, 89));
-        txtActivity.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(54, 33, 89)));
 
         btnSaveGrades.setBackground(new java.awt.Color(54, 33, 89));
         btnSaveGrades.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -1621,22 +1618,29 @@ public class Home extends javax.swing.JFrame {
         tblGrades.setForeground(new java.awt.Color(54, 33, 89));
         tblGrades.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Iara Santos",  new Double(95.2),  new Double(87.3),  new Double(62.5)},
-                {"John Smith",  new Double(95.2),  new Double(62.5),  new Double(87.3)},
-                {"Tomas Anderson",  new Double(87.3),  new Double(95.2),  new Double(62.5)},
-                {"Trinity",  new Double(62.5),  new Double(87.3),  new Double(95.2)},
-                {"Paul Lavigne",  new Double(87.3),  new Double(97.7),  new Double(95.2)}
+                {"Iara Santos",  new Double(95.2),  new Double(87.3),  new Double(62.5), null, null},
+                {"John Smith",  new Double(95.2),  new Double(62.5),  new Double(87.3), null, null},
+                {"Tomas Anderson",  new Double(87.3),  new Double(95.2),  new Double(62.5), null, null},
+                {"Trinity",  new Double(62.5),  new Double(87.3),  new Double(95.2), null, null},
+                {"Paul Lavigne",  new Double(87.3),  new Double(97.7),  new Double(95.2), null, null}
             },
             new String [] {
-                "Student Name", "Activity 1", "Activity 2", "Activity 3"
+                "Student Name", "Activity 1", "Activity 2", "Activity 3", "Activity 4", "Activity 5"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+                java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         tblGrades.setAlignmentX(0.0F);
@@ -1663,14 +1667,14 @@ public class Home extends javax.swing.JFrame {
             tblGrades.getColumnModel().getColumn(3).setPreferredWidth(10);
         }
 
-        btnCreateActivity.setBackground(new java.awt.Color(54, 33, 89));
-        btnCreateActivity.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnCreateActivity.setForeground(new java.awt.Color(255, 255, 255));
-        btnCreateActivity.setText("Create");
-        btnCreateActivity.setBorder(null);
-        btnCreateActivity.addActionListener(new java.awt.event.ActionListener() {
+        btnSearchStd.setBackground(new java.awt.Color(54, 33, 89));
+        btnSearchStd.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnSearchStd.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearchStd.setText("Search");
+        btnSearchStd.setBorder(null);
+        btnSearchStd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateActivityActionPerformed(evt);
+                btnSearchStdActionPerformed(evt);
             }
         });
 
@@ -1700,7 +1704,7 @@ public class Home extends javax.swing.JFrame {
         gradesDetailsPanel.setLayout(gradesDetailsPanelLayout);
         gradesDetailsPanelLayout.setHorizontalGroup(
             gradesDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gradesDetailsPanelLayout.createSequentialGroup()
+            .addGroup(gradesDetailsPanelLayout.createSequentialGroup()
                 .addGroup(gradesDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(gradesDetailsPanelLayout.createSequentialGroup()
                         .addContainerGap()
@@ -1709,31 +1713,25 @@ public class Home extends javax.swing.JFrame {
                         .addComponent(btnDeleteActivity, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(109, 109, 109)
                         .addComponent(btnUpdateGrades, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(gradesDetailsPanelLayout.createSequentialGroup()
                         .addGroup(gradesDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel34)
                             .addComponent(cmbCourses, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
-                        .addGroup(gradesDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel35)
-                            .addGroup(gradesDetailsPanelLayout.createSequentialGroup()
-                                .addComponent(txtActivity, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28)
-                                .addComponent(btnCreateActivity, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSearchStd, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(311, 311, 311))
+            .addGroup(gradesDetailsPanelLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 954, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         gradesDetailsPanelLayout.setVerticalGroup(
             gradesDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(gradesDetailsPanelLayout.createSequentialGroup()
-                .addGroup(gradesDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel34)
-                    .addComponent(jLabel35))
+                .addComponent(jLabel34)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(gradesDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbCourses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtActivity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCreateActivity, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSearchStd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
@@ -2228,9 +2226,14 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSaveGradesActionPerformed
 
-    private void btnCreateActivityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActivityActionPerformed
+    private void btnSearchStdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnCreateActivityActionPerformed
+        /*
+        1 - Search students by class (class id args)
+        2 - Allow enter Activity grades
+        3 - Update database
+        */
+    }//GEN-LAST:event_btnSearchStdActionPerformed
 
     private void btnDeleteActivityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActivityActionPerformed
         // TODO add your handling code here:
@@ -2279,7 +2282,6 @@ public class Home extends javax.swing.JFrame {
 
     private void btnSaveTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveTeacherActionPerformed
         getTeacherData();
-        JOptionPane.showMessageDialog(this, "Teacher saved!");
         clearTeacherFields();
         btnAddTeacher.setEnabled(true);
         btnSaveTeacher.setEnabled(false);
@@ -2395,25 +2397,29 @@ public class Home extends javax.swing.JFrame {
             }
         });
     }
+     /*GET DATA START*/
+    
     //get course data to set to the object and add to the list
     private void getCourseData() {
+        sectionTemp = new Section();  
         courses.get(countCourse).setTitle(txtCourseTitle.getText());
         courses.get(countCourse).setYear(Integer.parseInt(txtCourseYear.getText()));
         courses.get(countCourse).setId(Integer.parseInt(txtCourseId.getText()));
+          
+        //combobox Semester        
+        sectionTemp.setSemester((Semester) cmbSemester.getSelectedItem());  
+        //courses.get(countCourse).setSection(sectionTemp);       
         
-        //combobox
-        sectionTemp = new Section();       
+        //combobox Teacher        
+        sectionTemp.setTeacher((Teacher)cmbTeachers.getSelectedItem());
+        //courses.get(countCourse).setSection(sectionTemp);        
         
-        sectionTemp.setSemester((Semester) cmbSemester.getSelectedItem());
-
-        sections.add(sectionTemp);
-        
-        courses.get(countCourse).setSection(sections);
-        
-        System.out.println(courses.get(countCourse).getSection().get(countSection).getSemester());
-        
+        //database
+        insertCourses(courses.get(countCourse)); 
         ++countCourse;
-        ++countSection;
+        
+        //load combobox in grades
+        loadCmbCourses();
     }
 
     //get teacher data to set to the object and add to the list
@@ -2423,6 +2429,7 @@ public class Home extends javax.swing.JFrame {
         teachers.get(countTeac).setPhone(txtTeacherPhone.getText());
         teachers.get(countTeac).setEmail(txtTeacherEmail.getText());
         teachers.get(countTeac).setId(Integer.parseInt(txtTeacherId.getText()));
+        loadCmbTeachers();
         insertTeachers(teachers.get(countTeac));
         ++countTeac;
     }
@@ -2450,9 +2457,12 @@ public class Home extends javax.swing.JFrame {
         students.get(countStd).setParent(parent);
         
         System.out.println(students.get(0).getParent()[1].getlName());
-
+        insertStudents(students.get(countStd));
         ++countStd;
     }
+    /*GET DATA END*/
+    
+    /*CLEAR TXTFIELDS START*/
     //clear course fields
     private void clearCourseFields() {
         txtCourseTitle.setText("");
@@ -2484,6 +2494,9 @@ public class Home extends javax.swing.JFrame {
         txtParentPhone.setText("");
         txtParentEmail.setText("");
     }
+    /*CLEAR TXTFIELDS END*/
+    
+    /*DATA VALIDATION START*/
 
     //verify if data is valid
     private boolean isValidData() {
@@ -2504,34 +2517,53 @@ public class Home extends javax.swing.JFrame {
         }
     }
 
-    //set color to light to show in the click of the mouse
-    static void setColor(JPanel panel) {
-        panel.setBackground(new Color(85, 65, 118));
-    }
+   
 
-    //reset color to the original
-    static void resetColor(JPanel panel) {
-        panel.setBackground(new Color(64, 43, 100));
-    }
-
-    //change table header background, font, foreground
-    static void configureTableHeader(JTable tbl) {
-        JTableHeader tblNew = tbl.getTableHeader();
-        tblNew.setBackground(Color.WHITE);
-        tblNew.setForeground(new Color(54, 33, 89));
-        Font font = new Font("Segoe UI", Font.BOLD, 14);
-        tblNew.setFont(font);
-    }
+    /*DATA VALIDATION END*/
     
     /*DATABASE MANAGEMENT*/
+    //to save or update courses into database
+    public void insertCourses(Course cour) {
+        //connect to database
+        CoursesDB manager = new CoursesDB(DBMaria.getConnection());
+        manager.insertCourse(cour);
+        JOptionPane.showMessageDialog(null, "Course Inserted!");
+    }
     //to save or update students into database
+    public void insertStudents(Student std) {
+        //connect to database
+        StudentsDB manager = new StudentsDB(DBMaria.getConnection());
+        manager.insert(std);
+        JOptionPane.showMessageDialog(null, "Student Inserted!");
+    }
+    //to save or update teachers into database
     public void insertTeachers(Teacher tec) {
         //connect to database
         TeachersDB manager = new TeachersDB(DBMaria.getConnection());
         manager.insert(tec);
-        JOptionPane.showMessageDialog(null, "Student Inserted!");
+        JOptionPane.showMessageDialog(null, "Teacher Inserted!");
     }
-
+    
+    /*PERSONALIZED VARIABLES DECLARATION START*/
+    private List<Student> students = new ArrayList<>();
+    private Student stdTemp;
+    private static int countStd;
+    private Parent[] parent;
+    private Teacher teacherTemp;
+    private List<Teacher> teachers = new ArrayList<Teacher>();
+    DefaultComboBoxModel<Teacher> comboBoxModel;
+    private static int countTeac;
+    private Course courseTemp;
+    private List<Course> courses = new ArrayList<>();
+    private static int countCourse;
+    private Section sectionTemp;  
+    private Grade gradeTemp;
+    private List<Grade> grades = new ArrayList<>();
+    private static int countGrade;
+    private List<Section> sections = new ArrayList<>();
+    private static int countSection;
+    List<Teacher> tesTeacher;
+    /*PERSONALIZED VARIABLES DECLARATION END*/
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CardPanel;
     private javax.swing.JButton btnAddCourse;
@@ -2539,7 +2571,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton btnAddTeacher;
     private javax.swing.JButton btnClearView;
     private javax.swing.JPanel btnCoursesPanel;
-    private javax.swing.JButton btnCreateActivity;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDeleteActivity;
     private javax.swing.JButton btnDeleteCourse;
@@ -2555,6 +2586,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton btnSaveStudent;
     private javax.swing.JButton btnSaveTeacher;
     private javax.swing.JButton btnSearchCourses;
+    private javax.swing.JButton btnSearchStd;
     private javax.swing.JButton btnSearchStudent;
     private javax.swing.JButton btnSearchTeacher;
     private javax.swing.JButton btnSearchView;
@@ -2564,9 +2596,9 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton btnUpdateStudent;
     private javax.swing.JButton btnUpdateTeacher;
     private javax.swing.JPanel btnViewPanel;
-    private javax.swing.JComboBox<String> cmbCourses;
+    private javax.swing.JComboBox<Course> cmbCourses;
     private javax.swing.JComboBox<Semester> cmbSemester;
-    private javax.swing.JComboBox<String> cmbTeachers;
+    private javax.swing.JComboBox<Teacher> cmbTeachers;
     private javax.swing.JPanel courseDetailsPanel;
     private javax.swing.JPanel coursePanel;
     private javax.swing.JLabel coursesPanel;
@@ -2600,7 +2632,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
@@ -2659,7 +2690,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel titlePanel4;
     private javax.swing.JPanel titlePanel5;
     private javax.swing.JPanel titlePanel8;
-    private javax.swing.JTextField txtActivity;
     private javax.swing.JTextField txtByCourse;
     private javax.swing.JTextField txtByFName;
     private javax.swing.JTextField txtByLName;
@@ -2691,23 +2721,45 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel viewDetailPanel;
     private javax.swing.JPanel viewPanel;
     // End of variables declaration//GEN-END:variables
-
-    private List<Student> students = new ArrayList<>();
-    private Student stdTemp;
-    private static int countStd;
-    private Parent[] parent;
-    private Teacher teacherTemp;
-    private List<Teacher> teachers = new ArrayList<>();
-    private static int countTeac;
-    private Course courseTemp;
-    private List<Course> courses = new ArrayList<>();
-    private static int countCourse;
-    private Section sectionTemp;
-    private List<Section> sections = new ArrayList<>();
-    private static int countSection;
-
-    private void loadComboBox() {
+    //* GUI MANAGENMENT START *// 
+    private void loadCmbSemesters() {
         cmbSemester.setModel(new DefaultComboBoxModel<>(Semester.values()));
+    }
+    
+    private void loadCmbTeachers() {
+        clearComboBox(cmbTeachers);
+        
+        cmbTeachers.setModel(new DefaultComboBoxModel<>(teachers.toArray(new Teacher[0])));
+        //https://stackoverflow.com/questions/1291704/how-do-i-populate-a-jcombobox-with-an-arraylist/26347782
+        //to insert list of teachers in the combobox
+    }
+    private void clearComboBox(JComboBox combo){
+        combo.removeAllItems();        
+    }
+    
+    private void loadCmbCourses(){
+        clearComboBox(cmbCourses);               
+
+        cmbCourses.setModel(new DefaultComboBoxModel<Course>(courses.toArray(new Course[0])));
+    }
+    
+
+    //change table header background, font, foreground
+    static void configureTableHeader(JTable tbl) {
+        JTableHeader tblNew = tbl.getTableHeader();
+        tblNew.setBackground(Color.WHITE);
+        tblNew.setForeground(new Color(54, 33, 89));
+        Font font = new Font("Segoe UI", Font.BOLD, 14);
+        tblNew.setFont(font);
+    }
+    
+     //set color to light to show in the click of the mouse
+    static void setColor(JPanel panel) {
+        panel.setBackground(new Color(85, 65, 118));
+    }
+    //reset color to the original
+    static void resetColor(JPanel panel) {
+        panel.setBackground(new Color(64, 43, 100));
     }
 
 }
