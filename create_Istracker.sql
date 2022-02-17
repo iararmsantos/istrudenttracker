@@ -161,7 +161,3 @@ VALUES
 ((SELECT sectionID from Section WHERE sectionID = 1), (SELECT studentID from Student WHERE studentID = 3)),
 ((SELECT sectionID from Section WHERE sectionID = 1), (SELECT studentID from Student WHERE studentID = 4));
 
-
-
-
-

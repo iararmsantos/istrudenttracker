@@ -25,6 +25,37 @@ public class StudentsDB {
     public StudentsDB(Connection conn) {
         this.conn = conn;
     }
+    
+    //search student by firstname and lastname
+    public Student searchByName(String fname, String lname) {
+        //alterar banco de dados
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = conn.prepareStatement(
+                    "SELECT * FROM Student WHERE first_name = ? AND last_name = ?");
+
+            st.setString(1, fname);
+            st.setString(2, lname);
+            rs = st.executeQuery();
+            //o resultset retorna uma tabela e na OO trabalhamos com UML
+            //devemos transformar a tabela em objeto
+            //testar se veio resultado
+            if (rs.next()) {
+                //cria os objetos
+                Student std = instantiateStudent(rs);
+                System.out.println("StudentsDB" + std.getfName());
+                return std;
+                
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+            DBMaria.closeResultSet(rs);
+        }
+        return null;
+    }
 
     public List<Student> findbyCourseEnrolled(Integer id) {
         List<Student> std = new ArrayList<>();
