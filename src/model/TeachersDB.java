@@ -119,7 +119,7 @@ public class TeachersDB {
             DBMaria.closeStatement(st);
         }
     }
-    private Teacher instantiateTeacher(ResultSet rs) {
+    public static Teacher instantiateTeacher(ResultSet rs) {
         Teacher teacher = new Teacher();
         try {
             teacher.setId(rs.getInt("teacherid"));

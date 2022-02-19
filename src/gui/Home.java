@@ -72,7 +72,7 @@ public class Home extends javax.swing.JFrame {
         teachers = getTeachersList();
         loadCmbTeachers();
         
-        courses.add(new Course("Portuguese", 2022, new Section(Semester.SUMMER, teachers.get(1)))); 
+        courses = getCoursesList(); 
         loadCmbCourses();
     }
 
@@ -1737,7 +1737,7 @@ public class Home extends javax.swing.JFrame {
                     .addGroup(gradesDetailsPanelLayout.createSequentialGroup()
                         .addGroup(gradesDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel34)
-                            .addComponent(cmbCourses, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cmbCourses, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSearchStd, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(311, 311, 311))
@@ -2486,11 +2486,22 @@ public class Home extends javax.swing.JFrame {
         if("".equals(title) || "".equals(txtCourseYear.getText())){
             JOptionPane.showMessageDialog(this, "Title or year is empty");
        }else{
-            courseTemp = getCourseByTitleYear(title, year);//
+            courseTemp = getCourseByTitleYear(title, year);            
             fillCourseData();
-            //fillAllCourses
             int id = Integer.parseInt(txtCourseId.getText());
+            
             fillStudentsEnrolled(id, lstStudentsEnrolled);
+            
+            //select semester
+            //select teacher
+            getSection(id);
+            //select semester
+            cmbSemester.setSelectedItem(sectionTemp.getSemester());
+            //select teacher
+            cmbTeachers.setSelectedItem(sectionTemp.getTeacher());
+
+            //j.setSelectedItem(anObject);
+            //https://stackoverflow.com/questions/2777045/how-to-select-item-in-jcombobox
         }
     }//GEN-LAST:event_btnSearchCoursesActionPerformed
 
@@ -2553,8 +2564,7 @@ public class Home extends javax.swing.JFrame {
         txtCourseId.setText(String.valueOf(courseTemp.getId()));
         txtCourseTitle.setText(courseTemp.getTitle());
         txtCourseYear.setText(String.valueOf(courseTemp.getYear()));
-        //select semester
-        //select teacher
+        
     }
     //after get data from db fill teachers form
     private void fillTeacherData() {
@@ -2729,12 +2739,32 @@ public class Home extends javax.swing.JFrame {
     /*DATA VALIDATION END*/
     
     /*DATABASE MANAGEMENT*/
+    //find all courses registered 
+    private List<Course> getCoursesList() {
+        courses = null;
+        //connect to database
+        CoursesDB manager = new CoursesDB(DBMaria.getConnection());
+        courses = manager.findAll();
+        
+        return courses;
+    }
+    //find section by course id - get teacher and semester data
+    private void getSection(int id) {
+        sectionTemp = null;
+        //connect to database
+        CoursesDB manager = new CoursesDB(DBMaria.getConnection());
+        sectionTemp = manager.getSection(id);
+    }
+    
+    //find students enrolled in a course
     private void findCourseEnrolled(int id) {
         students = null;
         //connect to database
         CoursesDB manager = new CoursesDB(DBMaria.getConnection());
         students = manager.findCoursesEnrolled(id);
     }
+    
+    //find course using title and year as reference
     private Course getCourseByTitleYear(String title, int year) {
         courseTemp = null;
         //connect to database
@@ -2743,6 +2773,7 @@ public class Home extends javax.swing.JFrame {
         
         return courseTemp;
     }
+    //find all teachers registered 
     private List<Teacher> getTeachersList() {
         teachers = null;
         //connect to database
@@ -2751,6 +2782,7 @@ public class Home extends javax.swing.JFrame {
         
         return teachers;
     }
+    //find teacher by first name and last name
     private Teacher getTeacherByName(String fname, String lname) {
         teacherTemp = null;
         //connect to database
@@ -3016,5 +3048,7 @@ public class Home extends javax.swing.JFrame {
     static void resetColor(JPanel panel) {
         panel.setBackground(new Color(64, 43, 100));
     }
+
+    
 
 }
