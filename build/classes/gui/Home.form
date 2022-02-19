@@ -756,7 +756,7 @@
                                   <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="txtStudentId" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
@@ -780,7 +780,7 @@
                                           <Component id="txtStudentEmail" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Component id="jScrollPane5" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane5" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -788,9 +788,9 @@
                                   <Component id="btnSearchStudent" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                                   <Component id="enrollStudentSP" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="64" max="32767" attributes="0"/>
+                              <EmptySpace pref="76" max="32767" attributes="0"/>
                               <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="37" max="32767" attributes="0"/>
+                              <EmptySpace pref="50" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel21" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel26" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -821,10 +821,12 @@
                                           <Component id="jLabel53" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="txtParentEmail" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="txtParentPhone" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="txtParentEmail2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="txtParentEmail" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="txtParentPhone" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                       <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
                                   </Group>
@@ -1307,6 +1309,9 @@
                           <Dimension value="[37, 24]"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="enrollStudentSPActionPerformed"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane5">
                       <AuxValues>
@@ -1327,22 +1332,11 @@
                               <Color blue="59" green="21" red="36" type="rgb"/>
                             </Property>
                             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                              <StringArray count="10">
-                                <StringItem index="0" value="Item 1"/>
-                                <StringItem index="1" value="Item 2"/>
-                                <StringItem index="2" value="Item 3"/>
-                                <StringItem index="3" value="Item 4"/>
-                                <StringItem index="4" value="Item 5"/>
-                                <StringItem index="5" value="Item 1"/>
-                                <StringItem index="6" value="Item 2"/>
-                                <StringItem index="7" value="Item 3"/>
-                                <StringItem index="8" value="Item 4"/>
-                                <StringItem index="9" value="Item 5"/>
-                              </StringArray>
+                              <StringArray count="0"/>
                             </Property>
                           </Properties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Course&gt;"/>
                           </AuxValues>
                         </Component>
                       </SubComponents>
@@ -1608,7 +1602,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                               <Component id="lblTitle8" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="952" max="32767" attributes="0"/>
+                              <EmptySpace pref="954" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1658,6 +1652,14 @@
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
                                       <Group type="103" groupAlignment="1" attributes="0">
+                                          <Component id="jScrollPane8" alignment="1" max="32767" attributes="0"/>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                              <Component id="btnSaveTeacher" min="-2" pref="141" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="btnUpdateTeacher" min="-2" pref="141" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
+                                          </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="txtTeacherPhone" min="-2" pref="208" max="-2" attributes="0"/>
@@ -1666,34 +1668,29 @@
                                                   <Component id="jLabel55" min="-2" max="-2" attributes="0"/>
                                                   <Component id="jLabel41" alignment="0" min="-2" max="-2" attributes="0"/>
                                                   <Component id="jLabel45" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="btnSearchTeacher" alignment="0" min="-2" pref="172" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="txtTeacherLName" max="32767" attributes="0"/>
-                                                      <Group type="102" attributes="0">
-                                                          <Group type="103" groupAlignment="0" attributes="0">
-                                                              <Component id="jLabel42" min="-2" max="-2" attributes="0"/>
-                                                              <Component id="jLabel44" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="102" attributes="0">
+                                                      <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                                                      <Group type="103" groupAlignment="0" attributes="0">
+                                                          <Component id="txtTeacherLName" max="32767" attributes="0"/>
+                                                          <Group type="102" attributes="0">
+                                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                                  <Component id="jLabel42" min="-2" max="-2" attributes="0"/>
+                                                                  <Component id="jLabel44" min="-2" max="-2" attributes="0"/>
+                                                                  <Component id="txtTeacherEmail" min="-2" pref="208" max="-2" attributes="0"/>
+                                                              </Group>
+                                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                                           </Group>
-                                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                                       </Group>
                                                   </Group>
-                                                  <Component id="txtTeacherEmail" min="-2" pref="208" max="-2" attributes="0"/>
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                                                      <Component id="btnAddTeacher" min="-2" pref="172" max="-2" attributes="0"/>
+                                                      <EmptySpace max="32767" attributes="0"/>
+                                                  </Group>
                                               </Group>
-                                          </Group>
-                                          <Component id="jScrollPane8" alignment="1" max="32767" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="btnSearchTeacher" min="-2" pref="172" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-                                              <Component id="btnAddTeacher" min="-2" pref="172" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                              <Component id="btnSaveTeacher" min="-2" pref="141" max="-2" attributes="0"/>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                              <Component id="btnUpdateTeacher" min="-2" pref="141" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -1702,21 +1699,21 @@
                                               <Component id="jLabel56" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
-                                              <Component id="jScrollPane7" min="-2" pref="227" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                                               <Component id="btnRemoveTaught" min="-2" pref="141" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                                               <Component id="btnDeleteTeacher1" min="-2" pref="172" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                                               <Component id="btnAddCourse" min="-2" pref="172" max="-2" attributes="0"/>
                                           </Group>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="jScrollPane7" min="-2" pref="346" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
-                                      <EmptySpace min="-2" pref="260" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="259" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -1736,7 +1733,7 @@
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="txtTeacherId" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -1760,18 +1757,20 @@
                                           <Component id="txtTeacherEmail" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jScrollPane7" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="btnAddCourse" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                          <Component id="btnSearchTeacher" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                          <Component id="btnAddTeacher" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                          <Component id="btnDeleteTeacher1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                      </Group>
+                                  <Component id="jScrollPane7" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="btnSearchTeacher" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                      <Component id="btnAddTeacher" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="btnDeleteTeacher1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                      <Component id="btnAddCourse" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="43" max="32767" attributes="0"/>
+                              <EmptySpace pref="49" max="32767" attributes="0"/>
                               <Component id="jLabel23" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jScrollPane8" min="-2" pref="184" max="-2" attributes="0"/>
@@ -1937,6 +1936,9 @@
                           <Dimension value="[37, 24]"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchTeacherActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="btnRemoveTaught">
                       <Properties>
@@ -2055,6 +2057,9 @@
                           <Dimension value="[37, 24]"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddCourseActionPerformed"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane7">
                       <AuxValues>
@@ -2075,22 +2080,11 @@
                               <Color blue="59" green="21" red="36" type="rgb"/>
                             </Property>
                             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                              <StringArray count="10">
-                                <StringItem index="0" value="Item 1"/>
-                                <StringItem index="1" value="Item 2"/>
-                                <StringItem index="2" value="Item 3"/>
-                                <StringItem index="3" value="Item 4"/>
-                                <StringItem index="4" value="Item 5"/>
-                                <StringItem index="5" value="Item 1"/>
-                                <StringItem index="6" value="Item 2"/>
-                                <StringItem index="7" value="Item 3"/>
-                                <StringItem index="8" value="Item 4"/>
-                                <StringItem index="9" value="Item 5"/>
-                              </StringArray>
+                              <StringArray count="0"/>
                             </Property>
                           </Properties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Course&gt;"/>
                           </AuxValues>
                         </Component>
                       </SubComponents>
@@ -2369,7 +2363,10 @@
                                               </Group>
                                           </Group>
                                           <Group type="102" alignment="1" attributes="0">
-                                              <Component id="cmbSemester" min="-2" pref="216" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="cmbSemester" min="-2" pref="216" max="-2" attributes="0"/>
+                                                  <Component id="btnAddCourse1" alignment="0" min="-2" pref="171" max="-2" attributes="0"/>
+                                              </Group>
                                               <EmptySpace pref="22" max="32767" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="btnSaveCourse" min="-2" pref="171" max="-2" attributes="0"/>
@@ -2385,12 +2382,10 @@
                                       <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                      <Component id="btnAddCourse1" min="-2" pref="171" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="250" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="439" max="-2" attributes="0"/>
                                       <Component id="btnDeleteCourse" min="-2" pref="171" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                                      <Component id="btnEnrollStdCourse" min="-2" pref="171" max="-2" attributes="0"/>
+                                      <Component id="btnRemove" min="-2" pref="171" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="87" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
@@ -2406,7 +2401,7 @@
                                   <Component id="jLabel37" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="txtCourseTitle" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -2433,16 +2428,16 @@
                                           <Component id="cmbSemester" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Component id="jScrollPane6" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane6" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="btnAddCourse1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                                   <Component id="btnSaveCourse" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                                   <Component id="btnDeleteCourse" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <Component id="btnEnrollStdCourse" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="btnRemove" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="330" max="32767" attributes="0"/>
+                              <EmptySpace pref="341" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -2643,6 +2638,9 @@
                           <Dimension value="[37, 24]"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchCoursesActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="btnAddCourse1">
                       <Properties>
@@ -2721,22 +2719,11 @@
                               <Color blue="59" green="21" red="36" type="rgb"/>
                             </Property>
                             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                              <StringArray count="10">
-                                <StringItem index="0" value="Item 1"/>
-                                <StringItem index="1" value="Item 2"/>
-                                <StringItem index="2" value="Item 3"/>
-                                <StringItem index="3" value="Item 4"/>
-                                <StringItem index="4" value="Item 5"/>
-                                <StringItem index="5" value="Item 1"/>
-                                <StringItem index="6" value="Item 2"/>
-                                <StringItem index="7" value="Item 3"/>
-                                <StringItem index="8" value="Item 4"/>
-                                <StringItem index="9" value="Item 5"/>
-                              </StringArray>
+                              <StringArray count="0"/>
                             </Property>
                           </Properties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Student&gt;"/>
                           </AuxValues>
                         </Component>
                       </SubComponents>
@@ -2760,7 +2747,7 @@
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Teacher&gt;"/>
                       </AuxValues>
                     </Component>
-                    <Component class="javax.swing.JButton" name="btnEnrollStdCourse">
+                    <Component class="javax.swing.JButton" name="btnRemove">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="59" green="21" red="36" type="rgb"/>
@@ -2771,7 +2758,7 @@
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="ff" red="ff" type="rgb"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Enroll Student"/>
+                        <Property name="text" type="java.lang.String" value="Remove"/>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="null"/>
                         </Property>
@@ -2786,7 +2773,7 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEnrollStdCourseActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="cmbSemester">

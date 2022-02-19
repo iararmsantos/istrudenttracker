@@ -26,7 +26,71 @@ public class TeachersDB {
     public TeachersDB(Connection conn) {
         this.conn = conn;
     }
+    
+    //find all teachers
+    public List<Teacher> findAll() {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = conn.prepareStatement(
+                    "SELECT * FROM Teacher ORDER BY first_name");
+            rs = st.executeQuery();
 
+            //cria lista de resultados
+            List<Teacher> list = new ArrayList<>();
+
+            while (rs.next()) {
+                Teacher teacher = instantiateTeacher(rs);
+                
+                list.add(teacher);
+            }
+
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+            DBMaria.closeResultSet(rs);
+        }
+        return null;
+    }
+    
+    //find teacher by first and last name  in istracker
+    public Teacher searchByName(String fname, String lname) {
+        //alterar banco de dados
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        String QUERY = "SELECT * FROM Teacher WHERE first_name = ? AND last_name = ?";
+        try {
+            st = conn.prepareStatement(QUERY);
+
+            st.setString(1, fname);
+            st.setString(2, lname);
+            rs = st.executeQuery();
+            //getting the student data
+            int id = 0;
+            Teacher teacher = null;
+            if (rs.next()) {
+                //cria os objetos
+                id = rs.getInt(1);
+                teacher = instantiateTeacher(rs);                   
+            }
+            rs.close();
+                
+            st.close();            
+
+            return teacher;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+            DBMaria.closeResultSet(rs);
+        }
+        return null;
+    }
+
+    //insert teacher into istracker
     public void insert(Teacher obj) {
         PreparedStatement st = null;
         String SQL = "INSERT INTO Teacher (first_name, last_name, phone, email) VALUES (?, ?, ?, ?)";
@@ -54,6 +118,22 @@ public class TeachersDB {
         } finally {
             DBMaria.closeStatement(st);
         }
+    }
+    private Teacher instantiateTeacher(ResultSet rs) {
+        Teacher teacher = new Teacher();
+        try {
+            teacher.setId(rs.getInt("teacherid"));
+            teacher.setfName(rs.getString("first_name"));
+            teacher.setlName(rs.getString("last_name"));
+            teacher.setEmail(rs.getString("email"));
+            teacher.setPhone(rs.getString("phone"));            
+            
+            return teacher;
+        } catch (SQLException ex) {
+            Logger.getLogger(TeachersDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
     }
 
 //    public void update(Teacher obj) {
@@ -91,75 +171,11 @@ public class TeachersDB {
 //        }
 //    }
 //
-//    public Teacher findById(Integer id) {
-//        //alterar banco de dados
-//        PreparedStatement st = null;
-//        ResultSet rs = null;
-//        try {
-//            st = conn.prepareStatement(
-//                    "SELECT * FROM Teacher WHERE Id = ?");
+
 //
-//            st.setInt(1, id);
-//            rs = st.executeQuery();
-//            //o resultset retorna uma tabela e na OO trabalhamos com UML
-//            //devemos transformar a tabela em objeto
-//            //testar se veio resultado
-//            if (rs.next()) {
-//                //cria os objetos
-//                Teacher teacher = instantiateTeacher(rs);
+
 //
-//                return teacher;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DBMaria.closeStatement(st);
-//            DBMaria.closeResultSet(rs);
-//        }
-//        return null;
-//    }
-//
-//    public List<Teacher> findAll() {
-//        PreparedStatement st = null;
-//        ResultSet rs = null;
-//        try {
-//            st = conn.prepareStatement(
-//                    "SELECT * FROM department ORDER BY Name");
-//            rs = st.executeQuery();
-//
-//            //cria lista de resultados
-//            List<Teacher> list = new ArrayList<>();
-//
-//            while (rs.next()) {
-//                Teacher teacher = instantiateTeacher(rs);
-//                teacher.setId(rs.getInt("Id"));
-//                teacher.setfName(rs.getString("fName"));
-//                teacher.setfName(rs.getString("lName"));
-//                list.add(teacher);
-//            }
-//
-//            return list;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DBMaria.closeStatement(st);
-//            DBMaria.closeResultSet(rs);
-//        }
-//        return null;
-//    }
-//
-//    private Teacher instantiateTeacher(ResultSet rs) {
-//        Teacher teacher = new Teacher();
-//        try {
-//            teacher.setId(rs.getInt("Id"));
-//            teacher.setfName(rs.getString("fName"));
-//            teacher.setlName(rs.getString("lName"));
-//        } catch (SQLException ex) {
-//            Logger.getLogger(TeachersDB.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        return teacher;
-//    }
+
 //
 //    public Teacher findByName(String name) {
 //        //alterar banco de dados
@@ -189,5 +205,11 @@ public class TeachersDB {
 //        }
 //        return null;
 //    }
+
+    
+
+    
+
+    
 
 }

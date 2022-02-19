@@ -1,6 +1,8 @@
 package model;
 
 import db.DBMaria;
+import entities.Course;
+import entities.Parent;
 import entities.Student;
 import entities.Teacher;
 import java.sql.Connection;
@@ -25,29 +27,71 @@ public class StudentsDB {
     public StudentsDB(Connection conn) {
         this.conn = conn;
     }
+    //search for courses student is enrolled by studentid
+    public List<Course> searchCoursesEnrolledByID(int id){
+        String QUERY = "SELECT course.courseid, course.title, course.year FROM student JOIN enrollment "
+                + "ON student.studentid = enrollment.studentid JOIN section ON section.sectionID = enrollment.sectionID "
+                + "JOIN Course "
+                + "ON section.sectionID = course.sectionID WHERE student.studentid = ?";
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try{
+            st = conn.prepareStatement(QUERY);
+            st.setInt(1, id);
+            rs = st.executeQuery();
+            
+            //create list to save results found
+            List<Course> list = new ArrayList<>();
+            
+            while(rs.next()){
+                Course course = instantiateCourse(rs);
+                list.add(course);
+            }
+            return list;
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
     
     //search student by firstname and lastname
     public Student searchByName(String fname, String lname) {
         //alterar banco de dados
         PreparedStatement st = null;
         ResultSet rs = null;
+        String qStudent = "SELECT * FROM Student WHERE first_name = ? AND last_name = ?";
+        String qParents = "SELECT parent.parentid, parent.first_name, parent.last_name, parent.email, parent.phone FROM parent JOIN studentparents ON parent.parentid = studentparents.parentid AND studentparents.studentid = ?";
         try {
-            st = conn.prepareStatement(
-                    "SELECT * FROM Student WHERE first_name = ? AND last_name = ?");
+            st = conn.prepareStatement(qStudent);
 
             st.setString(1, fname);
             st.setString(2, lname);
             rs = st.executeQuery();
-            //o resultset retorna uma tabela e na OO trabalhamos com UML
-            //devemos transformar a tabela em objeto
-            //testar se veio resultado
+            //getting the student data
+            int id = 0;
+            Student std = null;
             if (rs.next()) {
                 //cria os objetos
-                Student std = instantiateStudent(rs);
-                System.out.println("StudentsDB" + std.getfName());
-                return std;
-                
+                id = rs.getInt(1);
+                std = instantiateStudent(rs);                   
             }
+            rs.close();
+                
+            st.close();
+            
+            st = conn.prepareStatement(qParents);
+            st.setInt(1, id);
+            rs = st.executeQuery();
+            int i = 0;
+            Parent[] par = new Parent[2];
+            //getting parent data
+            while(rs.next()){                
+                par[i] = instantiateParent(rs);                
+                i++;                
+            }
+            std.setParent(par);
+            return std;
+            
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -56,33 +100,9 @@ public class StudentsDB {
         }
         return null;
     }
+    
 
-    public List<Student> findbyCourseEnrolled(Integer id) {
-        List<Student> std = new ArrayList<>();
-        PreparedStatement st = null;
-        ResultSet rs = null;
-        String query = "SELECT student.studentid, student.first_name, student.last_name, grade.activity FROM\n"
-                + "Student JOIN Enrollment ON student.studentID = Enrollment.EnrollmentID \n"
-                + "JOIN Course ON Enrollment.EnrollmentID = Course.sectionID\n"
-                + "JOIN Grade ON Course.sectionId = Grade.gradeId\n"
-                + "WHERE Course.courseID = ?";
-        try {
-            st = conn.prepareStatement(query);
-            st.setInt(1, id);
-            rs = st.executeQuery();
-
-            if (rs.next()) {
-                Student student = instantiateStudent(rs);
-                std.add(student);
-            }
-            return std;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
+    //insert student into DB istracker
     public void insert(Student obj) {        
         PreparedStatement st = null;
         String SQL = "INSERT INTO Student (first_name, last_name, phone, email) VALUES (?, ?, ?, ?)";
@@ -100,11 +120,11 @@ public class StudentsDB {
             
             
             int rowsAffected = st.executeUpdate();
-            int std_id = 0;
+            int id = 0;
             if (rowsAffected > 0) {
                 ResultSet rs = st.getGeneratedKeys();
                 if (rs.next()) {
-                    int id = rs.getInt(1);
+                    id = rs.getInt(1);
                     obj.setId(id);
                 }  
                 rs.close();
@@ -123,7 +143,7 @@ public class StudentsDB {
             if (rowsAffectedPar1 > 0) {
                 ResultSet rs = st.getGeneratedKeys();
                 if (rs.next()) {
-                    int id = rs.getInt(1);
+                    id = rs.getInt(1);
                     obj.getParent()[0].setId(id);
                 } 
                 rs.close();
@@ -142,7 +162,7 @@ public class StudentsDB {
             if (rowsAffectedPar2 > 0) {
                 ResultSet rs = st.getGeneratedKeys();
                 if (rs.next()) {
-                    int id = rs.getInt(1);
+                    id = rs.getInt(1);
                     obj.getParent()[1].setId(id);
                 }  
                 rs.close();
@@ -173,21 +193,54 @@ public class StudentsDB {
             
         }
     }
+    //create one course object
+    private Course instantiateCourse(ResultSet rs) {
+        Course course = new Course();
+        try{
+            course.setId(rs.getInt("courseid"));
+            course.setTitle(rs.getString("title"));
+            course.setYear(rs.getInt("year"));  
+            
+            return course;
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
     
-    private Student instantiateStudent(ResultSet rs) {
+    //create one Parent object
+    private Parent instantiateParent(ResultSet rs) {
+        Parent parent = new Parent();
+        try {
+            
+            parent.setId(rs.getInt("parentid"));
+            parent.setfName(rs.getString("first_name"));
+            parent.setlName(rs.getString("last_name"));
+            parent.setEmail(rs.getString("email"));
+            parent.setPhone(rs.getString("phone"));           
+            return parent;
+        } catch (SQLException ex) {
+            Logger.getLogger(TeachersDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+        
+    }
+    //create one Student object
+    public static Student instantiateStudent(ResultSet rs) {
         Student student = new Student();
         try {
             student.setId(rs.getInt("studentid"));
             student.setfName(rs.getString("first_name"));
             student.setlName(rs.getString("last_name"));
             student.setEmail(rs.getString("email"));
-            student.setPhone(rs.getString("phone"));
+            student.setPhone(rs.getString("phone"));            
             
+            return student;
         } catch (SQLException ex) {
             Logger.getLogger(TeachersDB.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return student;
+        return null;
     }
 
 //    public void update(Teacher obj) {
@@ -323,4 +376,6 @@ public class StudentsDB {
 //        }
 //        return null;
 //    }
+
+    
 }

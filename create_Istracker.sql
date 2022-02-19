@@ -83,6 +83,7 @@ FOREIGN KEY (studentID) REFERENCES Student(studentID)
 
 CREATE TABLE ENROLLMENT
 (
+enrollID INT PRIMARY KEY AUTO_INCREMENT,
 sectionID INT,
 studentID INT,
 FOREIGN KEY (sectionID) REFERENCES Section(sectionID),
@@ -156,8 +157,7 @@ VALUES
 
 INSERT INTO Enrollment(sectionID, studentID)
 VALUES
-((SELECT sectionID from Section WHERE sectionID = 1), (SELECT studentID from Student WHERE studentID = 1)),
-((SELECT sectionID from Section WHERE sectionID = 1), (SELECT studentID from Student WHERE studentID = 2)),
-((SELECT sectionID from Section WHERE sectionID = 1), (SELECT studentID from Student WHERE studentID = 3)),
+((SELECT sectionID from Section WHERE sectionID = 4), (SELECT studentID from Student WHERE studentID = 1)),
+((SELECT sectionID from Section WHERE sectionID = 3), (SELECT studentID from Student WHERE studentID = 2)),
+((SELECT sectionID from Section WHERE sectionID = 2), (SELECT studentID from Student WHERE studentID = 3)),
 ((SELECT sectionID from Section WHERE sectionID = 1), (SELECT studentID from Student WHERE studentID = 4));
-
