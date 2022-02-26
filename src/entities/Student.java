@@ -11,7 +11,7 @@ import java.util.Map;
 public class Student extends Person{
     private Parent[] parent;
     private static int count = 0;
-//    private Map<Section, Grade> grades;
+    private Grade grades;
     private List<Enrollment> enroll;
 
     public Student() {
@@ -23,6 +23,7 @@ public class Student extends Person{
         this.parent = parent;
         setId(++count);
     }
+    
 
     public Parent[] getParent() {
         return parent;
@@ -49,10 +50,22 @@ public class Student extends Person{
         this.enroll = enroll;
     }
 
+    
+    public String printStudent() {
+        return "Student{" + getfName() + " " + getlName() + ", grades1=" + grades.getGrade(0) +", grades2=" + grades.getGrade(1) +", grades3=" + grades.getGrade(2) +", grades4=" + grades.getGrade(3) +", grades5=" + grades.getGrade(4) + '}';
+    }
+
     @Override
     public String toString() {
         return getfName() + " " + getlName();
     }
-    
+
+    public Grade getGrades() {
+        return grades;
+    }
+
+    public void setGrades(Grade grades) {
+        this.grades = grades;
+    }
     
 }

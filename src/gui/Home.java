@@ -15,6 +15,7 @@ import entities.Student;
 import entities.Teacher;
 import java.awt.Color;
 import java.awt.Font;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -25,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import model.CoursesDB;
 import model.StudentsDB;
@@ -1228,8 +1230,7 @@ public class Home extends javax.swing.JFrame {
                                                 .addGap(0, 0, Short.MAX_VALUE))))
                                     .addGroup(stdDetailsPanel2Layout.createSequentialGroup()
                                         .addGap(17, 17, 17)
-                                        .addComponent(btnAddTeacher, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                        .addComponent(btnAddTeacher, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGroup(stdDetailsPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(stdDetailsPanel2Layout.createSequentialGroup()
                                 .addGap(119, 119, 119)
@@ -1639,26 +1640,19 @@ public class Home extends javax.swing.JFrame {
         tblGrades.setForeground(new java.awt.Color(54, 33, 89));
         tblGrades.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Iara Santos",  new Double(95.2),  new Double(87.3),  new Double(62.5), null, null},
-                {"John Smith",  new Double(95.2),  new Double(62.5),  new Double(87.3), null, null},
-                {"Tomas Anderson",  new Double(87.3),  new Double(95.2),  new Double(62.5), null, null},
-                {"Trinity",  new Double(62.5),  new Double(87.3),  new Double(95.2), null, null},
-                {"Paul Lavigne",  new Double(87.3),  new Double(97.7),  new Double(95.2), null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
                 "Student Name", "Activity 1", "Activity 2", "Activity 3", "Activity 4", "Activity 5"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
-            };
             boolean[] canEdit = new boolean [] {
                 false, true, true, true, true, true
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -2248,9 +2242,19 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSaveGradesActionPerformed
 
     private void btnSearchStdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStdActionPerformed
-        // TODO add your handling code here:
+        //clear table
+        clearTables(tblGrades);
+        courseTemp = (Course) cmbCourses.getSelectedItem();
+        
+        //Search students by class (class id args)
+        ResultSet rs = getStudentsByCourse(courseTemp);
+        
+        //fill table with data found
+        fillGradesTable(students);
+        
         /*
-        1 - Search students by class (class id args)
+        
+        
         2 - Allow enter Activity grades
         3 - Update database
         */
@@ -2543,6 +2547,24 @@ public class Home extends javax.swing.JFrame {
         });
     }
     /*FILL DATA START*/
+    //fill jtable grade with object data
+    private void fillGradesTable(List<Student> students) {
+        DefaultTableModel model = (DefaultTableModel) tblGrades.getModel();
+        Object rowData[] = new Object[6];
+        for(int i = 0; i < students.size(); i++){
+            rowData[0] = students.get(i).toString();
+            
+            rowData[1] = students.get(i).getGrades().getGrade(0);
+            rowData[2] = students.get(i).getGrades().getGrade(1);
+            rowData[3] = students.get(i).getGrades().getGrade(2);
+            rowData[4] = students.get(i).getGrades().getGrade(3);
+            rowData[5] = students.get(i).getGrades().getGrade(4);
+            System.out.println(students.get(i).printStudent());
+                       
+            model.addRow(rowData);
+        }
+    }
+    
     //list of students enrolled in the course
     private void fillStudentsEnrolled(int id, JList list) {
         DefaultListModel model = new DefaultListModel();
@@ -2674,7 +2696,12 @@ public class Home extends javax.swing.JFrame {
     }
     /*GET DATA END*/
     
-    /*CLEAR TXTFIELDS START*/
+    /*CLEAR FIELDS and TABLES START*/
+    //clear jtable
+    private void clearTables(JTable table){
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+    }
     //clear jList
     private void clearList(JList<Course> lstCoursesEnrolled) {
         DefaultListModel model = new DefaultListModel();
@@ -2713,6 +2740,10 @@ public class Home extends javax.swing.JFrame {
         txtParentPhone.setText("");
         txtParentEmail.setText("");
     }
+    //clear combobox data
+    private void clearComboBox(JComboBox combo){
+        combo.removeAllItems();        
+    }
     /*CLEAR TXTFIELDS END*/
     
     /*DATA VALIDATION START*/
@@ -2739,6 +2770,14 @@ public class Home extends javax.swing.JFrame {
     /*DATA VALIDATION END*/
     
     /*DATABASE MANAGEMENT*/
+    //find students by course
+     private ResultSet getStudentsByCourse(Course crs) {
+        students = null;
+        ResultSet rs = null;
+        CoursesDB manager = new CoursesDB(DBMaria.getConnection());
+        students = manager.findStudentsByCourse(crs);
+        return rs;
+    }
     //find all courses registered 
     private List<Course> getCoursesList() {
         courses = null;
@@ -3020,9 +3059,7 @@ public class Home extends javax.swing.JFrame {
         //https://stackoverflow.com/questions/1291704/how-do-i-populate-a-jcombobox-with-an-arraylist/26347782
         //to insert list of teachers in the combobox
     }
-    private void clearComboBox(JComboBox combo){
-        combo.removeAllItems();        
-    }
+    
     
     private void loadCmbCourses(){
         clearComboBox(cmbCourses);               
@@ -3049,6 +3086,5 @@ public class Home extends javax.swing.JFrame {
         panel.setBackground(new Color(64, 43, 100));
     }
 
-    
 
 }

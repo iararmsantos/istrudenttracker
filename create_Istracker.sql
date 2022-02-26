@@ -48,8 +48,11 @@ CREATE TABLE Grade
 (
 gradeID INT PRIMARY KEY AUTO_INCREMENT,
 sectionID INT,
-letterGrade CHAR(2),
-numberGrade NUMERIC(4, 2),
+activity1 NUMERIC(4, 2),
+activity2 NUMERIC(4, 2),
+activity3 NUMERIC(4, 2),
+activity4 NUMERIC(4, 2),
+activity5 NUMERIC(4, 2),
 FOREIGN KEY (sectionID) REFERENCES Section(sectionID)
 );
 
@@ -119,12 +122,12 @@ VALUES
 ((SELECT sectionID from Section WHERE sectionID = 3), 'Potions', 2019),
 ((SELECT sectionID from Section WHERE sectionID = 4), 'Potions', 2019);
 
-INSERT INTO Grade(sectionID, letterGrade, numberGrade)
+INSERT INTO Grade(sectionID, letterGrade, numberGrade, activity1, activity2, activity3, activity4, activity5)
 VALUES
-((SELECT sectionID from Section WHERE sectionID = 1), 'A', 95.25),
-((SELECT sectionID from Section WHERE sectionID = 2), 'B', 89.20),
-((SELECT sectionID from Section WHERE sectionID = 3), 'C', 84.00),
-((SELECT sectionID from Section WHERE sectionID = 4), 'D', 75.25);
+((SELECT sectionID from Section WHERE sectionID = 1), 95.25, 75.25, 95.25, 89.20, 84.00),
+((SELECT sectionID from Section WHERE sectionID = 2), 89.20, 75.25, 95.25, 89.20, 84.00),
+((SELECT sectionID from Section WHERE sectionID = 3), 84.00, 75.25, 95.25, 89.20, 84.00),
+((SELECT sectionID from Section WHERE sectionID = 4), 75.25, 75.25, 95.25, 89.20, 84.00);
 
 INSERT INTO Parent(first_name, last_name, phone, email)
 VALUES

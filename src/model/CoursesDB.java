@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import entities.Course;
+import entities.Grade;
 import entities.Section;
 import entities.Semester;
 import entities.Student;
@@ -26,6 +27,42 @@ public class CoursesDB {
     public CoursesDB(Connection conn) {
         this.conn = conn;
     }
+    public List<Student> findStudentsByCourse(Course course) {
+        List<Student> list = new ArrayList<>();
+        Grade[] grade = new Grade[5];
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        String query = "SELECT student.studentid, student.first_name, student.last_name, student.email, student.phone, grade.gradeid, grade.activity1, grade.activity2, grade.activity3,     grade.activity4, grade.activity5 "
+                + "FROM Student "
+                + "JOIN Enrollment ON student.studentID = Enrollment.EnrollID "
+                + "JOIN Course ON Enrollment.EnrollID = Course.sectionID "
+                + "JOIN Grade ON Course.sectionId = Grade.gradeId "
+                + "WHERE Course.courseID = ?";
+        try {
+            st = conn.prepareStatement(query);
+            st.setInt(1, course.getId());
+            rs = st.executeQuery();
+            //st.setInt(2, obj.getParent()[1].getId());
+
+            while (rs.next()) {
+                Student std = StudentsDB.instantiateStudent(rs);
+                Grade grd = instantiateGrade(rs);
+                std.setGrades(grd);
+                list.add(std);
+                
+            }
+            
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+            DBMaria.closeResultSet(rs);
+        }
+        return null;
+    }
+    
+    //find all courses registered
     public List<Course> findAll() {
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -87,12 +124,9 @@ public class CoursesDB {
             DBMaria.closeStatement(st);
             DBMaria.closeResultSet(rs);
         }
-        return null;
-    
+        return null;    
 }
                 
-    
-    
     //get list of students in a course
     public List<Student> findCoursesEnrolled(Integer id) {
         List<Student> std = new ArrayList<>();
@@ -165,6 +199,23 @@ public class CoursesDB {
         }
         return null;
     }
+    //create one grade obejct
+    private Grade instantiateGrade(ResultSet rs) {
+        Grade grade = new Grade();
+        try{
+            grade.setGradeId(rs.getInt("gradeID"));
+            grade.setGrade(0, rs.getDouble("activity1"));
+            grade.setGrade(1, rs.getDouble("activity2"));
+            grade.setGrade(2, rs.getDouble("activity3"));
+            grade.setGrade(3, rs.getDouble("activity4"));
+            grade.setGrade(4, rs.getDouble("activity5"));
+            
+            return grade;
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
     
     //create one course object
     private Course instantiateCourse(ResultSet rs) {
@@ -215,10 +266,6 @@ public class CoursesDB {
 
     
 
-    
-
-    
-    
 }
 
 //source get enum using resutset: https://stackoverflow.com/questions/65197006/saving-and-reading-the-enum-value-to-the-database-with-jdbc
