@@ -29,6 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import model.CoursesDB;
+import model.GradesDB;
 import model.StudentsDB;
 import model.TeachersDB;
 
@@ -58,7 +59,7 @@ public class Home extends javax.swing.JFrame {
         viewPanel.setVisible(false);
 
         //tblGrades
-        configureTableHeader(tblGrades);        
+        configureTableHeader(tblGrades);
 
         //tblCoursesTaught
         configureTableHeader(tblCoursesTaught);
@@ -67,14 +68,14 @@ public class Home extends javax.swing.JFrame {
         configureTableHeader(tblSearchResult);
 
         //tblGradesAvg
-        configureTableHeader(tblGradesAvg);    
-        
+        configureTableHeader(tblGradesAvg);
+
         loadCmbSemesters();
         //get list of teachers
         teachers = getTeachersList();
         loadCmbTeachers();
-        
-        courses = getCoursesList(); 
+
+        courses = getCoursesList();
         loadCmbCourses();
     }
 
@@ -200,6 +201,9 @@ public class Home extends javax.swing.JFrame {
         cmbTeachers = new javax.swing.JComboBox<>();
         btnRemove = new javax.swing.JButton();
         cmbSemester = new javax.swing.JComboBox<>();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        tblCoursesTaught1 = new javax.swing.JTable();
+        btnEnrollStudent = new javax.swing.JButton();
         gradesPanel = new javax.swing.JPanel();
         titlePanel4 = new javax.swing.JPanel();
         lblTitle4 = new javax.swing.JLabel();
@@ -535,7 +539,7 @@ public class Home extends javax.swing.JFrame {
             .addGroup(titlePanel3Layout.createSequentialGroup()
                 .addGap(44, 44, 44)
                 .addComponent(lblTitle3)
-                .addContainerGap(750, Short.MAX_VALUE))
+                .addContainerGap(745, Short.MAX_VALUE))
         );
         titlePanel3Layout.setVerticalGroup(
             titlePanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -751,6 +755,11 @@ public class Home extends javax.swing.JFrame {
         btnUpdateStudent.setMaximumSize(new java.awt.Dimension(37, 24));
         btnUpdateStudent.setMinimumSize(new java.awt.Dimension(37, 24));
         btnUpdateStudent.setPreferredSize(new java.awt.Dimension(37, 24));
+        btnUpdateStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateStudentActionPerformed(evt);
+            }
+        });
 
         jLabel51.setBackground(new java.awt.Color(255, 255, 255));
         jLabel51.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -803,79 +812,72 @@ public class Home extends javax.swing.JFrame {
             .addGroup(stdDetailsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel20)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, stdDetailsPanelLayout.createSequentialGroup()
                         .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, stdDetailsPanelLayout.createSequentialGroup()
                                 .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                                        .addComponent(jLabel24)
-                                        .addGap(241, 241, 241))
+                                    .addComponent(jLabel11)
+                                    .addComponent(jLabel18)
+                                    .addComponent(jLabel21)
+                                    .addComponent(txtStudentFName, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                                    .addComponent(txtStudentPhone)
+                                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnSearchStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(stdDetailsPanelLayout.createSequentialGroup()
                                         .addComponent(txtParentEmail)
-                                        .addGap(92, 92, 92)))
-                                .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                                    .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(stdDetailsPanelLayout.createSequentialGroup()
+                                        .addGap(22, 22, 22)))
+                                .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(stdDetailsPanelLayout.createSequentialGroup()
+                                        .addGap(38, 38, 38)
+                                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(jLabel11)
-                                                .addComponent(jLabel18)
-                                                .addComponent(jLabel21)
-                                                .addComponent(txtStudentFName, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                                                .addComponent(txtStudentPhone)
-                                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(btnSearchStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                                                    .addGap(38, 38, 38)
-                                                    .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                            .addComponent(jLabel12)
-                                                            .addComponent(txtStudentLName, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                                                            .addComponent(txtStudentEmail)
-                                                            .addComponent(jLabel19))
-                                                        .addComponent(btnInsertStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                    .addGap(68, 68, 68)
-                                                    .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(enrollStudentSP, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel14)))
-                                                .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                                                    .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                                                            .addGap(10, 10, 10)
-                                                            .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                .addComponent(jLabel26)
-                                                                .addComponent(txtParentLName, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                                                                .addComponent(jLabel22)
-                                                                .addComponent(txtParentPhone))
-                                                            .addGap(45, 45, 45)
-                                                            .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addComponent(txtParentFName2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addComponent(jLabel51)
-                                                                .addComponent(jLabel53)
-                                                                .addComponent(txtParentEmail2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                        .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                                                            .addGap(34, 34, 34)
-                                                            .addComponent(btnEnterGrades, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                            .addGap(50, 50, 50)
-                                                            .addComponent(btnSaveStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                    .addGap(33, 33, 33)
-                                                    .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(txtParentPhone2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(btnUpdateStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel52)
-                                                        .addComponent(txtParentLName2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel54)))))
-                                        .addComponent(txtStudentId, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtParentFName, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(41, 41, 41)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, stdDetailsPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel15)
-                                .addGap(318, 318, 318)))
-                        .addGap(111, 111, 111))))
+                                                .addComponent(jLabel12)
+                                                .addComponent(txtStudentLName, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                                                .addComponent(txtStudentEmail)
+                                                .addComponent(jLabel19))
+                                            .addComponent(btnInsertStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(68, 68, 68)
+                                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(enrollStudentSP, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel14)))
+                                    .addGroup(stdDetailsPanelLayout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jLabel26)
+                                                .addComponent(txtParentLName, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                                                .addComponent(txtParentPhone))
+                                            .addComponent(jLabel22)
+                                            .addComponent(btnEnterGrades, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(stdDetailsPanelLayout.createSequentialGroup()
+                                                .addGap(45, 45, 45)
+                                                .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel53)
+                                                    .addComponent(txtParentFName2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jLabel51)
+                                                    .addComponent(txtParentEmail2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(33, 33, 33)
+                                                .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(txtParentPhone2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jLabel52)
+                                                    .addComponent(txtParentLName2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jLabel54)))
+                                            .addGroup(stdDetailsPanelLayout.createSequentialGroup()
+                                                .addGap(59, 59, 59)
+                                                .addComponent(btnSaveStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(60, 60, 60)
+                                                .addComponent(btnUpdateStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                            .addComponent(txtStudentId, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtParentFName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(67, 67, 67))
+                    .addGroup(stdDetailsPanelLayout.createSequentialGroup()
+                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel20)
+                            .addComponent(jLabel24))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         stdDetailsPanelLayout.setVerticalGroup(
             stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -910,59 +912,48 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(btnInsertStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSearchStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(enrollStudentSP, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                .addGap(47, 47, 47)
                 .addComponent(jLabel20)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
                 .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel21)
                     .addComponent(jLabel26)
                     .addComponent(jLabel51)
                     .addComponent(jLabel54))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                                .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtParentFName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtParentLName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(24, 24, 24))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, stdDetailsPanelLayout.createSequentialGroup()
-                                .addComponent(txtParentFName2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)))
-                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel24)
-                                .addComponent(jLabel22))
-                            .addComponent(jLabel53))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtParentEmail2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtParentEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtParentPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(75, 75, 75))
-                    .addGroup(stdDetailsPanelLayout.createSequentialGroup()
-                        .addComponent(txtParentLName2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel52)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtParentPhone2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnUpdateStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSaveStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEnterGrades, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtParentFName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtParentLName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtParentFName2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtParentLName2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(jLabel22)
+                    .addComponent(jLabel53)
+                    .addComponent(jLabel52))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtParentEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtParentPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtParentEmail2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtParentPhone2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addGroup(stdDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEnterGrades, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSaveStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdateStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(48, 48, 48))
         );
 
         javax.swing.GroupLayout studentsPanelLayout = new javax.swing.GroupLayout(studentsPanel);
         studentsPanel.setLayout(studentsPanelLayout);
         studentsPanelLayout.setHorizontalGroup(
             studentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(titlePanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 957, Short.MAX_VALUE)
+            .addComponent(titlePanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, studentsPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 17, Short.MAX_VALUE)
                 .addComponent(stdDetailsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 933, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         studentsPanelLayout.setVerticalGroup(
@@ -1479,6 +1470,42 @@ public class Home extends javax.swing.JFrame {
         cmbSemester.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cmbSemester.setForeground(new java.awt.Color(54, 33, 89));
 
+        tblCoursesTaught1.setBackground(new java.awt.Color(255, 255, 255));
+        tblCoursesTaught1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tblCoursesTaught1.setForeground(new java.awt.Color(54, 33, 89));
+        tblCoursesTaught1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Student ID", "Student First Name", "Student LastName"
+            }
+        ));
+        tblCoursesTaught1.setGridColor(new java.awt.Color(255, 255, 255));
+        tblCoursesTaught1.setMaximumSize(new java.awt.Dimension(150, 64));
+        tblCoursesTaught1.setMinimumSize(new java.awt.Dimension(150, 64));
+        tblCoursesTaught1.setOpaque(false);
+        tblCoursesTaught1.setSelectionBackground(new java.awt.Color(54, 33, 89));
+        tblCoursesTaught1.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        jScrollPane11.setViewportView(tblCoursesTaught1);
+
+        btnEnrollStudent.setBackground(new java.awt.Color(54, 33, 89));
+        btnEnrollStudent.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnEnrollStudent.setForeground(new java.awt.Color(255, 255, 255));
+        btnEnrollStudent.setText("Enroll Student");
+        btnEnrollStudent.setBorder(null);
+        btnEnrollStudent.setMaximumSize(new java.awt.Dimension(37, 24));
+        btnEnrollStudent.setMinimumSize(new java.awt.Dimension(37, 24));
+        btnEnrollStudent.setPreferredSize(new java.awt.Dimension(37, 24));
+        btnEnrollStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnrollStudentActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout courseDetailsPanelLayout = new javax.swing.GroupLayout(courseDetailsPanel);
         courseDetailsPanel.setLayout(courseDetailsPanelLayout);
         courseDetailsPanelLayout.setHorizontalGroup(
@@ -1487,44 +1514,52 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, courseDetailsPanelLayout.createSequentialGroup()
-                        .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane11)
                             .addGroup(courseDetailsPanelLayout.createSequentialGroup()
-                                .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtCourseTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                                    .addComponent(jLabel37)
-                                    .addComponent(jLabel30)
-                                    .addComponent(jLabel28)
-                                    .addComponent(txtCourseId))
-                                .addGap(38, 38, 38)
                                 .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel31)
-                                    .addComponent(btnSearchCourses, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel29)
-                                    .addComponent(txtCourseYear, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, courseDetailsPanelLayout.createSequentialGroup()
+                                    .addGroup(courseDetailsPanelLayout.createSequentialGroup()
+                                        .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtCourseTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                                            .addComponent(jLabel37)
+                                            .addComponent(jLabel30)
+                                            .addComponent(jLabel28)
+                                            .addComponent(txtCourseId))
+                                        .addGap(38, 38, 38)
+                                        .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel31)
+                                            .addComponent(btnSearchCourses, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel29)
+                                            .addComponent(txtCourseYear, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(courseDetailsPanelLayout.createSequentialGroup()
+                                        .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(cmbSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnAddCourse1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(courseDetailsPanelLayout.createSequentialGroup()
+                                                .addGap(5, 5, 5)
+                                                .addComponent(btnSaveCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(courseDetailsPanelLayout.createSequentialGroup()
+                                                .addGap(30, 30, 30)
+                                                .addComponent(cmbTeachers, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                                 .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cmbSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAddCourse1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                                .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnSaveCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cmbTeachers, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel38)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel38)))
+                            .addGroup(courseDetailsPanelLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnDeleteCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(64, 64, 64)
+                                .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(63, 63, 63))
                     .addGroup(courseDetailsPanelLayout.createSequentialGroup()
-                        .addGap(439, 439, 439)
-                        .addComponent(btnDeleteCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
-                        .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 87, Short.MAX_VALUE))))
+                        .addComponent(btnEnrollStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         courseDetailsPanelLayout.setVerticalGroup(
             courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(courseDetailsPanelLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(18, 18, 18)
                 .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel38)
                     .addComponent(jLabel37))
@@ -1547,7 +1582,7 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(jLabel31)
                             .addComponent(jLabel30))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(courseDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cmbTeachers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbSemester, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane6))
@@ -1557,7 +1592,11 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(btnSaveCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDeleteCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(341, Short.MAX_VALUE))
+                .addGap(45, 45, 45)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addComponent(btnEnrollStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40))
         );
 
         javax.swing.GroupLayout coursePanelLayout = new javax.swing.GroupLayout(coursePanel);
@@ -1672,7 +1711,6 @@ public class Home extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblGrades);
         tblGrades.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tblGrades.getColumnModel().getColumnCount() > 0) {
-            tblGrades.getColumnModel().getColumn(0).setResizable(false);
             tblGrades.getColumnModel().getColumn(0).setPreferredWidth(50);
             tblGrades.getColumnModel().getColumn(1).setResizable(false);
             tblGrades.getColumnModel().getColumn(1).setPreferredWidth(10);
@@ -1680,6 +1718,7 @@ public class Home extends javax.swing.JFrame {
             tblGrades.getColumnModel().getColumn(2).setPreferredWidth(10);
             tblGrades.getColumnModel().getColumn(3).setResizable(false);
             tblGrades.getColumnModel().getColumn(3).setPreferredWidth(10);
+            tblGrades.getColumnModel().getColumn(4).setResizable(false);
         }
 
         btnSearchStd.setBackground(new java.awt.Color(54, 33, 89));
@@ -2052,7 +2091,7 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(viewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(viewPanelLayout.createSequentialGroup()
                         .addComponent(jLabel43)
-                        .addContainerGap(577, Short.MAX_VALUE))
+                        .addContainerGap(570, Short.MAX_VALUE))
                     .addGroup(viewPanelLayout.createSequentialGroup()
                         .addGroup(viewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel40)
@@ -2120,8 +2159,8 @@ public class Home extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jSplitSidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 1208, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addComponent(jSplitSidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 1201, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2245,19 +2284,13 @@ public class Home extends javax.swing.JFrame {
         //clear table
         clearTables(tblGrades);
         courseTemp = (Course) cmbCourses.getSelectedItem();
-        
+
         //Search students by class (class id args)
-        ResultSet rs = getStudentsByCourse(courseTemp);
-        
+        getStudentsByCourse(courseTemp);
+
         //fill table with data found
         fillGradesTable(students);
         
-        /*
-        
-        
-        2 - Allow enter Activity grades
-        3 - Update database
-        */
     }//GEN-LAST:event_btnSearchStdActionPerformed
 
     private void btnDeleteActivityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActivityActionPerformed
@@ -2265,7 +2298,16 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActivityActionPerformed
 
     private void btnUpdateGradesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateGradesActionPerformed
-        // TODO add your handling code here:
+        //get student id   
+        courseTemp = (Course) cmbCourses.getSelectedItem();
+        getStudentsByCourse(courseTemp);
+        
+        System.out.println(students.get(0).getId());
+        //update grades of all students
+        for (int i = 0; i < students.size(); i++) {
+            updateGrades(students.get(i).getId());
+        }      
+        
     }//GEN-LAST:event_btnUpdateGradesActionPerformed
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
@@ -2293,7 +2335,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_txtRelative2ActionPerformed
 
     private void btnAddTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTeacherActionPerformed
-       
+
         teacherTemp = new Teacher();
 
         teachers.add(teacherTemp);
@@ -2341,6 +2383,7 @@ public class Home extends javax.swing.JFrame {
         try {
             if (isValidData()) {
                 getStudentData();
+                insertStudents(students.get(countStd));                
                 JOptionPane.showMessageDialog(this, "Student saved!");
                 clearStudentFields();
                 btnInsertStudent.setEnabled(true);
@@ -2359,7 +2402,7 @@ public class Home extends javax.swing.JFrame {
         resetColor(btnTeacher);
         resetColor(btnViewPanel);
         resetColor(btnExitPanel);
-        
+
         teachersPanel.setVisible(false);
         coursePanel.setVisible(false);
         studentsPanel.setVisible(false);
@@ -2372,7 +2415,9 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnInsertStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertStudentActionPerformed
-        //get student data
+        //get data from database
+        getStudentsList();
+        
         stdTemp = new Student();
 
         students.add(stdTemp);
@@ -2396,10 +2441,10 @@ public class Home extends javax.swing.JFrame {
         //get first and last name
         String fname = txtStudentFName.getText();
         String lname = txtStudentLName.getText();
-        System.out.println(fname + " " + lname);
-        if("".equals(fname) || "".equals(lname)){
+        
+        if ("".equals(fname) || "".equals(lname)) {
             JOptionPane.showMessageDialog(this, "First Name or Last Name is empty");
-       }else{
+        } else {
             stdTemp = getStudentByName(fname, lname);
             fillStudentData();
             int id = Integer.parseInt(txtStudentId.getText());
@@ -2408,9 +2453,8 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSearchStudentActionPerformed
 
     private void enrollStudentSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enrollStudentSPActionPerformed
-        
+
         //TODO:
-        
         /*
         get student id to enroll in the course user will choose   
         
@@ -2434,7 +2478,7 @@ public class Home extends javax.swing.JFrame {
         
         enroll student to that course
         
-        */
+         */
     }//GEN-LAST:event_enrollStudentSPActionPerformed
 
     private void btnSearchTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchTeacherActionPerformed
@@ -2442,21 +2486,21 @@ public class Home extends javax.swing.JFrame {
         String fname = txtTeacherFName.getText();
         String lname = txtTeacherLName.getText();
         System.out.println(fname + " " + lname);
-        if("".equals(fname) || "".equals(lname)){
+        if ("".equals(fname) || "".equals(lname)) {
             JOptionPane.showMessageDialog(this, "First Name or Last Name is empty");
-       }else{
+        } else {
             teacherTemp = getTeacherByName(fname, lname);
             fillTeacherData();
             //fillAllCourses //SHOULD BE LIST OF COURSES TAUGHT
             int id = Integer.parseInt(txtTeacherId.getText());
             fillCoursesEnrolled(id, lstTeacherCourses);//SHOULD BE LIST OF COURSES
         }
-        
+
     }//GEN-LAST:event_btnSearchTeacherActionPerformed
 
     private void btnAddCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCourseActionPerformed
         //TODO:
-        
+
         /*
         get teacher id to enroll in the course user will choose   
         
@@ -2480,22 +2524,22 @@ public class Home extends javax.swing.JFrame {
         
         enroll teacher to the course
         
-        */
+         */
     }//GEN-LAST:event_btnAddCourseActionPerformed
 
     private void btnSearchCoursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchCoursesActionPerformed
         //get title
         String title = txtCourseTitle.getText();
         int year = Integer.parseInt(txtCourseYear.getText());
-        if("".equals(title) || "".equals(txtCourseYear.getText())){
+        if ("".equals(title) || "".equals(txtCourseYear.getText())) {
             JOptionPane.showMessageDialog(this, "Title or year is empty");
-       }else{
-            courseTemp = getCourseByTitleYear(title, year);            
+        } else {
+            courseTemp = getCourseByTitleYear(title, year);
             fillCourseData();
             int id = Integer.parseInt(txtCourseId.getText());
-            
+
             fillStudentsEnrolled(id, lstStudentsEnrolled);
-            
+
             //select semester
             //select teacher
             getSection(id);
@@ -2508,6 +2552,17 @@ public class Home extends javax.swing.JFrame {
             //https://stackoverflow.com/questions/2777045/how-to-select-item-in-jcombobox
         }
     }//GEN-LAST:event_btnSearchCoursesActionPerformed
+
+    private void btnEnrollStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnrollStudentActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEnrollStudentActionPerformed
+
+    private void btnUpdateStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStudentActionPerformed
+        getStudentData();        
+        
+        updateStudent(stdTemp);    
+        
+    }//GEN-LAST:event_btnUpdateStudentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2546,48 +2601,51 @@ public class Home extends javax.swing.JFrame {
             }
         });
     }
+
     /*FILL DATA START*/
     //fill jtable grade with object data
     private void fillGradesTable(List<Student> students) {
         DefaultTableModel model = (DefaultTableModel) tblGrades.getModel();
         Object rowData[] = new Object[6];
-        for(int i = 0; i < students.size(); i++){
+        for (int i = 0; i < students.size(); i++) {
             rowData[0] = students.get(i).toString();
-            
+
             rowData[1] = students.get(i).getGrades().getGrade(0);
             rowData[2] = students.get(i).getGrades().getGrade(1);
             rowData[3] = students.get(i).getGrades().getGrade(2);
             rowData[4] = students.get(i).getGrades().getGrade(3);
             rowData[5] = students.get(i).getGrades().getGrade(4);
-            System.out.println(students.get(i).printStudent());
-                       
+            
+
             model.addRow(rowData);
         }
     }
-    
+
     //list of students enrolled in the course
     private void fillStudentsEnrolled(int id, JList list) {
         DefaultListModel model = new DefaultListModel();
         clearList(list);
-        
+
         //get from database
         findCourseEnrolled(id);
-        
+
         //fill list
-        for(Student std : students){
+        for (Student std : students) {
             model.addElement(std.toString());
             System.out.println(std.toString());
-        }        
-        list.setModel(model);    
+        }
+        list.setModel(model);
     }
+
     //after get data from db fill course form
     private void fillCourseData() {
         clearCourseFields();
         txtCourseId.setText(String.valueOf(courseTemp.getId()));
         txtCourseTitle.setText(courseTemp.getTitle());
         txtCourseYear.setText(String.valueOf(courseTemp.getYear()));
-        
+
     }
+
     //after get data from db fill teachers form
     private void fillTeacherData() {
         clearTeacherFields();
@@ -2597,25 +2655,24 @@ public class Home extends javax.swing.JFrame {
         txtTeacherPhone.setText(teacherTemp.getPhone());
         txtTeacherEmail.setText(teacherTemp.getEmail());
     }
-    
+
     //fill course list with courses a student is enrolled
-    public void fillCoursesEnrolled(int id, JList list){
+    public void fillCoursesEnrolled(int id, JList list) {
         DefaultListModel model = new DefaultListModel();
         clearList(list);
-        
+
         //get from database
         getCoursesEnrolled(id);
-        
+
         //fill list
-        for(Course course : courses){
-            model.addElement(course.toString());
-            System.out.println(course.toString());
-        }        
-        list.setModel(model);        
+        for (Course course : courses) {
+            model.addElement(course.toString());            
+        }
+        list.setModel(model);
     }
-    
+
     //after get data from db fill students form
-    public void fillStudentData(){        
+    public void fillStudentData() {
         clearStudentFields();
         txtStudentId.setText(String.valueOf(stdTemp.getId()));
         txtStudentFName.setText(stdTemp.getfName());
@@ -2627,31 +2684,48 @@ public class Home extends javax.swing.JFrame {
         txtParentPhone.setText(stdTemp.getParent()[0].getPhone());
         txtParentEmail.setText(stdTemp.getParent()[0].getEmail());
         txtParentFName2.setText(stdTemp.getParent()[1].getfName());
-        txtParentLName2.setText(stdTemp.getParent()[1].getfName());       
+        txtParentLName2.setText(stdTemp.getParent()[1].getfName());
         txtParentPhone2.setText(stdTemp.getParent()[1].getPhone());
         txtParentEmail2.setText(stdTemp.getParent()[1].getEmail());
     }
+
     /*FILL DATA END*/
+
+ /*GET FORM DATA START*/
     
-     /*GET FORM DATA START*/
-    
+    //get grades to update database
+    private void updateGrades(int id) {
+        Double[] grade = new Double[5];
+        DefaultTableModel model = (DefaultTableModel) tblGrades.getModel();
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            grade[0] = new Double(model.getValueAt(i, 1).toString());
+            grade[1] = new Double(model.getValueAt(i, 2).toString());
+            grade[2] = new Double(model.getValueAt(i, 3).toString());
+            grade[3] = new Double(model.getValueAt(i, 4).toString());
+            grade[4] = new Double(model.getValueAt(i, 5).toString());
+            System.out.println(grade[4]);
+        }
+
+        updateGradesDB(grade, id);
+    }
     //get course data to set to the object and add to the list
     private void getCourseData() {
-        sectionTemp = new Section();  
+        sectionTemp = new Section();
         courses.get(countCourse).setTitle(txtCourseTitle.getText());
         courses.get(countCourse).setYear(Integer.parseInt(txtCourseYear.getText()));
         courses.get(countCourse).setId(Integer.parseInt(txtCourseId.getText()));
-          
+
         //combobox Semester        
-        sectionTemp.setSemester((Semester) cmbSemester.getSelectedItem());  
-        
+        sectionTemp.setSemester((Semester) cmbSemester.getSelectedItem());
+
         //combobox Teacher        
-        sectionTemp.setTeacher((Teacher)cmbTeachers.getSelectedItem());
-        
+        sectionTemp.setTeacher((Teacher) cmbTeachers.getSelectedItem());
+
         //database
-        insertCourses(courses.get(countCourse)); 
+        insertCourses(courses.get(countCourse));
         ++countCourse;
-        
+
         //load combobox in grades
         loadCmbCourses();
     }
@@ -2670,11 +2744,11 @@ public class Home extends javax.swing.JFrame {
 
     //get student data to set to the object and add to the list
     private void getStudentData() {
-        students.get(countStd).setfName(txtStudentFName.getText());
-        students.get(countStd).setlName(txtStudentLName.getText());
-        students.get(countStd).setPhone(txtStudentPhone.getText());
-        students.get(countStd).setEmail(txtStudentEmail.getText());
-        students.get(countStd).setId(Integer.parseInt(txtStudentId.getText()));
+        stdTemp.setfName(txtStudentFName.getText());
+        stdTemp.setlName(txtStudentLName.getText());
+        stdTemp.setPhone(txtStudentPhone.getText());
+        stdTemp.setEmail(txtStudentEmail.getText());
+        stdTemp.setId(Integer.parseInt(txtStudentId.getText()));
 
         parent = new Parent[2];
         parent[0] = new Parent();
@@ -2683,32 +2757,37 @@ public class Home extends javax.swing.JFrame {
         parent[0].setlName(txtParentLName.getText());
         parent[0].setPhone(txtParentPhone.getText());
         parent[0].setEmail(txtParentEmail.getText());
+        parent[0].setId(stdTemp.getParent()[0].getId());
         parent[1].setfName(txtParentFName2.getText());
         parent[1].setlName(txtParentLName2.getText());
         parent[1].setPhone(txtParentPhone2.getText());
         parent[1].setEmail(txtParentEmail2.getText());
-
-        students.get(countStd).setParent(parent);
+        parent[1].setId(stdTemp.getParent()[1].getId());
         
-        System.out.println(students.get(0).getParent()[1].getlName());
-        insertStudents(students.get(countStd));
-        ++countStd;
+        stdTemp.setParent(parent);
+        
+        students.add(stdTemp);
+
+        countStd++;
+        
     }
+
     /*GET DATA END*/
-    
-    /*CLEAR FIELDS and TABLES START*/
+
+ /*CLEAR FIELDS and TABLES START*/
     //clear jtable
-    private void clearTables(JTable table){
+    private void clearTables(JTable table) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
     }
+
     //clear jList
     private void clearList(JList<Course> lstCoursesEnrolled) {
         DefaultListModel model = new DefaultListModel();
         model.removeAllElements();
-        lstCoursesEnrolled.setModel(model);        
+        lstCoursesEnrolled.setModel(model);
     }
-    
+
     //clear course fields
     private void clearCourseFields() {
         txtCourseTitle.setText("");
@@ -2740,14 +2819,15 @@ public class Home extends javax.swing.JFrame {
         txtParentPhone.setText("");
         txtParentEmail.setText("");
     }
-    //clear combobox data
-    private void clearComboBox(JComboBox combo){
-        combo.removeAllItems();        
-    }
-    /*CLEAR TXTFIELDS END*/
-    
-    /*DATA VALIDATION START*/
 
+    //clear combobox data
+    private void clearComboBox(JComboBox combo) {
+        combo.removeAllItems();
+    }
+
+    /*CLEAR TXTFIELDS END*/
+
+ /*DATA VALIDATION START*/
     //verify if data is valid
     private boolean isValidData() {
         return isPresent(txtStudentFName, "First Name") && isPresent(txtStudentLName, "Last Name")
@@ -2765,28 +2845,33 @@ public class Home extends javax.swing.JFrame {
         } else {
             return true;
         }
-    }   
+    }
 
     /*DATA VALIDATION END*/
-    
-    /*DATABASE MANAGEMENT*/
-    //find students by course
-     private ResultSet getStudentsByCourse(Course crs) {
-        students = null;
-        ResultSet rs = null;
-        CoursesDB manager = new CoursesDB(DBMaria.getConnection());
-        students = manager.findStudentsByCourse(crs);
-        return rs;
+ /*DATABASE MANAGEMENT*/
+    //insert new grades into db
+    private void updateGradesDB(Double[] grade, int id) {
+        GradesDB manager = new GradesDB(DBMaria.getConnection());
+        manager.updateGrades(grade, id);
     }
+
+    //find students by course
+    private void getStudentsByCourse(Course crs) {
+        students = null;
+        CoursesDB manager = new CoursesDB(DBMaria.getConnection());
+        students = manager.findStudentsByCourse(crs);        
+    }
+
     //find all courses registered 
     private List<Course> getCoursesList() {
         courses = null;
         //connect to database
         CoursesDB manager = new CoursesDB(DBMaria.getConnection());
         courses = manager.findAll();
-        
+
         return courses;
     }
+
     //find section by course id - get teacher and semester data
     private void getSection(int id) {
         sectionTemp = null;
@@ -2794,7 +2879,7 @@ public class Home extends javax.swing.JFrame {
         CoursesDB manager = new CoursesDB(DBMaria.getConnection());
         sectionTemp = manager.getSection(id);
     }
-    
+
     //find students enrolled in a course
     private void findCourseEnrolled(int id) {
         students = null;
@@ -2802,52 +2887,65 @@ public class Home extends javax.swing.JFrame {
         CoursesDB manager = new CoursesDB(DBMaria.getConnection());
         students = manager.findCoursesEnrolled(id);
     }
-    
+
     //find course using title and year as reference
     private Course getCourseByTitleYear(String title, int year) {
         courseTemp = null;
         //connect to database
         CoursesDB manager = new CoursesDB(DBMaria.getConnection());
         courseTemp = manager.searchCoursesByTitleYear(title, year);
-        
+
         return courseTemp;
     }
+    //find all teachers registered 
+    private List<Student> getStudentsList() {
+        students = null;
+        //connect to database
+        StudentsDB manager = new StudentsDB(DBMaria.getConnection());
+        students = manager.findAll();
+
+        return students;
+    }
+
     //find all teachers registered 
     private List<Teacher> getTeachersList() {
         teachers = null;
         //connect to database
         TeachersDB manager = new TeachersDB(DBMaria.getConnection());
         teachers = manager.findAll();
-        
+
         return teachers;
     }
+
     //find teacher by first name and last name
     private Teacher getTeacherByName(String fname, String lname) {
         teacherTemp = null;
         //connect to database
         TeachersDB manager = new TeachersDB(DBMaria.getConnection());
         teacherTemp = manager.searchByName(fname, lname);
-        
+
         return teacherTemp;
     }
+
     //search courses students is enrolled
-    public void getCoursesEnrolled(int id){
+    public void getCoursesEnrolled(int id) {
         courses = null;
         //connect to database
         StudentsDB manager = new StudentsDB(DBMaria.getConnection());
         courses = manager.searchCoursesEnrolledByID(id);
-        System.out.println(courses.get(0).getTitle());        
+        System.out.println(courses.get(0).getTitle());
     }
-    
+
     //search students by first name and last name
-    public Student getStudentByName(String fname, String lname){
+    public Student getStudentByName(String fname, String lname) {
         stdTemp = null;
         //connect to database
         StudentsDB manager = new StudentsDB(DBMaria.getConnection());
         stdTemp = manager.searchByName(fname, lname);
-        
+
         return stdTemp;
     }
+
     //to save or update courses into database
     public void insertCourses(Course cour) {
         //connect to database
@@ -2855,6 +2953,13 @@ public class Home extends javax.swing.JFrame {
         manager.insertCourse(cour);
         JOptionPane.showMessageDialog(null, "Course Inserted!");
     }
+    private void updateStudent(Student std) {
+        //connect to database
+        StudentsDB manager = new StudentsDB(DBMaria.getConnection());
+        manager.update(std);
+        JOptionPane.showMessageDialog(null, "Student Updated!");
+    }
+
     //to save or update students into database
     public void insertStudents(Student std) {
         //connect to database
@@ -2862,6 +2967,7 @@ public class Home extends javax.swing.JFrame {
         manager.insert(std);
         JOptionPane.showMessageDialog(null, "Student Inserted!");
     }
+
     //to save or update teachers into database
     public void insertTeachers(Teacher tec) {
         //connect to database
@@ -2869,7 +2975,7 @@ public class Home extends javax.swing.JFrame {
         manager.insert(tec);
         JOptionPane.showMessageDialog(null, "Teacher Inserted!");
     }
-    
+
     /*PERSONALIZED VARIABLES DECLARATION START*/
     private List<Student> students = new ArrayList<>();
     private Student stdTemp;
@@ -2882,7 +2988,7 @@ public class Home extends javax.swing.JFrame {
     private Course courseTemp;
     private List<Course> courses = new ArrayList<>();
     private static int countCourse;
-    private Section sectionTemp;  
+    private Section sectionTemp;
     private Grade gradeTemp;
     private List<Grade> grades = new ArrayList<>();
     private static int countGrade;
@@ -2901,6 +3007,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton btnDeleteActivity;
     private javax.swing.JButton btnDeleteCourse;
     private javax.swing.JButton btnDeleteTeacher1;
+    private javax.swing.JButton btnEnrollStudent;
     private javax.swing.JButton btnEnterGrades;
     private javax.swing.JPanel btnExitPanel;
     private javax.swing.JPanel btnGradesPanel;
@@ -2987,6 +3094,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
@@ -3007,6 +3115,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel stdDetailsPanel2;
     private javax.swing.JPanel studentsPanel;
     private javax.swing.JTable tblCoursesTaught;
+    private javax.swing.JTable tblCoursesTaught1;
     private javax.swing.JTable tblGrades;
     private javax.swing.JTable tblGradesAvg;
     private javax.swing.JTable tblSearchResult;
@@ -3051,22 +3160,20 @@ public class Home extends javax.swing.JFrame {
     private void loadCmbSemesters() {
         cmbSemester.setModel(new DefaultComboBoxModel<>(Semester.values()));
     }
-    
+
     private void loadCmbTeachers() {
         clearComboBox(cmbTeachers);
-        
+
         cmbTeachers.setModel(new DefaultComboBoxModel<>(teachers.toArray(new Teacher[0])));
         //https://stackoverflow.com/questions/1291704/how-do-i-populate-a-jcombobox-with-an-arraylist/26347782
         //to insert list of teachers in the combobox
     }
-    
-    
-    private void loadCmbCourses(){
-        clearComboBox(cmbCourses);               
+
+    private void loadCmbCourses() {
+        clearComboBox(cmbCourses);
 
         cmbCourses.setModel(new DefaultComboBoxModel<Course>(courses.toArray(new Course[0])));
     }
-    
 
     //change table header background, font, foreground
     static void configureTableHeader(JTable tbl) {
@@ -3076,15 +3183,18 @@ public class Home extends javax.swing.JFrame {
         Font font = new Font("Segoe UI", Font.BOLD, 14);
         tblNew.setFont(font);
     }
-    
-     //set color to light to show in the click of the mouse
+
+    //set color to light to show in the click of the mouse
     static void setColor(JPanel panel) {
         panel.setBackground(new Color(85, 65, 118));
     }
+
     //reset color to the original
     static void resetColor(JPanel panel) {
         panel.setBackground(new Color(64, 43, 100));
     }
 
+    
 
 }
+//source to fill jtable with list: https://www.youtube.com/watch?v=GAl1FSKvoFY

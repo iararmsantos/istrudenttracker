@@ -27,6 +27,63 @@ public class StudentsDB {
     public StudentsDB(Connection conn) {
         this.conn = conn;
     }
+    
+    public void update(Student obj) {
+        PreparedStatement st = null;
+        String SQL = "UPDATE Student SET first_name = ?, last_name = ?, phone = ?, email = ? WHERE studentid = ?";
+        String SQLParents = "UPDATE Parent SET first_name = ?, last_name = ?, phone = ?, email = ? WHERE parentid = ?";
+        
+        try {
+            st = conn.prepareStatement(SQL);
+
+            st.setString(1, obj.getfName());
+            st.setString(2, obj.getlName());
+            st.setString(3, obj.getPhone());
+            st.setString(4, obj.getEmail());
+            st.setInt(5, obj.getId()); 
+            
+            
+            st.executeUpdate();
+            
+                
+            st.close();
+            
+            
+            st = conn.prepareStatement(SQLParents);            
+            
+            st.setString(1, obj.getParent()[0].getfName());
+            st.setString(2, obj.getParent()[0].getlName());
+            st.setString(3, obj.getParent()[0].getPhone());
+            st.setString(4, obj.getParent()[0].getEmail());
+            st.setInt(5, obj.getParent()[0].getId()); 
+            st.executeUpdate();
+            
+                
+            st.close();
+            
+            
+            st = conn.prepareStatement(SQLParents, Statement.RETURN_GENERATED_KEYS);            
+            
+            st.setString(1, obj.getParent()[1].getfName());
+            st.setString(2, obj.getParent()[1].getlName());
+            st.setString(3, obj.getParent()[1].getPhone());
+            st.setString(4, obj.getParent()[1].getEmail());
+            st.setInt(5, obj.getParent()[1].getId());
+            st.executeUpdate();
+            
+                
+                st.close();
+           
+            
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+            
+        }
+    }
+    
     //search for courses student is enrolled by studentid
     public List<Course> searchCoursesEnrolledByID(int id){
         String QUERY = "SELECT course.courseid, course.title, course.year FROM student JOIN enrollment "
@@ -377,5 +434,31 @@ public class StudentsDB {
 //        return null;
 //    }
 
-    
+    public List<Student> findAll() {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = conn.prepareStatement(
+                    "SELECT * FROM Teacher ORDER BY first_name");
+            rs = st.executeQuery();
+
+            //cria lista de resultados
+            List<Student> list = new ArrayList<>();
+
+            while (rs.next()) {
+                Student student = instantiateStudent(rs);
+                
+                list.add(student);
+            }
+
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+            DBMaria.closeResultSet(rs);
+        }
+        return null;
+    }
+
 }

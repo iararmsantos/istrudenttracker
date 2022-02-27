@@ -28,30 +28,26 @@ public class CoursesDB {
         this.conn = conn;
     }
     public List<Student> findStudentsByCourse(Course course) {
-        List<Student> list = new ArrayList<>();
-        Grade[] grade = new Grade[5];
+        List<Student> list = new ArrayList<>();        
         PreparedStatement st = null;
         ResultSet rs = null;
-        String query = "SELECT student.studentid, student.first_name, student.last_name, student.email, student.phone, grade.gradeid, grade.activity1, grade.activity2, grade.activity3,     grade.activity4, grade.activity5 "
-                + "FROM Student "
-                + "JOIN Enrollment ON student.studentID = Enrollment.EnrollID "
-                + "JOIN Course ON Enrollment.EnrollID = Course.sectionID "
-                + "JOIN Grade ON Course.sectionId = Grade.gradeId "
-                + "WHERE Course.courseID = ?";
+        String query = "SELECT student.studentid, student.first_name, student.last_name, student.email, student.phone, grade.gradeid, grade.activity1, grade.activity2, grade.activity3,grade.activity4, grade.activity5 \n" +
+                       "FROM Student \n" +
+                       "JOIN grade ON grade.gradeid = student.gradeid \n" +
+                       "JOIN Course ON course.sectionID = grade.sectionid\n" +
+                       "WHERE Course.courseID = ?";
+        
         try {
             st = conn.prepareStatement(query);
             st.setInt(1, course.getId());
-            rs = st.executeQuery();
-            //st.setInt(2, obj.getParent()[1].getId());
+            rs = st.executeQuery();            
 
             while (rs.next()) {
                 Student std = StudentsDB.instantiateStudent(rs);
                 Grade grd = instantiateGrade(rs);
                 std.setGrades(grd);
-                list.add(std);
-                
-            }
-            
+                list.add(std);                
+            }            
             return list;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,11 +71,9 @@ public class CoursesDB {
             List<Course> list = new ArrayList<>();
 
             while (rs.next()) {
-                Course course = instantiateCourse(rs);
-                
+                Course course = instantiateCourse(rs);                
                 list.add(course);
             }
-
             return list;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,29 +86,25 @@ public class CoursesDB {
     
     public Section getSection(int id){
         String QUERY = "SELECT section.sectionid, teacher.teacherID, teacher.first_name, teacher.last_name, teacher.phone, teacher.email, section.semester\n" +
-"FROM Course JOIN Section ON course.sectionID = section.sectionID\n" +
-"JOIN Teacher ON section.teacherID = teacher.teacherID\n" +
-"WHERE course.courseID = ?";
+                       "FROM Course JOIN Section ON course.sectionID = section.sectionID\n" +
+                       "JOIN Teacher ON section.teacherID = teacher.teacherID\n" +
+                       "WHERE course.courseID = ?";
         //alterar banco de dados
         PreparedStatement st = null;
         ResultSet rs = null;
         
         try {
             st = conn.prepareStatement(QUERY);
-
-            st.setInt(1, id);
-            
+            st.setInt(1, id);            
             rs = st.executeQuery();
             //getting the student data            
             Section section = null;
             if (rs.next()) {
-                //cria os objetos
-                
+                //cria os objetos                
                 section = instantiateSection(rs);                   
             }
-            rs.close();
-                
-            st.close();            
+            rs.close();                
+            st.close();         
 
             return section;
             
@@ -258,14 +248,6 @@ public class CoursesDB {
             DBMaria.closeStatement(st);
         }
     }
-/*String query = "SELECT student.studentid, student.first_name, student.last_name, grade.activity FROM\n"
-                + "Student JOIN Enrollment ON student.studentID = Enrollment.EnrollmentID \n"
-                + "JOIN Course ON Enrollment.EnrollmentID = Course.sectionID\n"
-                + "JOIN Grade ON Course.sectionId = Grade.gradeId\n"
-                + "WHERE Course.courseID = ?";*/
-
-    
-
 }
 
 //source get enum using resutset: https://stackoverflow.com/questions/65197006/saving-and-reading-the-enum-value-to-the-database-with-jdbc
