@@ -2382,8 +2382,7 @@ public class Home extends javax.swing.JFrame {
     private void btnSaveStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveStudentActionPerformed
         try {
             if (isValidData()) {
-                getStudentData();
-                insertStudents(students.get(countStd));                
+                getStudentData();                             
                 JOptionPane.showMessageDialog(this, "Student saved!");
                 clearStudentFields();
                 btnInsertStudent.setEnabled(true);
@@ -2485,7 +2484,7 @@ public class Home extends javax.swing.JFrame {
         //get first and last name
         String fname = txtTeacherFName.getText();
         String lname = txtTeacherLName.getText();
-        System.out.println(fname + " " + lname);
+        
         if ("".equals(fname) || "".equals(lname)) {
             JOptionPane.showMessageDialog(this, "First Name or Last Name is empty");
         } else {
@@ -2558,7 +2557,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEnrollStudentActionPerformed
 
     private void btnUpdateStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStudentActionPerformed
-        getStudentData();        
+        getUpdatedStudent();
         
         updateStudent(stdTemp);    
         
@@ -2717,12 +2716,14 @@ public class Home extends javax.swing.JFrame {
         courses.get(countCourse).setId(Integer.parseInt(txtCourseId.getText()));
 
         //combobox Semester        
-        sectionTemp.setSemester((Semester) cmbSemester.getSelectedItem());
-
+        sectionTemp.setSemester((Semester)cmbSemester.getSelectedItem());
+        
         //combobox Teacher        
         sectionTemp.setTeacher((Teacher) cmbTeachers.getSelectedItem());
 
+        courses.get(countCourse).setSection(sectionTemp);
         //database
+        System.out.println(courses.get(countCourse).getSection().toString());
         insertCourses(courses.get(countCourse));
         ++countCourse;
 
@@ -2741,9 +2742,7 @@ public class Home extends javax.swing.JFrame {
         insertTeachers(teachers.get(countTeac));
         ++countTeac;
     }
-
-    //get student data to set to the object and add to the list
-    private void getStudentData() {
+    private void getUpdatedStudent(){
         stdTemp.setfName(txtStudentFName.getText());
         stdTemp.setlName(txtStudentLName.getText());
         stdTemp.setPhone(txtStudentPhone.getText());
@@ -2766,9 +2765,32 @@ public class Home extends javax.swing.JFrame {
         
         stdTemp.setParent(parent);
         
-        students.add(stdTemp);
+    }
 
-        countStd++;
+    //get student data to set to the object and add to the list
+    private void getStudentData() {
+        students.get(countStd).setfName(txtStudentFName.getText());
+        students.get(countStd).setlName(txtStudentLName.getText());
+        students.get(countStd).setPhone(txtStudentPhone.getText());
+        students.get(countStd).setEmail(txtStudentEmail.getText());
+        students.get(countStd).setId(Integer.parseInt(txtStudentId.getText()));
+
+        parent = new Parent[2];
+        parent[0] = new Parent();
+        parent[1] = new Parent();
+        parent[0].setfName(txtParentFName.getText());
+        parent[0].setlName(txtParentLName.getText());
+        parent[0].setPhone(txtParentPhone.getText());
+        parent[0].setEmail(txtParentEmail.getText());
+        parent[1].setfName(txtParentFName2.getText());
+        parent[1].setlName(txtParentLName2.getText());
+        parent[1].setPhone(txtParentPhone2.getText());
+        parent[1].setEmail(txtParentEmail2.getText());
+
+        students.get(countStd).setParent(parent);        
+        
+        insertStudents(students.get(countStd));
+        ++countStd;
         
     }
 
@@ -2853,6 +2875,7 @@ public class Home extends javax.swing.JFrame {
     private void updateGradesDB(Double[] grade, int id) {
         GradesDB manager = new GradesDB(DBMaria.getConnection());
         manager.updateGrades(grade, id);
+        JOptionPane.showMessageDialog(null, "Grades Updated!");
     }
 
     //find students by course
@@ -2948,6 +2971,7 @@ public class Home extends javax.swing.JFrame {
 
     //to save or update courses into database
     public void insertCourses(Course cour) {
+        
         //connect to database
         CoursesDB manager = new CoursesDB(DBMaria.getConnection());
         manager.insertCourse(cour);
@@ -2962,6 +2986,7 @@ public class Home extends javax.swing.JFrame {
 
     //to save or update students into database
     public void insertStudents(Student std) {
+        
         //connect to database
         StudentsDB manager = new StudentsDB(DBMaria.getConnection());
         manager.insert(std);
@@ -3193,8 +3218,6 @@ public class Home extends javax.swing.JFrame {
     static void resetColor(JPanel panel) {
         panel.setBackground(new Color(64, 43, 100));
     }
-
-    
 
 }
 //source to fill jtable with list: https://www.youtube.com/watch?v=GAl1FSKvoFY

@@ -78,6 +78,7 @@ FOREIGN KEY (gradeID) REFERENCES Grade(gradeID)
 
 CREATE TABLE StudentParents
 (
+std_parID INT PRIMARY KEY AUTO_INCREMENT,
 parentID INT,
 studentID INT,
 FOREIGN KEY (parentID) REFERENCES Parent(parentID),

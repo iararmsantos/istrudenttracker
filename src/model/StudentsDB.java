@@ -22,8 +22,7 @@ import java.util.logging.Logger;
 public class StudentsDB {
 
     private Connection conn;
-
-    //to call: TeachersDB tDB = new TeachersDB(DBPosgres.getConnection());
+    
     public StudentsDB(Connection conn) {
         this.conn = conn;
     }
@@ -166,7 +165,6 @@ public class StudentsDB {
         String SQLParents = "INSERT INTO Parent (first_name, last_name, phone, email) VALUES (?, ?, ?, ?)";
         
         String SQLStdPar = "INSERT INTO StudentParents (studentid, parentid) VALUES (?, ?)";
-        
         try {
             st = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
 
@@ -300,146 +298,14 @@ public class StudentsDB {
         return null;
     }
 
-//    public void update(Teacher obj) {
-//        PreparedStatement st = null;
-//        try {
-//            st = conn.prepareStatement(
-//                    "UPDATE Teacher SET fName = ?, lName = ?, email = ? "
-//                    + "WHERE Id = ?");
-//
-//            st.setString(1, obj.getfName());
-//            st.setString(2, obj.getlName());
-//            st.setString(3, obj.getEmail());
-//            st.setInt(4, obj.getId());
-//
-//            st.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DBMaria.closeStatement(st);
-//        }
-//    }
-//
-//    public void deleteById(Integer id) {
-//        PreparedStatement st = null;
-//        try {
-//            st = conn.prepareStatement(
-//                    "DELETE FROM Teacher WHERE Id = ?");
-//            st.setInt(1, id);
-//            int rows = st.executeUpdate();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DBMaria.closeStatement(st);
-//        }
-//    }
-//
-//    public Teacher findById(Integer id) {
-//        //alterar banco de dados
-//        PreparedStatement st = null;
-//        ResultSet rs = null;
-//        try {
-//            st = conn.prepareStatement(
-//                    "SELECT * FROM Teacher WHERE Id = ?");
-//
-//            st.setInt(1, id);
-//            rs = st.executeQuery();
-//            //o resultset retorna uma tabela e na OO trabalhamos com UML
-//            //devemos transformar a tabela em objeto
-//            //testar se veio resultado
-//            if (rs.next()) {
-//                //cria os objetos
-//                Teacher teacher = instantiateTeacher(rs);
-//
-//                return teacher;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DBMaria.closeStatement(st);
-//            DBMaria.closeResultSet(rs);
-//        }
-//        return null;
-//    }
-//
-//    public List<Teacher> findAll() {
-//        PreparedStatement st = null;
-//        ResultSet rs = null;
-//        try {
-//            st = conn.prepareStatement(
-//                    "SELECT * FROM department ORDER BY Name");
-//            rs = st.executeQuery();
-//
-//            //cria lista de resultados
-//            List<Teacher> list = new ArrayList<>();
-//
-//            while (rs.next()) {
-//                Teacher teacher = instantiateTeacher(rs);
-//                teacher.setId(rs.getInt("Id"));
-//                teacher.setfName(rs.getString("fName"));
-//                teacher.setfName(rs.getString("lName"));
-//                list.add(teacher);
-//            }
-//
-//            return list;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DBMaria.closeStatement(st);
-//            DBMaria.closeResultSet(rs);
-//        }
-//        return null;
-//    }
-//
-//    private Teacher instantiateTeacher(ResultSet rs) {
-//        Teacher teacher = new Teacher();
-//        try {
-//            teacher.setId(rs.getInt("Id"));
-//            teacher.setfName(rs.getString("fName"));
-//            teacher.setlName(rs.getString("lName"));
-//        } catch (SQLException ex) {
-//            Logger.getLogger(StudentsDB.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        return teacher;
-//    }
-//
-//    public Teacher findByName(String name) {
-//        //alterar banco de dados
-//        PreparedStatement st = null;
-//        ResultSet rs = null;
-//        try {
-//            st = conn.prepareStatement(
-//                    "SELECT * FROM department WHERE Name = ?");
-//
-//            st.setString(1, name);
-//            rs = st.executeQuery();
-//            //o resultset retorna uma tabela e na OO trabalhamos com UML
-//            //devemos transformar a tabela em objeto
-//            //testar se veio resultado
-//            if (rs.next()) {
-//                //cria os objetos
-//                Teacher dep = instantiateTeacher(rs);
-//
-//                return dep;
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DBMaria.closeStatement(st);
-//            DBMaria.closeResultSet(rs);
-//        }
-//        return null;
-//    }
+
 
     public List<Student> findAll() {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
             st = conn.prepareStatement(
-                    "SELECT * FROM Teacher ORDER BY first_name");
+                    "SELECT * FROM Student ORDER BY first_name");
             rs = st.executeQuery();
 
             //cria lista de resultados

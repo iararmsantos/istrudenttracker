@@ -64,6 +64,11 @@ public class Section {
         this.teacher = teacher;
     }
 
+    @Override
+    public String toString() {
+        return "Section{" + "sectionId=" + sectionId + ", semester=" + semester + ", teacher=" + teacher + '}';
+    }
+    
     
 
 }

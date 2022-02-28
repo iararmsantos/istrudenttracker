@@ -54,6 +54,11 @@ public class Student extends Person{
     public String printStudent() {
         return "Student{" + getfName() + " " + getlName() + ", grades1=" + grades.getGrade(0) +", grades2=" + grades.getGrade(1) +", grades3=" + grades.getGrade(2) +", grades4=" + grades.getGrade(3) +", grades5=" + grades.getGrade(4) + '}';
     }
+    
+    public String printParent(){
+        return "Parent 1: " + getParent()[0].getfName() + " " + getParent()[0].getlName() + "\nParent 2: " + 
+                getParent()[1].getfName() + " " + getParent()[1].getlName();
+    }
 
     @Override
     public String toString() {
