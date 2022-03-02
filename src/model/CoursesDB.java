@@ -27,6 +27,37 @@ public class CoursesDB {
     public CoursesDB(Connection conn) {
         this.conn = conn;
     }
+    
+    //update dabase with edited data
+    public void update(Course obj) {
+        PreparedStatement st = null;
+        String SQLSection = "UPDATE Section SET teacherID = ?, semester = ? WHERE sectionid = ?";
+        String SQLCourse = "UPDATE Course SET sectionID = ?, title = ?, year = ? WHERE courseid = ?";
+        
+        try {
+            st = conn.prepareStatement(SQLSection, Statement.RETURN_GENERATED_KEYS);
+            st.setInt(1, obj.getSection().getTeacher().getId());
+            st.setString(2, obj.getSection().getSemester().toString());
+            st.setInt(3, obj.getSection().getSectionId());
+            st.executeUpdate();
+            st.close();
+            
+            st = conn.prepareStatement(SQLCourse, Statement.RETURN_GENERATED_KEYS);
+            st.setInt(1, obj.getSection().getSectionId());
+            st.setString(2, obj.getTitle());
+            st.setInt(3, obj.getYear());
+            st.setInt(4, obj.getId());
+            
+            st.executeUpdate();
+            st.close();
+            } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+        
+        }
+    }
+    
     public List<Student> findStudentsByCourse(Course course) {
         List<Student> list = new ArrayList<>();        
         PreparedStatement st = null;
@@ -58,13 +89,42 @@ public class CoursesDB {
         return null;
     }
     
+    //find all sections registered
+    public List<Section> findAllSections() {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        String QUERY = "SELECT section.sectionid, teacher.teacherID, teacher.first_name, teacher.last_name, teacher.phone, teacher.email, section.semester\n" +
+                       "FROM Course JOIN Section ON course.sectionID = section.sectionID\n" +
+                       "JOIN Teacher ON section.teacherID = teacher.teacherID";
+                       
+        try {
+            st = conn.prepareStatement(QUERY);
+            rs = st.executeQuery();
+
+            //cria lista de resultados
+            List<Section> list = new ArrayList<>();
+
+            while (rs.next()) {
+                Section section = instantiateSection(rs);                
+                list.add(section);
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+            DBMaria.closeResultSet(rs);
+        }
+        return null;
+    }
+    
     //find all courses registered
     public List<Course> findAll() {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
             st = conn.prepareStatement(
-                    "SELECT * FROM Course ORDER BY title");
+                    "SELECT * FROM Course");
             rs = st.executeQuery();
 
             //cria lista de resultados
@@ -99,9 +159,12 @@ public class CoursesDB {
             rs = st.executeQuery();
             //getting the student data            
             Section section = null;
+            Teacher teacher = null;
             if (rs.next()) {
                 //cria os objetos                
-                section = instantiateSection(rs);                   
+                section = instantiateSection(rs);  
+                teacher = TeachersDB.instantiateTeacher(rs);
+                section.setTeacher(teacher);                
             }
             rs.close();                
             st.close();         
@@ -176,12 +239,12 @@ public class CoursesDB {
     }
     private Section instantiateSection(ResultSet rs) {
         Section section = new Section();
-        Teacher teacher = new Teacher();
+        //Teacher teacher = new Teacher();
         try{
             section.setSectionId(rs.getInt("sectionid"));
             section.setSemester(Semester.valueOf(rs.getString("semester").toUpperCase()));
-            teacher = TeachersDB.instantiateTeacher(rs);
-            section.setTeacher(teacher);
+            //TeachersDB.instantiateTeacher(rs);
+            //section.setTeacher(teacher);
             
             return section;
         }catch(SQLException ex){
@@ -224,19 +287,23 @@ public class CoursesDB {
     
     public void insertCourse(Course obj){
         PreparedStatement st = null;
-        String SQLSection = "INSERT INTO Section(teacherID, semester) VALUES(?, ?)";
-        String SQLCourse = "INSERT INTO Course(sectionID, title, year) VALUES(?, ?, ?)";
+        String SQLSection = "INSERT INTO Section(sectionID, teacherID, semester) VALUES(?, ?, ?)";
+        String SQLCourse = "INSERT INTO Course(courseid, sectionID, title, year) VALUES(?, ?, ?, ?)";
         try{
             st = conn.prepareStatement(SQLSection, Statement.RETURN_GENERATED_KEYS);
-            st.setInt(1, obj.getSection().getTeacher().getId());
-            st.setString(2, obj.getSection().getSemester().toString());
-            st.executeUpdate();
-            st.close();
+            st.setInt(1, obj.getSection().getSectionId());
+            st.setInt(2, obj.getSection().getTeacher().getId());
+            st.setString(3, obj.getSection().getSemester().toString());
+            int rowsAffected = st.executeUpdate();
+            int id = 0;            
+                
+            st.close();            
             
             st = conn.prepareStatement(SQLCourse, Statement.RETURN_GENERATED_KEYS);
-            st.setInt(1, obj.getSection().getSectionId());
-            st.setString(2, obj.getTitle());
-            st.setInt(3, obj.getYear());
+            st.setInt(1, obj.getId());
+            st.setInt(2, obj.getSection().getSectionId());
+            st.setString(3, obj.getTitle());
+            st.setInt(4, obj.getYear());
             
             st.executeUpdate();
             st.close();
@@ -248,6 +315,7 @@ public class CoursesDB {
             DBMaria.closeStatement(st);
         }
     }
+
 }
 
 //source get enum using resutset: https://stackoverflow.com/questions/65197006/saving-and-reading-the-enum-value-to-the-database-with-jdbc

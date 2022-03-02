@@ -41,12 +41,9 @@ public class StudentsDB {
             st.setString(4, obj.getEmail());
             st.setInt(5, obj.getId()); 
             
-            
             st.executeUpdate();
             
-                
             st.close();
-            
             
             st = conn.prepareStatement(SQLParents);            
             
@@ -57,9 +54,7 @@ public class StudentsDB {
             st.setInt(5, obj.getParent()[0].getId()); 
             st.executeUpdate();
             
-                
             st.close();
-            
             
             st = conn.prepareStatement(SQLParents, Statement.RETURN_GENERATED_KEYS);            
             
@@ -68,18 +63,14 @@ public class StudentsDB {
             st.setString(3, obj.getParent()[1].getPhone());
             st.setString(4, obj.getParent()[1].getEmail());
             st.setInt(5, obj.getParent()[1].getId());
-            st.executeUpdate();
-            
+            st.executeUpdate();            
                 
-                st.close();
-           
-            
+            st.close();         
             
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DBMaria.closeStatement(st);
-            
         }
     }
     

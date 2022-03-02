@@ -19,7 +19,7 @@ public class Teacher extends Person{
 
     @Override
     public String toString() {
-        return String.format("%s", this.getfName());
+        return String.format("%s %s", this.getfName(), this.getlName());
     }
     
     
