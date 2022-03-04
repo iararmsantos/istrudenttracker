@@ -296,7 +296,7 @@ public class StudentsDB {
         ResultSet rs = null;
         try {
             st = conn.prepareStatement(
-                    "SELECT * FROM Student ORDER BY first_name");
+                    "SELECT * FROM Student ORDER BY studentid");
             rs = st.executeQuery();
 
             //cria lista de resultados

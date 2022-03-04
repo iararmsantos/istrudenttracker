@@ -5,8 +5,7 @@
         <group>
             <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/model/CoursesDB.java</file>
             <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/model/TeachersDB.java</file>
-            <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/entities/Course.java</file>
-            <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/entities/Section.java</file>
+            <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/gui/Login.java</file>
             <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/gui/Home.java</file>
             <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/model/StudentsDB.java</file>
         </group>

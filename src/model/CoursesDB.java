@@ -28,6 +28,63 @@ public class CoursesDB {
         this.conn = conn;
     }
     
+    public List<Course> findCoursesTaught(int id) {
+        List<Course> list = new ArrayList<>(); 
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        String query = "SELECT course.courseid, section.sectionid, course.title, course.year FROM course\n" +
+                       "JOIN section ON course.courseid = section.sectionid\n" +
+                       "JOIN teacher ON teacher.teacherid = section.sectionid\n" +
+                       "WHERE teacher.teacherid = ?";
+        try {
+            st = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            st.setInt(1, id);
+                     
+            rs = st.executeQuery();
+
+            //cria lista de resultados
+            while (rs.next()) {
+                Course course = instantiateCourse(rs);                
+                list.add(course);
+            }
+            return list;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);            
+        }        
+        return null;        
+    }
+    
+    //receive student id and course data to enroll student into a section/course and grade
+    public void enrollStudent(int id, Course obj) {
+        
+        PreparedStatement st = null;
+        String enrollQuery = "INSERT INTO Enrollment (sectionid, studentid) VALUES (?, ?)";
+        String gradeQuery = "INSERT INTO Grade (sectionid, studentid) VALUES (?, ?)";
+        try {
+            st = conn.prepareStatement(enrollQuery);
+            st.setInt(1, obj.getSection().getSectionId());
+            st.setInt(2, id);            
+            st.executeUpdate();
+            st.close();
+            
+            st = conn.prepareStatement(gradeQuery, Statement.RETURN_GENERATED_KEYS);
+
+            st.setInt(1, obj.getSection().getSectionId()); 
+            st.setInt(2, id); 
+            
+            st.executeUpdate();  
+                
+            st.close(); 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);            
+        }        
+    }
+    
     //update dabase with edited data
     public void update(Course obj) {
         PreparedStatement st = null;
@@ -64,7 +121,7 @@ public class CoursesDB {
         ResultSet rs = null;
         String query = "SELECT student.studentid, student.first_name, student.last_name, student.email, student.phone, grade.gradeid, grade.activity1, grade.activity2, grade.activity3,grade.activity4, grade.activity5 \n" +
                        "FROM Student \n" +
-                       "JOIN grade ON grade.gradeid = student.gradeid \n" +
+                       "JOIN grade ON grade.gradeid = student.studentid \n" +
                        "JOIN Course ON course.sectionID = grade.sectionid\n" +
                        "WHERE Course.courseID = ?";
         
@@ -185,13 +242,13 @@ public class CoursesDB {
         List<Student> std = new ArrayList<>();
         PreparedStatement st = null;
         ResultSet rs = null;
-        String query = "SELECT student.studentid, student.first_name, student.last_name, student.email, student.phone, course.title, course.year FROM Student JOIN Enrollment ON student.studentID = Enrollment.enrollID JOIN Course ON Enrollment.sectionId = Course.sectionID WHERE Course.courseID = ?";
+        String query = "SELECT student.studentid, student.first_name, student.last_name, student.email, student.phone, course.title, course.year FROM Student JOIN Enrollment ON student.studentID = Enrollment.studentID JOIN Course ON Enrollment.sectionId = Course.sectionID WHERE Course.courseID = ?";
         try {
             st = conn.prepareStatement(query);
             st.setInt(1, id);
             rs = st.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Student student = StudentsDB.instantiateStudent(rs);
                 std.add(student);
             }
