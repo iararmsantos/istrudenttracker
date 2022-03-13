@@ -6,6 +6,9 @@
 package gui;
 
 import db.DBMaria;
+import db.manager.TeacherManagerDB;
+import entities.Teacher;
+import exceptions.DataValidation;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -14,6 +17,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -254,37 +259,49 @@ public class SignUp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     Login lframe = new Login();
     private void btnSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignupActionPerformed
+        Login login = new Login();
+        ResultSet rs;
+        DataValidation dt = new DataValidation();
+        String fName = txtFNameSignup.getText();
+        String lName = txtLNameSignup.getText();
+        String phone = txtPhoneSignup.getText();
+        String email = txtEmailSignup.getText();
+        String pass = new String(txtSignupPassword.getPassword());
+        try {
+            if (dt.isUserValid(fName, lName, phone, email, pass)) {
+                
+                rs = login.findUser(email, pass);
+                if (rs.next()) {
+                    JOptionPane.showMessageDialog(this, "User already exist.");
+                } else {
+                    newUser(fName, lName, phone, email, pass);
+                    lframe.setVisible(true);
+                    dispose();
+                }
+            } 
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnSignupActionPerformed
+
+    private void newUser(String fName, String lName, String phone, String email, String pass) {
         String SQL = "INSERT INTO Login(first_name, last_name, phone, email, password) VALUES (?, ?, ?, ?, ?)";
         Connection conn = DBMaria.getConnection();
         PreparedStatement st = null;
-        try{
+        try {
             st = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            st.setString(1, fName);
+            st.setString(2, lName);
+            st.setString(3, phone);
+            st.setString(4, email);
+            st.setString(5, pass);               
             
-            st.setString(1, txtFNameSignup.getText());
-            st.setString(2, txtLNameSignup.getText());
-            st.setString(3, txtPhoneSignup.getText());
-            st.setString(4, txtEmailSignup.getText());
-            st.setString(5, new String(txtSignupPassword.getPassword()));
-            
-            int rowsAffected = st.executeUpdate();
-            
-            if(rowsAffected > 0){
-                ResultSet rs = st.getGeneratedKeys();
-                if(rs.next()){
-                    int id = rs.getInt(1);
-                }
-                DBMaria.closeResultSet(rs);
-            }
-        }catch(SQLException e){
-            e.printStackTrace();
-        }finally{
+        } catch (SQLException ex) {
+            Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
             DBMaria.closeStatement(st);
         }
-        
-        lframe.setVisible(true);
-        dispose();
-    }//GEN-LAST:event_btnSignupActionPerformed
-
+    }
     private void lblExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblExitMouseClicked
         lframe.setVisible(true);
         SignUp sFrame = new SignUp();
@@ -347,4 +364,5 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JTextField txtPhoneSignup;
     private javax.swing.JPasswordField txtSignupPassword;
     // End of variables declaration//GEN-END:variables
+
 }

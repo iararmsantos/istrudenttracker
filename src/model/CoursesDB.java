@@ -27,8 +27,90 @@ public class CoursesDB {
     public CoursesDB(Connection conn) {
         this.conn = conn;
     }
+    //find courses by title
+    public List<Course> findByTitle(String title) {
+        //alterar banco de dados
+        List<Course> courses = new ArrayList<>();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        String QUERY = "SELECT * FROM Course WHERE title = ?";
+        try {
+            st = conn.prepareStatement(QUERY);
+
+            st.setString(1, title);
+            
+            rs = st.executeQuery();
+            //getting the student data            
+            
+            while (rs.next()) {
+                //cria os objetos and add to the list       
+                 
+                courses.add(instantiateCourse(rs));
+            }
+            rs.close();
+                
+            st.close();            
+
+            return courses;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+            DBMaria.closeResultSet(rs);
+        }
+        return null;
+    }
+    //receive course and student data and dismiss student from the course
+    public void dismissStudent(Student std) {
+        PreparedStatement st = null;
+        String dismissQuery = "DELETE FROM Grade WHERE studentid = ?";
+        
+        try {
+            st = conn.prepareStatement(dismissQuery);
+            st.setInt(1, std.getId());                    
+            st.executeUpdate();
+            st.close();            
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);            
+        }        
+    }
+    //receive course and section data to delete it from database
+    public void delete(Section section) {
+        PreparedStatement st = null;        
+        String gradeSQL = "DELETE FROM Grade WHERE sectionid = ?";
+        
+        String sectionSQL = "DELETE FROM Section WHERE sectionid = ?";
+        String courseSQL = "DELETE FROM Course WHERE sectionid = ?";
+        try {
+            st = conn.prepareStatement(gradeSQL);
+            st.setInt(1, section.getSectionId());
+            st.executeUpdate();
+            st.close();
+            
+            st = conn.prepareStatement(courseSQL);
+            st.setInt(1, section.getSectionId());
+            st.executeUpdate();
+            st.close();
+            
+            st = conn.prepareStatement(sectionSQL);
+            st.setInt(1, section.getSectionId());
+            st.executeUpdate();
+            st.close();
+            
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+        }
+    }
     
-    public List<Course> findCoursesTaught(int id) {
+    //receive teacher teacherId and find all courses this teach is enrolled
+    public List<Course> findCoursesTaught(int teacherId) {
         List<Course> list = new ArrayList<>(); 
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -38,7 +120,7 @@ public class CoursesDB {
                        "WHERE teacher.teacherid = ?";
         try {
             st = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            st.setInt(1, id);
+            st.setInt(1, teacherId);
                      
             rs = st.executeQuery();
 
@@ -58,20 +140,11 @@ public class CoursesDB {
     }
     
     //receive student id and course data to enroll student into a section/course and grade
-    public void enrollStudent(int id, Course obj) {
-        
-        PreparedStatement st = null;
-        String enrollQuery = "INSERT INTO Enrollment (sectionid, studentid) VALUES (?, ?)";
+    public void enrollStudent(int id, Course obj) {        
+        PreparedStatement st = null;        
         String gradeQuery = "INSERT INTO Grade (sectionid, studentid) VALUES (?, ?)";
         try {
-            st = conn.prepareStatement(enrollQuery);
-            st.setInt(1, obj.getSection().getSectionId());
-            st.setInt(2, id);            
-            st.executeUpdate();
-            st.close();
-            
-            st = conn.prepareStatement(gradeQuery, Statement.RETURN_GENERATED_KEYS);
-
+            st = conn.prepareStatement(gradeQuery);
             st.setInt(1, obj.getSection().getSectionId()); 
             st.setInt(2, id); 
             
@@ -113,37 +186,6 @@ public class CoursesDB {
             DBMaria.closeStatement(st);
         
         }
-    }
-    
-    public List<Student> findStudentsByCourse(Course course) {
-        List<Student> list = new ArrayList<>();        
-        PreparedStatement st = null;
-        ResultSet rs = null;
-        String query = "SELECT student.studentid, student.first_name, student.last_name, student.email, student.phone, grade.gradeid, grade.activity1, grade.activity2, grade.activity3,grade.activity4, grade.activity5 \n" +
-                       "FROM Student \n" +
-                       "JOIN grade ON grade.gradeid = student.studentid \n" +
-                       "JOIN Course ON course.sectionID = grade.sectionid\n" +
-                       "WHERE Course.courseID = ?";
-        
-        try {
-            st = conn.prepareStatement(query);
-            st.setInt(1, course.getId());
-            rs = st.executeQuery();            
-
-            while (rs.next()) {
-                Student std = StudentsDB.instantiateStudent(rs);
-                Grade grd = instantiateGrade(rs);
-                std.setGrades(grd);
-                list.add(std);                
-            }            
-            return list;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DBMaria.closeStatement(st);
-            DBMaria.closeResultSet(rs);
-        }
-        return null;
     }
     
     //find all sections registered
@@ -201,6 +243,7 @@ public class CoursesDB {
         return null;
     }
     
+    //receive course id and find section
     public Section getSection(int id){
         String QUERY = "SELECT section.sectionid, teacher.teacherID, teacher.first_name, teacher.last_name, teacher.phone, teacher.email, section.semester\n" +
                        "FROM Course JOIN Section ON course.sectionID = section.sectionID\n" +
@@ -237,29 +280,6 @@ public class CoursesDB {
         return null;    
 }
                 
-    //get list of students in a course
-    public List<Student> findCoursesEnrolled(Integer id) {
-        List<Student> std = new ArrayList<>();
-        PreparedStatement st = null;
-        ResultSet rs = null;
-        String query = "SELECT student.studentid, student.first_name, student.last_name, student.email, student.phone, course.title, course.year FROM Student JOIN Enrollment ON student.studentID = Enrollment.studentID JOIN Course ON Enrollment.sectionId = Course.sectionID WHERE Course.courseID = ?";
-        try {
-            st = conn.prepareStatement(query);
-            st.setInt(1, id);
-            rs = st.executeQuery();
-
-            while (rs.next()) {
-                Student student = StudentsDB.instantiateStudent(rs);
-                std.add(student);
-            }
-            return std;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
     //search course by title and year
     public Course searchCoursesByTitleYear(String title, int year) {
         //alterar banco de dados
@@ -310,7 +330,7 @@ public class CoursesDB {
         return null;
     }
     //create one grade obejct
-    private Grade instantiateGrade(ResultSet rs) {
+    public static Grade instantiateGrade(ResultSet rs) {
         Grade grade = new Grade();
         try{
             grade.setGradeId(rs.getInt("gradeID"));
@@ -319,6 +339,7 @@ public class CoursesDB {
             grade.setGrade(2, rs.getDouble("activity3"));
             grade.setGrade(3, rs.getDouble("activity4"));
             grade.setGrade(4, rs.getDouble("activity5"));
+            grade.setGrade(5, rs.getDouble("average"));
             
             return grade;
         }catch(SQLException ex){
@@ -373,6 +394,7 @@ public class CoursesDB {
         }
     }
 
+    
 }
 
 //source get enum using resutset: https://stackoverflow.com/questions/65197006/saving-and-reading-the-enum-value-to-the-database-with-jdbc

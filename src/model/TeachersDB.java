@@ -26,7 +26,27 @@ public class TeachersDB {
     public TeachersDB(Connection conn) {
         this.conn = conn;
     }
-    
+    //receive teacher and delete it from the database
+    public void delete(Teacher obj) {
+        PreparedStatement st = null;        
+        String sectionSQL = "DELETE FROM Section WHERE teacherid = ?";
+        String teacherSQL = "DELETE FROM Teacher WHERE teacherid = ?";
+        try {
+            st = conn.prepareStatement(sectionSQL);
+            st.setInt(1, obj.getId());
+            st.executeUpdate();
+            st.close();
+
+            st = conn.prepareStatement(teacherSQL);
+            st.setInt(1, obj.getId());
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+        }
+    }
     //update dabase with edited data
     public void update(Teacher obj) {
         PreparedStatement st = null;
@@ -160,5 +180,4 @@ public class TeachersDB {
 
         return null;
     }
-
 }

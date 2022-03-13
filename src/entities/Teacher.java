@@ -21,6 +21,4 @@ public class Teacher extends Person{
     public String toString() {
         return String.format("%s %s", this.getfName(), this.getlName());
     }
-    
-    
 }

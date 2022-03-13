@@ -8,7 +8,7 @@ package entities;
  */
 public class Grade {
     private int gradeId;      
-    private double[] activities = new double[5];
+    private double[] activities = new double[6];
     private static int count = 0;
     
 
@@ -58,6 +58,14 @@ public class Grade {
         
         return activities[markID];
     }
+
+    @Override
+    public String toString() {
+        return "Grade{" + "gradeId=" + gradeId + ", activities=" + activities[0] + "; " + activities[1] + "; " + activities[2] +
+                "; " + activities[3] + "; " + activities[4] + "; " + activities[5] + '}';
+    }
+
+    
     
     
 }

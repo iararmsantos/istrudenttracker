@@ -81,15 +81,7 @@ activity2 NUMERIC(5, 2),
 activity3 NUMERIC(5, 2),
 activity4 NUMERIC(5, 2),
 activity5 NUMERIC(5, 2),
-FOREIGN KEY (sectionID) REFERENCES Section(sectionID),
-FOREIGN KEY (studentID) REFERENCES Student(studentID)
-);
-
-CREATE TABLE ENROLLMENT
-(
-enrollID INT PRIMARY KEY AUTO_INCREMENT,
-sectionID INT,
-studentID INT,
+average NUMERIC(5,2) as ((activity1 + activity2 + activity3 + grade.activity4 + activity5)/5),
 FOREIGN KEY (sectionID) REFERENCES Section(sectionID),
 FOREIGN KEY (studentID) REFERENCES Student(studentID)
 );
@@ -121,7 +113,7 @@ VALUES
 ((SELECT sectionID from Section WHERE sectionID = 1), 'Defence Against the Dark Arts', 2019),
 ((SELECT sectionID from Section WHERE sectionID = 2), 'Transfiguration', 2019),
 ((SELECT sectionID from Section WHERE sectionID = 3), 'Potions', 2019),
-((SELECT sectionID from Section WHERE sectionID = 4), 'Potions', 2019);
+((SELECT sectionID from Section WHERE sectionID = 4), 'Herbology', 2019);
 
 INSERT INTO Parent(first_name, last_name, phone, email)
 VALUES
@@ -150,15 +142,8 @@ VALUES
 ((SELECT parentID from Parent WHERE parentID = 5), (SELECT studentID from Student WHERE studentID = 4)),
 ((SELECT parentID from Parent WHERE parentID = 6), (SELECT studentID from Student WHERE studentID = 4));
 
-INSERT INTO Grade(sectionID, studentID,activity1, activity2, activity3, activity4, activity5) VALUES 
+INSERT INTO Grade(sectionID, studentID, activity1, activity2, activity3, activity4, activity5) VALUES 
 ((SELECT sectionID from Section WHERE sectionID = 1), (SELECT studentID from Student WHERE studentID = 1), 95.25, 75.25, 95.25, 89.20, 84.00), 
 ((SELECT sectionID from Section WHERE sectionID = 2), (SELECT studentID from Student WHERE studentID = 2), 89.20, 75.25, 95.25, 89.20, 84.00), 
 ((SELECT sectionID from Section WHERE sectionID = 3), (SELECT studentID from Student WHERE studentID = 3), 84.00, 75.25, 95.25, 89.20, 84.00), 
-((SELECT sectionID from Section WHERE sectionID = 4), (SELECT studentID from Student WHERE studentID = 4), 75.25, 75.25, 95.25, 89.20, 84.00)
-
-INSERT INTO Enrollment(sectionID, studentID)
-VALUES
-((SELECT sectionID from Section WHERE sectionID = 4), (SELECT studentID from Student WHERE studentID = 1)),
-((SELECT sectionID from Section WHERE sectionID = 3), (SELECT studentID from Student WHERE studentID = 2)),
-((SELECT sectionID from Section WHERE sectionID = 2), (SELECT studentID from Student WHERE studentID = 3)),
-((SELECT sectionID from Section WHERE sectionID = 1), (SELECT studentID from Student WHERE studentID = 4));
+((SELECT sectionID from Section WHERE sectionID = 4), (SELECT studentID from Student WHERE studentID = 4), 75.25, 75.25, 95.25, 89.20, 84.00);

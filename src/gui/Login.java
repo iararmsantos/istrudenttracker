@@ -5,12 +5,16 @@
  */
 package gui;
 
+import exceptions.DataValidation;
 import java.awt.Color;
 import java.awt.Cursor;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -251,41 +255,46 @@ public class Login extends javax.swing.JFrame {
     @SuppressWarnings("empty-statement")
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         ResultSet rs;
-        Connection conn;
-        try{
-            String email = txtEmail.getText();
-            String password = txtPassword.getText();
-            do{
-             conn = db.DBMaria.getConnection();
-            
+        DataValidation dt = new DataValidation();
+        String user = txtEmail.getText();
+        String pass = txtPassword.getText();
+        try {
+            if (dt.isLoginValid(user, pass)) {
+                do {
+                    rs = findUser(user, pass);
+                    if (rs.next()) {
+                        dispose();
+                        Home hFrame = new Home();
+                        hFrame.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "User or password does not exist. Try again!");
+                        txtEmail.setText("");
+                        txtPassword.setText("");
+                    }
+                } while (rs.wasNull());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnLoginActionPerformed
+
+    public ResultSet findUser(String user, String pass) {
+        try {
+            ResultSet rs;
+            Connection conn;
+            conn = db.DBMaria.getConnection();
             
             Statement smt = conn.createStatement();
             
-            String sql = "SELECT * FROM Login WHERE email='"+email+"' and password='"+password+"'";
+            String sql = "SELECT * FROM Login WHERE email='" + user + "' and password='" + pass + "'";
             
             rs = smt.executeQuery(sql);
-            
-            if(rs.next()){
-                dispose();
-                
-                Home hFrame = new Home();
-            
-                hFrame.setVisible(true);        
-                
-            }else{
-                JOptionPane.showMessageDialog(this, "Email or Password Incorrect");
-                txtEmail.setText("");
-                txtPassword.setText("");
-            }
-            }while(rs.wasNull());            
-           
-        }catch(Exception e){
-            e.printStackTrace();
+            return rs;
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    
-    }//GEN-LAST:event_btnLoginActionPerformed
-
+        return null;
+    }
     private void lblExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblExitMouseClicked
         System.exit(0);
     }//GEN-LAST:event_lblExitMouseClicked
@@ -369,4 +378,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField txtEmail;
     private javax.swing.JPasswordField txtPassword;
     // End of variables declaration//GEN-END:variables
+
+    
 }
