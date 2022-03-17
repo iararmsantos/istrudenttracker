@@ -7,6 +7,7 @@ package db.manager;
 
 import db.DBMaria;
 import entities.Course;
+import entities.Grade;
 import entities.Section;
 import entities.Student;
 import java.util.ArrayList;
@@ -21,6 +22,22 @@ import model.StudentsDB;
  * @author iarar
  */
 public class CourseManagerDB {
+    //find grades and 
+    public static Grade getStudentGradeByCourse(int stdId, int courseId) {
+        Grade gradeTemp = new Grade();
+        GradesDB manager = new GradesDB(DBMaria.getConnection());
+        gradeTemp = manager.findGradesByStdCourse(stdId, courseId);
+        return gradeTemp;
+    }
+    
+    //search courses students is enrolled
+    public static List<Course> getCoursesEnrolled(int id) {
+        List<Course> crs = new ArrayList<>();
+        //connect to database
+        StudentsDB manager = new StudentsDB(DBMaria.getConnection());
+        crs = manager.searchCoursesEnrolledByID(id);
+        return crs;
+    }
     //find list of courses by title
     public static List<Course> findCoursesByTitle(String title) {
         List<Course> list = new ArrayList<>();
@@ -101,16 +118,27 @@ public class CourseManagerDB {
         //connect to database
         CoursesDB manager = new CoursesDB(DBMaria.getConnection());
         course = manager.searchCoursesByTitleYear(title, year);
-
+        
         return course;
     }
 
     //to save or update courses into database
-    public static void insertCourses(Course cour) {        
+    public static void insertCourses(Course cour) { 
+        Course crs = new Course();
         //connect to database
         CoursesDB manager = new CoursesDB(DBMaria.getConnection());
-        manager.insertCourse(cour);
-        JOptionPane.showMessageDialog(null, "Course Inserted!");
+        //verify if course already exist
+        crs = getCourseByTitleYear(cour.getTitle(), cour.getYear());
+        int nextid = manager.findNextId("crs") + 1;
+        if(crs == null){
+            manager.insertCourse(cour);
+            JOptionPane.showMessageDialog(null, "Course Inserted!");
+            //update nextvalue for 'crs'
+            manager.updateNextValue(nextid, "crs");
+            //update nextvalue for 'sec'
+        }else{
+            JOptionPane.showMessageDialog(null, "Course Already Exist!");
+        }
     }
     
     public static void updateCourse(Course obj) {
@@ -119,4 +147,6 @@ public class CourseManagerDB {
         manager.update(obj);
         JOptionPane.showMessageDialog(null, "Course Updated!");
     }
+
+    
 }

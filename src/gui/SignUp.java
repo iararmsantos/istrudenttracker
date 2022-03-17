@@ -268,17 +268,18 @@ public class SignUp extends javax.swing.JFrame {
         String email = txtEmailSignup.getText();
         String pass = new String(txtSignupPassword.getPassword());
         try {
-            if (dt.isUserValid(fName, lName, phone, email, pass)) {
-                
+            if (dt.isSignUpValid(fName, lName, phone, email, pass)) {
+
                 rs = login.findUser(email, pass);
                 if (rs.next()) {
                     JOptionPane.showMessageDialog(this, "User already exist.");
                 } else {
                     newUser(fName, lName, phone, email, pass);
+                    JOptionPane.showMessageDialog(this, "User registered successfully.");
                     lframe.setVisible(true);
                     dispose();
                 }
-            } 
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -294,8 +295,8 @@ public class SignUp extends javax.swing.JFrame {
             st.setString(2, lName);
             st.setString(3, phone);
             st.setString(4, email);
-            st.setString(5, pass);               
-            
+            st.setString(5, pass);
+
         } catch (SQLException ex) {
             Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

@@ -27,6 +27,7 @@ public class CoursesDB {
     public CoursesDB(Connection conn) {
         this.conn = conn;
     }
+    
     //find courses by title
     public List<Course> findByTitle(String title) {
         //alterar banco de dados
@@ -394,6 +395,53 @@ public class CoursesDB {
         }
     }
 
+    public int findNextId(String tch) {
+        //alterar banco de dados
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        String QUERY = "SELECT * FROM nextid WHERE idtype = ?";
+        try {
+            st = conn.prepareStatement(QUERY);
+
+            st.setString(1, tch);
+            
+            rs = st.executeQuery();
+            //getting the student data
+            int id = 0;
+            if (rs.next()) {
+                //cria os objetos
+                id = rs.getInt("nextvalue");
+                                   
+            }
+            rs.close();
+                
+            st.close();            
+
+            return id;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+            DBMaria.closeResultSet(rs);
+        }
+        return 0;
+    }
+    public void updateNextValue(int id, String crs) {
+        String SQL = "UPDATE nextid SET nextvalue= ? WHERE idtype = ?";
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            st.setInt(1, id);
+            st.setString(2, crs);
+            st.executeUpdate();
+            st.close();         
+            } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+        }
+    }
     
 }
 

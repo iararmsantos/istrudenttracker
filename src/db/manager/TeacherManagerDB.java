@@ -10,6 +10,7 @@ import entities.Teacher;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import model.CoursesDB;
 import model.TeachersDB;
 
 /**
@@ -26,11 +27,23 @@ public class TeacherManagerDB {
 
     //to save or update teachers into database
     public static void insertTeachers(Teacher tec) {
+        Teacher teacher = new Teacher();
         //connect to database
         TeachersDB manager = new TeachersDB(DBMaria.getConnection());
-        manager.insert(tec);
-        JOptionPane.showMessageDialog(null, "Teacher Inserted!");
+        teacher = getTeacherByName(tec.getfName(), tec.getlName());
+        
+        if(teacher == null){
+            manager.insert(tec);
+            //update nextvalue for 'tch'
+            CoursesDB cman = new CoursesDB(DBMaria.getConnection());
+            int nextid = cman.findNextId("tch") + 1;
+            cman.updateNextValue(nextid, "tch");
+            JOptionPane.showMessageDialog(null, "Teacher Inserted!");
+        }else{
+            JOptionPane.showMessageDialog(null, "Teacher Already Exist!");
+        }
     }
+    
     //find all teachers registered 
     public static List<Teacher> getTeachersList() {        
         //connect to database
@@ -46,7 +59,6 @@ public class TeacherManagerDB {
         //connect to database
         TeachersDB manager = new TeachersDB(DBMaria.getConnection());
         teacher = manager.searchByName(fname, lname);
-
         return teacher;
     }
     //receive teacher data and delete it from the database

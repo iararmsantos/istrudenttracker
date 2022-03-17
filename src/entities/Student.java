@@ -2,7 +2,6 @@
 package entities;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Purpose: entity that will save student personal data

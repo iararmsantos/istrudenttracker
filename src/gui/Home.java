@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import db.DBMaria;
@@ -16,6 +11,7 @@ import entities.Section;
 import entities.Semester;
 import entities.Student;
 import entities.Teacher;
+import exceptions.DataValidation;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
@@ -27,14 +23,13 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import model.CoursesDB;
 import model.GradesDB;
-import model.StudentsDB;
 
 /**
  *
@@ -70,18 +65,7 @@ public class Home extends javax.swing.JFrame {
         //tblGradesAvg
         configureTableHeader(tblGradesAvg);
 
-        loadCmbSemesters();
-        //get list of teachers
-        List<Teacher> listTeacher = new ArrayList<>();
-        listTeacher = TeacherManagerDB.getTeachersList();
-        loadCmbTeachers();
-
-        courses = CourseManagerDB.getCoursesList();
-        loadCmbCourses();
-
-        sections = CourseManagerDB.getSectionList();
-
-        students = StudentManagerDB.getStudentsList();
+        loadCmbSemesters();        
     }
 
     /**
@@ -2212,10 +2196,18 @@ public class Home extends javax.swing.JFrame {
         teachersPanel.setVisible(false);
 
         courses = CourseManagerDB.getCoursesList();
-        loadCmbCourses();
+        loadCmbCourses(courses);
         List<Student> list = new ArrayList<>();
         list = StudentManagerDB.getStudentsList();
-        fillStudentsTable(list);
+        if(list != null){
+            fillStudentsTable(list);
+        }
+        //get list of teachers
+        List<Teacher> listTeacher = new ArrayList<>();
+        if(listTeacher != null){
+            listTeacher = TeacherManagerDB.getTeachersList();
+            loadCmbTeachers(listTeacher);
+        }
     }//GEN-LAST:event_btnCoursesPanelMousePressed
 
     private void btnGradesPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGradesPanelMousePressed
@@ -2231,6 +2223,14 @@ public class Home extends javax.swing.JFrame {
         studentsPanel.setVisible(false);
         viewPanel.setVisible(false);
         teachersPanel.setVisible(false);
+
+        //get list of teachers
+        List<Course> listCrs = new ArrayList<>();
+        listCrs = CourseManagerDB.getCoursesList();
+        if(listCrs != null){
+            loadCmbCourses(listCrs);
+        }
+        
     }//GEN-LAST:event_btnGradesPanelMousePressed
 
     private void btnViewPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewPanelMousePressed
@@ -2249,9 +2249,6 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnViewPanelMousePressed
 
     private void btnExitPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitPanelMousePressed
-
-        //resetColor(btnLoginPanel);
-        //maybe a jform here asking are you sure?
         System.exit(0);
     }//GEN-LAST:event_btnExitPanelMousePressed
 
@@ -2268,7 +2265,6 @@ public class Home extends javax.swing.JFrame {
         studentsPanel.setVisible(false);
         gradesPanel.setVisible(false);
         viewPanel.setVisible(false);
-
     }//GEN-LAST:event_btnTeacherMousePressed
 
     private void txtTeacherFNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTeacherFNameActionPerformed
@@ -2281,58 +2277,59 @@ public class Home extends javax.swing.JFrame {
 
     private void btnDeleteTeacher1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteTeacher1ActionPerformed
         List<Course> list = new ArrayList<>();
-        getTeacherData();
-
-        list = CourseManagerDB.getCoursesTaught(teacherTemp.getId());
-
+        Teacher t = new Teacher();
+        t = getTeacherData();
+        list = CourseManagerDB.getCoursesTaught(t.getId());
         if (list.size() > 0) {
             JOptionPane.showMessageDialog(null, "Teacher has courses under his name. Delete courses first!");
         } else {
-            TeacherManagerDB.deleteTeacher(teacherTemp);
+            TeacherManagerDB.deleteTeacher(t);
+            clearTeacherFields();
         }
-
     }//GEN-LAST:event_btnDeleteTeacher1ActionPerformed
 
     private void btnSearchStdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStdActionPerformed
         List<Student> list = new ArrayList<>();
         //clear table
         clearTables(tblGrades);
-        cs = (Course) cmbCourses.getSelectedItem();
-
+        course = (Course) cmbCourses.getSelectedItem();
         //Search students by class (class courseId args)
-        list = StudentManagerDB.getStudentsByCourse(cs);
-
-        //fill table with data found
+        list = StudentManagerDB.getStudentsByCourse(course);
+        if(list != null){
+            //fill table with data found
         fillGradesTable(list, tblGrades);
+        }
     }//GEN-LAST:event_btnSearchStdActionPerformed
 
     private void btnUpdateGradesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateGradesActionPerformed
         //get student courseId   
         List<Student> list = new ArrayList<>();
         Section section = new Section();
-        cs = (Course) cmbCourses.getSelectedItem();
-        list = StudentManagerDB.getStudentsByCourse(cs);
-        section = CourseManagerDB.getSection(cs.getId());
-        cs.setSection(section);
+        Course c = (Course) cmbCourses.getSelectedItem();
+        list = StudentManagerDB.getStudentsByCourse(c);
+        section = CourseManagerDB.getSection(c.getId());
+        if(list != null && section != null){
+            c.setSection(section);
         //update grades of all students
         for (int i = 0; i < list.size(); i++) {
-            //pass student row , courseId, course data
-            updateGrades(i, list.get(i).getId(), cs);
+            //pass student row , courseId, c data
+            updateGrades(i, list.get(i).getId(), c);
         }
         JOptionPane.showMessageDialog(null, "Grades Updated!");
+        }else{
+            JOptionPane.showMessageDialog(null, "Grades not found!");
+        }
     }//GEN-LAST:event_btnUpdateGradesActionPerformed
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         //get student data
+        Student s = new Student();
         int index = lstStudentsEnrolled.getSelectedIndex();
         ListModel model = lstStudentsEnrolled.getModel();
-        stdTemp = (Student) model.getElementAt(index);
-        CourseManagerDB.dismissStudent(stdTemp);
+        s = (Student) model.getElementAt(index);
+        CourseManagerDB.dismissStudent(s);
         int courseId = Integer.parseInt(txtCourseId.getText());
-
         fillStudentsEnrolled(courseId, lstStudentsEnrolled);
-
-
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void txtByFNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtByFNameActionPerformed
@@ -2352,70 +2349,63 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_txtRelative2ActionPerformed
 
     private void btnAddTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTeacherActionPerformed
-        //get data from the list (is updated when the program open) to set the new courseId
+        //get data from the list (is updated when the program open) to set the new courseId        
         List<Teacher> list = new ArrayList<>();
         list = TeacherManagerDB.getTeachersList();
-
-        int size = list.size();
-
-        int newId = list.get(size - 1).getId() + 1;
-
-        teacherTemp = new Teacher();
-        teacherTemp.setId(newId);
-        list.add(teacherTemp);
-
-        txtTeacherId.setText(Integer.toString(teacherTemp.getId()));
-
+        int newId = findNextId("tch");
+        Teacher t = new Teacher();
+        t.setId(newId);
+        list.add(t);
+        txtTeacherId.setText(Integer.toString(t.getId()));
         txtTeacherFName.requestFocus();
-
         btnAddTeacher.setEnabled(false);
         btnSaveTeacher.setEnabled(true);
     }//GEN-LAST:event_btnAddTeacherActionPerformed
 
     private void btnSaveTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveTeacherActionPerformed
-        getTeacherData();
-        TeacherManagerDB.insertTeachers(teacherTemp);
-        clearTeacherFields();
-        btnAddTeacher.setEnabled(true);
-        btnSaveTeacher.setEnabled(false);
+        Teacher t = new Teacher();
+        try {
+            t = getTeacherData();
+            if (t != null) {
+                TeacherManagerDB.insertTeachers(t);
+                clearTeacherFields();
+                btnAddTeacher.setEnabled(true);
+                btnSaveTeacher.setEnabled(false);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Teacher was not found!");
+        }
     }//GEN-LAST:event_btnSaveTeacherActionPerformed
 
     private void btnAddCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCourseActionPerformed
-
-        //get the list size to verify last courseId inserted
-        countCourse = courses.size();
-        countSection = sections.size();
-        //create new courseId (the last in the db + 1 )
-        int newId = courses.get(countCourse - 1).getId() + 1;
-        int newSecId = sections.get(countSection - 1).getSectionId() + 1;
-
+        //new id will be nextid from the table
+        int newId = findNextId("crs");
+        int newSecId = findNextId("sec");
         //create new objects
-        cs = new Course();
+        course = new Course();
         sectionTemp = new Section();
-
         //set the new last ids
-        cs.setId(newId);
+        course.setId(newId);
         sectionTemp.setSectionId(newSecId);
-        cs.setSection(sectionTemp);
-
-        txtCourseId.setText(Integer.toString(cs.getId()));
+        course.setSection(sectionTemp);
+        txtCourseId.setText(Integer.toString(course.getId()));
         txtCourseTitle.requestFocus();
-
         btnAddCourse.setEnabled(false);
         btnSaveCourse.setEnabled(true);
-
-
     }//GEN-LAST:event_btnAddCourseActionPerformed
 
     private void btnSaveCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveCourseActionPerformed
-        getCourseData();
-
-        CourseManagerDB.insertCourses(cs);
-
-        JOptionPane.showMessageDialog(this, "Course saved!");
-        clearCourseFields();
-        btnAddCourse.setEnabled(true);
-        btnSaveCourse.setEnabled(false);
+        Course c = new Course();
+        c = getCourseData();
+        if (c != null) {
+            CourseManagerDB.insertCourses(c);
+            clearCourseFields();
+            btnAddCourse.setEnabled(true);
+            btnSaveCourse.setEnabled(false);
+        }else{
+            JOptionPane.showMessageDialog(this, "Course was not found!");
+        }
+        
     }//GEN-LAST:event_btnSaveCourseActionPerformed
 
     private void txtParentPhone2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtParentPhone2ActionPerformed
@@ -2423,16 +2413,17 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_txtParentPhone2ActionPerformed
 
     private void btnSaveStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveStudentActionPerformed
+        Student student = new Student();
         try {
-            if (isStudentValid()) {
-                getStudentData();
+            student = getStudentData();
+            if (student != null) {
+                StudentManagerDB.insertStudents(student);
                 clearStudentFields();
                 btnAddStudent.setEnabled(true);
                 btnSaveStudent.setEnabled(false);
-
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnSaveStudentActionPerformed
 
@@ -2441,29 +2432,30 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearStdActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        getUpdatedStudent();
-
-        StudentManagerDB.deleteStudent(stdTemp);
+        Student s = new Student();
+        s = getUpdatedStudent();
+        if(s != null){
+            StudentManagerDB.deleteStudent(s);
+            clearStudentFields();
+        }else{
+            JOptionPane.showMessageDialog(this, "Student was not found!");
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnAddStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStudentActionPerformed
-
         //get data from the list (is updated when the program open) to set the new courseId
         students.clear();
         students = StudentManagerDB.getStudentsList();
-        countStd = students.size();
-
-        int newId = students.get(countStd - 1).getId() + 1;
-
-        stdTemp = new Student();
-        stdTemp.setId(newId);
-        students.add(stdTemp);
-
-        txtStudentId.setText(Integer.toString(stdTemp.getId()));
+        int newId = findNextId("stu");
+        Student student = new Student();
+        student.setId(newId);
+        students.add(student);
+        txtStudentId.setText(Integer.toString(student.getId()));
         txtStudentFName.requestFocus();
-
         btnAddStudent.setEnabled(false);
         btnSaveStudent.setEnabled(true);
+        btnUpdateStudent.setEnabled(false);
+        btnDelete.setEnabled(false);
     }//GEN-LAST:event_btnAddStudentActionPerformed
 
     private void txtParentPhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtParentPhoneActionPerformed
@@ -2478,15 +2470,19 @@ public class Home extends javax.swing.JFrame {
         //get first and last name
         String fname = txtStudentFName.getText();
         String lname = txtStudentLName.getText();
-
         if ("".equals(fname) || "".equals(lname)) {
             JOptionPane.showMessageDialog(this, "First Name or Last Name is empty");
         } else {
-            stdTemp = StudentManagerDB.getStudentByName(fname, lname);
-            fillStudentData();
-            int id = Integer.parseInt(txtStudentId.getText());
-            fillCoursesEnrolled(id, lstCoursesEnrolled);
+            std = StudentManagerDB.getStudentByName(fname, lname);
+            if (std.getfName() != null && std.getlName() != null) {
+                fillStudentData(std);
+                int id = Integer.parseInt(txtStudentId.getText());
+                fillCoursesEnrolled(id, lstCoursesEnrolled);
+            } else {
+                JOptionPane.showMessageDialog(this, "Student was not found!");
+            }
         }
+        btnSaveStudent.setEnabled(false);
     }//GEN-LAST:event_btnSearchStudentActionPerformed
 
     private void btnSearchTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchTeacherActionPerformed
@@ -2494,24 +2490,23 @@ public class Home extends javax.swing.JFrame {
         List<Course> list = new ArrayList<>();
         String fname = txtTeacherFName.getText();
         String lname = txtTeacherLName.getText();
-
         if ("".equals(fname) || "".equals(lname)) {
             JOptionPane.showMessageDialog(this, "First Name or Last Name is empty");
         } else {
-            teacherTemp = null;
-            teacherTemp = TeacherManagerDB.getTeacherByName(fname, lname);
-
-            clearTeacherFields();
-            fillTeacherData();
-            //fill courses taught
-            int id = Integer.parseInt(txtTeacherId.getText());
-            //get from database
-            list = CourseManagerDB.getCoursesTaught(id);
-            fillCoursesTaughtTb(list);
-
-            /*PROBLEMS WITH SECTION DATA*/
+            Teacher t = new Teacher();
+            t = TeacherManagerDB.getTeacherByName(fname, lname);
+            if (t != null) {
+                clearTeacherFields();
+                fillTeacherData(t);
+                //fill courses taught
+                int id = Integer.parseInt(txtTeacherId.getText());
+                //get from database
+                list = CourseManagerDB.getCoursesTaught(id);
+                fillCoursesTaughtTb(list);
+            } else {
+                JOptionPane.showMessageDialog(this, "Teacher was not found!");
+            }
         }
-
     }//GEN-LAST:event_btnSearchTeacherActionPerformed
 
     private void btnEnrollTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnrollTeacherActionPerformed
@@ -2531,62 +2526,74 @@ public class Home extends javax.swing.JFrame {
 
     private void btnSearchCoursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchCoursesActionPerformed
         //Section section = new Section();
-
+        Course c = new Course();
         if ("".equals(txtCourseTitle.getText()) || "".equals(txtCourseYear.getText())) {
             JOptionPane.showMessageDialog(this, "Title or year is empty");
         } else {
             String title = txtCourseTitle.getText();
             int year = Integer.parseInt(txtCourseYear.getText());
-            cs = CourseManagerDB.getCourseByTitleYear(title, year);
-            fillCourseData();
-            int courseId = Integer.parseInt(txtCourseId.getText());
-
-            fillStudentsEnrolled(courseId, lstStudentsEnrolled);
-
-            //get section by courseId
-            sectionTemp = CourseManagerDB.getSection(courseId);
-            //select semester
-            cmbSemester.setSelectedItem(sectionTemp.getSemester());
-            //select teacher            
-            //https://coderanch.com/t/508122/java/JComboBox-setSelectedItem-update-displayed
-            cmbTeachers.getModel().setSelectedItem(sectionTemp.getTeacher());
-
-            //j.setSelectedItem(anObject);
-            //https://stackoverflow.com/questions/2777045/how-to-select-item-in-jcombobox
+            c = CourseManagerDB.getCourseByTitleYear(title, year);
+            if (c != null) {
+                fillCourseData(c);
+                int courseId = Integer.parseInt(txtCourseId.getText());
+                fillStudentsEnrolled(courseId, lstStudentsEnrolled);
+                //get section by courseId
+                sectionTemp = CourseManagerDB.getSection(courseId);
+                //select semester
+                cmbSemester.setSelectedItem(sectionTemp.getSemester());
+                //select teacher            
+                cmbTeachers.getModel().setSelectedItem(sectionTemp.getTeacher());
+            }else{
+                JOptionPane.showMessageDialog(this, "Course not found!");
+            }            
         }
     }//GEN-LAST:event_btnSearchCoursesActionPerformed
 
     private void btnEnrollStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnrollStudentActionPerformed
         int stdId = (Integer) tblStudents.getValueAt(tblStudents.getSelectedRow(), tblStudents.getSelectedColumn());
-
-        cs = new Course();
-        getCourseData();
-
-        CourseManagerDB.enrollStudent(stdId, cs);
-
-        fillStudentsEnrolled(cs.getId(), lstStudentsEnrolled);
-
+        Course course = new Course();
+        course = getCourseData();
+        if(course != null){
+            CourseManagerDB.enrollStudent(stdId, course);
+            fillStudentsEnrolled(this.course.getId(), lstStudentsEnrolled);
+        }
     }//GEN-LAST:event_btnEnrollStudentActionPerformed
 
     private void btnUpdateStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStudentActionPerformed
-        getUpdatedStudent();
-
-        StudentManagerDB.updateStudent(stdTemp);
-
+        try{
+            Student s = new Student();        
+            s = getUpdatedStudent();
+            if(s != null){
+                StudentManagerDB.updateStudent(s);
+                clearStudentFields();
+        }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        
     }//GEN-LAST:event_btnUpdateStudentActionPerformed
 
     private void btnUpdateTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateTeacherActionPerformed
-        teacherTemp = new Teacher();
-        getTeacherData();
-        TeacherManagerDB.updateTeacher(teacherTemp);
+        try {
+            Teacher t = new Teacher();
+            t = getTeacherData();
+            if(t != null){
+                TeacherManagerDB.updateTeacher(t);
+            clearTeacherFields();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }//GEN-LAST:event_btnUpdateTeacherActionPerformed
 
     private void btnUpdateCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateCourseActionPerformed
-        cs = new Course();
-        getCourseData();
-
-        CourseManagerDB.updateCourse(cs);
-        clearCourseFields();
+        Course c = new Course();
+        c = getCourseData();
+        if(c != null){
+            CourseManagerDB.updateCourse(c);
+            clearCourseFields();
+        }
+        
     }//GEN-LAST:event_btnUpdateCourseActionPerformed
 
     private void btnClearCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearCourseActionPerformed
@@ -2595,8 +2602,11 @@ public class Home extends javax.swing.JFrame {
 
     private void btnDeleteCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteCourseActionPerformed
         Section section = new Section();
-        section = CourseManagerDB.getSection(cs.getId());
-        CourseManagerDB.deleteCourse(section);
+        section = CourseManagerDB.getSection(course.getId());
+        if(section != null){
+            CourseManagerDB.deleteCourse(section);
+            clearCourseFields();
+        }
     }//GEN-LAST:event_btnDeleteCourseActionPerformed
 
     private void btnSearchViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchViewActionPerformed
@@ -2611,7 +2621,7 @@ public class Home extends javax.swing.JFrame {
             students = StudentManagerDB.findStudentsByLastName(lname);
             fillResultListStd(students, lstViewResults);
         } else if (!"".equals(course)) {
-            //if search by course it will fill the list with all students of this course
+            //if search by c it will fill the list with all students of this c
             courses = CourseManagerDB.findCoursesByTitle(course);
             fillResultListCourse(courses, lstViewResults);
         } else {
@@ -2624,6 +2634,7 @@ public class Home extends javax.swing.JFrame {
                 Student std = new Student();
                 Course crs = new Course();
                 List<Grade> list = new ArrayList<>();
+                List<Course> listCrs = new ArrayList<>();
                 ListModel model = lstViewResults.getModel();
                 if (!e.getValueIsAdjusting()) {
                     Object selection = lstViewResults.getSelectedValue();
@@ -2632,8 +2643,12 @@ public class Home extends javax.swing.JFrame {
                         if (maybe.isInstance(std)) {
                             std = Student.class.cast(selection);
                             if (selection != null) {
-                                list = findCoursesGrades(std);
-                                fillStudentsViewTable(list);
+                                //get all courses student is enrolled
+                                listCrs = CourseManagerDB.getCoursesEnrolled(std.getId());
+                                list = findCoursesGrades(std, listCrs);
+                                if(list != null){
+                                    fillStudentsViewTable(list, listCrs);
+                                }                                
                             }
                         } else if (maybe.isInstance(crs)) {
                             crs = Course.class.cast(selection);
@@ -2641,8 +2656,10 @@ public class Home extends javax.swing.JFrame {
                             //clear table
                             clearTables(tblGradesAvg);
                             stds = StudentManagerDB.getStudentsByCourse(crs);
-                            //fill table with data found
-                            fillGradesTable(stds, tblGradesAvg);
+                            if(stds != null){
+                                //fill table with data found
+                                fillGradesTable(stds, tblGradesAvg);
+                            }
                         }
                     }
                 }
@@ -2658,20 +2675,19 @@ public class Home extends javax.swing.JFrame {
         clearViewFields();
     }//GEN-LAST:event_btnClearView1ActionPerformed
     //fill view table with student data
-    private void fillStudentsViewTable(List<Grade> list) {
+    private void fillStudentsViewTable(List<Grade> list, List<Course> crs) {
         DefaultTableModel model = (DefaultTableModel) tblGradesAvg.getModel();
         model.setRowCount(0);
         Object rowData[] = new Object[7];
 
         for (int i = 0; i < list.size(); i++) {
-            rowData[0] = courses.get(i).toString();
+            rowData[0] = crs.get(i).toString();
             rowData[1] = list.get(i).getGrade(0);
             rowData[2] = list.get(i).getGrade(1);
             rowData[3] = list.get(i).getGrade(2);
             rowData[4] = list.get(i).getGrade(3);
             rowData[5] = list.get(i).getGrade(4);
             rowData[6] = list.get(i).getGrade(5);
-
             model.addRow(rowData);
         }
     }
@@ -2707,7 +2723,6 @@ public class Home extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Login lframe = new Login();
-
                 lframe.setVisible(true);
                 //new Home().setVisible(true);
             }
@@ -2716,38 +2731,20 @@ public class Home extends javax.swing.JFrame {
 
     /*FILL DATA START*/
     //find courses and grades by student id to fil table in the view form
-    private List<Grade> findCoursesGrades(Student stdTemp) {
+    private List<Grade> findCoursesGrades(Student stdTemp, List<Course> crs) {
         List<Grade> list = new ArrayList<>();
-        List<Course> crs = new ArrayList<>();
         Grade grade = new Grade();
-        //get all courses student is enrolled
-        crs = getCoursesEnrolled(stdTemp.getId());
-
-        //to get all student grade by course
+        //to get all student grade by c
         for (int i = 0; i < crs.size(); i++) {
-            grade = getStudentGradeByCourse(stdTemp.getId(), crs.get(i).getId());
-            list.add(grade);
+            grade = CourseManagerDB.getStudentGradeByCourse(stdTemp.getId(), crs.get(i).getId());
+            if(grade != null){
+                list.add(grade);
+            }            
         }
-
         return list;
     }
 
-    //find grades and 
-    private Grade getStudentGradeByCourse(int stdId, int courseId) {
-        gradeTemp = null;
-        GradesDB manager = new GradesDB(DBMaria.getConnection());
-        gradeTemp = manager.findGradesByStdCourse(stdId, courseId);
-        return gradeTemp;
-    }
-
-    //search courses students is enrolled
-    public List<Course> getCoursesEnrolled(int id) {
-        List<Course> crs = new ArrayList<>();
-        //connect to database
-        StudentsDB manager = new StudentsDB(DBMaria.getConnection());
-        crs = manager.searchCoursesEnrolledByID(id);
-        return crs;
-    }
+    
 
     //fill jtable courses taught in the teachers panel
     private void fillCoursesTaughtTb(List<Course> courses) {
@@ -2756,12 +2753,11 @@ public class Home extends javax.swing.JFrame {
         for (int i = 0; i < courses.size(); i++) {
             rowData[0] = courses.get(i).getTitle();
             rowData[1] = courses.get(i).getYear();
-
             model.addRow(rowData);
         }
     }
 
-    //fill students into a table in the course panel
+    //fill students into a table in the c panel
     private void fillStudentsTable(List<Student> students) {
         DefaultTableModel model = (DefaultTableModel) tblStudents.getModel();
         model.setRowCount(0);
@@ -2770,7 +2766,6 @@ public class Home extends javax.swing.JFrame {
             rowData[0] = students.get(i).getId();
             rowData[1] = students.get(i).getfName();
             rowData[2] = students.get(i).getlName();
-
             model.addRow(rowData);
         }
     }
@@ -2788,20 +2783,17 @@ public class Home extends javax.swing.JFrame {
             rowData[4] = students.get(i).getGrades().getGrade(3);
             rowData[5] = students.get(i).getGrades().getGrade(4);
             rowData[6] = students.get(i).getGrades().getGrade(5);
-
             model.addRow(rowData);
         }
     }
 
-    //list of students enrolled in the course
+    //list of students enrolled in the c
     private void fillStudentsEnrolled(int id, JList list) {
-
         DefaultListModel model = new DefaultListModel();
         clearList(list);
         List<Student> stds = new ArrayList<>();
         //get from database
         stds = StudentManagerDB.findCourseEnrolled(id);
-
         //fill list
         for (Student std : stds) {
             model.addElement(std);
@@ -2809,34 +2801,31 @@ public class Home extends javax.swing.JFrame {
         list.setModel(model);
     }
 
-    //after get data from db fill course form
-    private void fillCourseData() {
+    //after get data from db fill c form
+    private void fillCourseData(Course cs) {
         clearCourseFields();
         txtCourseId.setText(String.valueOf(cs.getId()));
         txtCourseTitle.setText(cs.getTitle());
         txtCourseYear.setText(String.valueOf(cs.getYear()));
-
     }
 
     //after get data from db fill teachers form
-    private void fillTeacherData() {
+    private void fillTeacherData(Teacher teacher) {
         clearTeacherFields();
-        txtTeacherId.setText(String.valueOf(teacherTemp.getId()));
-        txtTeacherFName.setText(teacherTemp.getfName());
-        txtTeacherLName.setText(teacherTemp.getlName());
-        txtTeacherPhone.setText(teacherTemp.getPhone());
-        txtTeacherEmail.setText(teacherTemp.getEmail());
+        txtTeacherId.setText(String.valueOf(teacher.getId()));
+        txtTeacherFName.setText(teacher.getfName());
+        txtTeacherLName.setText(teacher.getlName());
+        txtTeacherPhone.setText(teacher.getPhone());
+        txtTeacherEmail.setText(teacher.getEmail());
     }
 
     //fill list with students found in the view
     private void fillResultListCourse(List<Course> crs, JList list) {
         DefaultListModel model = new DefaultListModel();
         clearList(list);
-
         //fill list
         for (Course ob : crs) {
             model.addElement(ob);
-
         }
         list.setModel(model);
     }
@@ -2845,56 +2834,54 @@ public class Home extends javax.swing.JFrame {
     private void fillResultListStd(List<Student> stds, JList list) {
         DefaultListModel model = new DefaultListModel();
         clearList(list);
-
         //fill list
         for (Student ob : stds) {
             model.addElement(ob);
-
         }
         list.setModel(model);
     }
 
-    //fill course list with courses a student is enrolled
+    //fill c list with courses a student is enrolled
     public void fillCoursesEnrolled(int id, JList list) {
+        List<Course> crsList = new ArrayList<>();
         DefaultListModel model = new DefaultListModel();
-        clearList(list);
-
         //get from database
-        getCoursesEnrolled(id);
-
-        //fill list
-        for (Course course : courses) {
-            model.addElement(course.toString());
+        crsList = CourseManagerDB.getCoursesEnrolled(id);
+        if (crsList != null) {
+            clearList(list);
+            //fill list
+            for (Course course : crsList) {
+                model.addElement(course.toString());
+            }
+            list.setModel(model);
         }
-        list.setModel(model);
     }
 
     //after get data from db fill students form
-    public void fillStudentData() {
+    public void fillStudentData(Student std) {
         clearStudentFields();
-        txtStudentId.setText(String.valueOf(stdTemp.getId()));
-        txtStudentFName.setText(stdTemp.getfName());
-        txtStudentLName.setText(stdTemp.getlName());
-        txtStudentPhone.setText(stdTemp.getPhone());
-        txtStudentEmail.setText(stdTemp.getEmail());
-        txtParentFName.setText(stdTemp.getParent()[0].getfName());
-        txtParentLName.setText(stdTemp.getParent()[0].getfName());
-        txtParentPhone.setText(stdTemp.getParent()[0].getPhone());
-        txtParentEmail.setText(stdTemp.getParent()[0].getEmail());
-        txtParentFName2.setText(stdTemp.getParent()[1].getfName());
-        txtParentLName2.setText(stdTemp.getParent()[1].getfName());
-        txtParentPhone2.setText(stdTemp.getParent()[1].getPhone());
-        txtParentEmail2.setText(stdTemp.getParent()[1].getEmail());
+        txtStudentId.setText(String.valueOf(std.getId()));
+        txtStudentFName.setText(std.getfName());
+        txtStudentLName.setText(std.getlName());
+        txtStudentPhone.setText(std.getPhone());
+        txtStudentEmail.setText(std.getEmail());
+        txtParentFName.setText(std.getParent()[0].getfName());
+        txtParentLName.setText(std.getParent()[0].getlName());
+        txtParentPhone.setText(std.getParent()[0].getPhone());
+        txtParentEmail.setText(std.getParent()[0].getEmail());
+        txtParentFName2.setText(std.getParent()[1].getfName());
+        txtParentLName2.setText(std.getParent()[1].getlName());
+        txtParentPhone2.setText(std.getParent()[1].getPhone());
+        txtParentEmail2.setText(std.getParent()[1].getEmail());
     }
-
     /*FILL DATA END*/
 
- /*GET FORM DATA START*/
+    /*GET FORM DATA START*/
+    
     //get grades to update database by studentid and sectionid
     private void updateGrades(int row, int id, Course obj) {
         Double[] grade = new Double[6];
         DefaultTableModel model = (DefaultTableModel) tblGrades.getModel();
-
         //rowCount = number of rows in the table
         for (int i = 0; i < model.getRowCount(); i++) {
             //get value at row and column to update
@@ -2908,89 +2895,152 @@ public class Home extends javax.swing.JFrame {
         CourseManagerDB.updateGradesDB(grade, id, obj);
     }
 
-    //get course data to set to the object and add to the list
-    private void getCourseData() {
-        Course cs = new Course();
-        this.cs.setTitle(txtCourseTitle.getText());
-        this.cs.setYear(Integer.parseInt(txtCourseYear.getText()));
-        this.cs.setId(Integer.parseInt(txtCourseId.getText()));
-
-        //combobox Semester        
-        sectionTemp.setSemester((Semester) cmbSemester.getSelectedItem());
-
-        //combobox Teacher        
-        sectionTemp.setTeacher((Teacher) cmbTeachers.getSelectedItem());
-
-        this.cs.setSection(sectionTemp);
-
-        courses.add(this.cs);
-        //load combobox in grades
-        loadCmbCourses();
+    //get c data to set to the object and add to the list
+    private Course getCourseData() {
+        Course crs = new Course();
+        Section s = new Section();
+        try{
+            DataValidation dt = new DataValidation();
+            String title = txtCourseTitle.getText();
+            String year = txtCourseYear.getText();
+            if (dt.isCourseValid(title, year)) {
+                crs.setTitle(title);
+                crs.setYear(Integer.parseInt(year));
+                crs.setId(Integer.parseInt(txtCourseId.getText()));
+                //combobox Semester        
+                sectionTemp.setSemester((Semester) cmbSemester.getSelectedItem());
+                //combobox Teacher        
+                sectionTemp.setTeacher((Teacher) cmbTeachers.getSelectedItem());
+                crs.setSection(sectionTemp);
+                courses.add(crs);
+                //load combobox in grades
+                loadCmbCourses(courses);
+                return crs;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        return null;
     }
 
     //get teacher data to set to the object and add to the list
-    private void getTeacherData() {
-        teacherTemp.setfName(txtTeacherFName.getText());
-        teacherTemp.setlName(txtTeacherLName.getText());
-        teacherTemp.setPhone(txtTeacherPhone.getText());
-        teacherTemp.setEmail(txtTeacherEmail.getText());
-        teacherTemp.setId(Integer.parseInt(txtTeacherId.getText()));
+    private Teacher getTeacherData() {
+        Teacher t = new Teacher();
+        try {
+            DataValidation dt = new DataValidation();
+            String fName = txtTeacherFName.getText();
+            String lName = txtTeacherLName.getText();
+            String phone = txtTeacherPhone.getText();
+            String email = txtTeacherEmail.getText();
+            if (dt.isEntityValid(fName, lName, phone, email)) {
+                t.setfName(fName);
+                t.setlName(lName);
+                t.setPhone(phone);
+                t.setEmail(email);
+                return t;
+            }
 
-        loadCmbTeachers();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        return null;
     }
 
-    private void getUpdatedStudent() {
-        stdTemp.setfName(txtStudentFName.getText());
-        stdTemp.setlName(txtStudentLName.getText());
-        stdTemp.setPhone(txtStudentPhone.getText());
-        stdTemp.setEmail(txtStudentEmail.getText());
-        stdTemp.setId(Integer.parseInt(txtStudentId.getText()));
+    private Student getUpdatedStudent() {
+        Student stu = new Student();
+        try {
+            DataValidation dt = new DataValidation();
+            String fName = txtStudentFName.getText();
+            String lName = txtStudentLName.getText();
+            String phone = txtStudentPhone.getText();
+            String email = txtStudentEmail.getText();
 
-        parent = new Parent[2];
-        parent[0] = new Parent();
-        parent[1] = new Parent();
-        parent[0].setfName(txtParentFName.getText());
-        parent[0].setlName(txtParentLName.getText());
-        parent[0].setPhone(txtParentPhone.getText());
-        parent[0].setEmail(txtParentEmail.getText());
-        parent[0].setId(stdTemp.getParent()[0].getId());
-        parent[1].setfName(txtParentFName2.getText());
-        parent[1].setlName(txtParentLName2.getText());
-        parent[1].setPhone(txtParentPhone2.getText());
-        parent[1].setEmail(txtParentEmail2.getText());
-        parent[1].setId(stdTemp.getParent()[1].getId());
+            String fNamep = txtParentFName.getText();
+            String lNamep = txtParentLName.getText();
+            String phonep = txtParentPhone.getText();
+            String emailp = txtParentEmail.getText();
 
-        stdTemp.setParent(parent);
-
+            String fNamep2 = txtParentFName2.getText();
+            String lNamep2 = txtParentLName2.getText();
+            String phonep2 = txtParentPhone2.getText();
+            String emailp2 = txtParentEmail2.getText();
+            if (dt.isEntityValid(fName, lName, phone, email) && dt.isEntityValid(fNamep, lNamep, phonep, emailp) && dt.isEntityValid(fNamep2, lNamep2, phonep2, emailp2)) {
+                stu = StudentManagerDB.getStudentByName(fName, lName);
+                if (stu != null) {
+                    stu.setfName(fName);
+                    stu.setlName(lName);
+                    stu.setPhone(phone);
+                    stu.setEmail(email);
+                    stu.setId(Integer.parseInt(txtStudentId.getText()));
+                    stu.setId(Integer.parseInt(txtStudentId.getText()));
+                    parent = new Parent[2];
+                    parent[0] = new Parent();
+                    parent[1] = new Parent();
+                    parent[0].setfName(fNamep);
+                    parent[0].setlName(lNamep);
+                    parent[0].setPhone(phonep);
+                    parent[0].setEmail(emailp);
+                    parent[0].setId(stu.getParent()[0].getId());
+                    parent[1].setfName(fNamep2);
+                    parent[1].setlName(lNamep2);
+                    parent[1].setPhone(phonep2);
+                    parent[1].setEmail(emailp2);
+                    parent[1].setId(stu.getParent()[1].getId());
+                    stu.setParent(parent);
+                    System.out.println(stu);
+                    return stu;
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        return null;
     }
 
     //get student data to set to the object and add to the list
-    private void getStudentData() {
-        students.get(countStd).setfName(txtStudentFName.getText());
-        students.get(countStd).setlName(txtStudentLName.getText());
-        students.get(countStd).setPhone(txtStudentPhone.getText());
-        students.get(countStd).setEmail(txtStudentEmail.getText());
-        students.get(countStd).setId(Integer.parseInt(txtStudentId.getText()));
+    private Student getStudentData() {
+        Student s = new Student();
+        try {
+            DataValidation dt = new DataValidation();
+            String fName = txtStudentFName.getText();
+            String lName = txtStudentLName.getText();
+            String phone = txtStudentPhone.getText();
+            String email = txtStudentEmail.getText();
 
-        parent = new Parent[2];
-        parent[0] = new Parent();
-        parent[1] = new Parent();
-        parent[0].setfName(txtParentFName.getText());
-        parent[0].setlName(txtParentLName.getText());
-        parent[0].setPhone(txtParentPhone.getText());
-        parent[0].setEmail(txtParentEmail.getText());
-        parent[1].setfName(txtParentFName2.getText());
-        parent[1].setlName(txtParentLName2.getText());
-        parent[1].setPhone(txtParentPhone2.getText());
-        parent[1].setEmail(txtParentEmail2.getText());
+            String fNamep = txtParentFName.getText();
+            String lNamep = txtParentLName.getText();
+            String phonep = txtParentPhone.getText();
+            String emailp = txtParentEmail.getText();
 
-        students.get(countStd).setParent(parent);
-
-        StudentManagerDB.insertStudents(students.get(countStd));
-        ++countStd;
-
+            String fNamep2 = txtParentFName2.getText();
+            String lNamep2 = txtParentLName2.getText();
+            String phonep2 = txtParentPhone2.getText();
+            String emailp2 = txtParentEmail2.getText();
+            if (dt.isEntityValid(fName, lName, phone, email) && dt.isEntityValid(fNamep, lNamep, phonep, emailp) && dt.isEntityValid(fNamep2, lNamep2, phonep2, emailp2)) {
+                s.setfName(fName);
+                s.setlName(lName);
+                s.setPhone(phone);
+                s.setEmail(email);
+                s.setId(Integer.parseInt(txtStudentId.getText()));
+                parent = new Parent[2];
+                parent[0] = new Parent();
+                parent[1] = new Parent();
+                parent[0].setfName(fNamep);
+                parent[0].setlName(lNamep);
+                parent[0].setPhone(phonep);
+                parent[0].setEmail(emailp);
+                parent[1].setfName(fNamep2);
+                parent[1].setlName(lNamep2);
+                parent[1].setPhone(phonep2);
+                parent[1].setEmail(emailp2);
+                s.setParent(parent);
+                return s;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        return null;
     }
-
     /*GET DATA END*/
 
  /*CLEAR FIELDS and TABLES START*/
@@ -3015,7 +3065,7 @@ public class Home extends javax.swing.JFrame {
         clearTables(tblGradesAvg);
     }
 
-    //clear course fields
+    //clear c fields
     private void clearCourseFields() {
         txtCourseTitle.setText("");
         txtCourseId.setText("");
@@ -3054,9 +3104,7 @@ public class Home extends javax.swing.JFrame {
         txtParentLName2.setText("");
         txtParentPhone2.setText("");
         txtParentEmail2.setText("");
-
         clearList(lstCoursesEnrolled);
-
     }
 
     //clear combobox data
@@ -3065,47 +3113,21 @@ public class Home extends javax.swing.JFrame {
     }
 
     /*CLEAR TXTFIELDS END*/
-
- /*DATA VALIDATION START*/
-    //verify if data is valid
-    private boolean isStudentValid() {
-        return isPresent(txtStudentFName, "First Name") && isPresent(txtStudentLName, "Last Name")
-                && isPresent(txtStudentPhone, "Student Phone") && isPresent(txtStudentEmail, "Student Email")
-                && isPresent(txtParentFName, "Parent First Name") && isPresent(txtParentFName, "Parent Last Name")
-                && isPresent(txtParentEmail, "Parent Email") && isPresent(txtParentPhone, "Parent Phone");
+    private int findNextId(String tch) {
+        CoursesDB manager = new CoursesDB(DBMaria.getConnection());
+        int newId = manager.findNextId(tch);
+        return newId;
     }
 
-    //verify if required fields are filled
-    private boolean isPresent(JTextField txtField, String title) {
-        if (txtField.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, title + " is a required field");
-            txtField.requestFocus();
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /*DATA VALIDATION END*/
-
- /*PERSONALIZED VARIABLES DECLARATION START*/
+    /*PERSONALIZED VARIABLES DECLARATION START*/
     private List<Student> students = new ArrayList<>();
-    private Student stdTemp;
-    private static int countStd;
-    private Parent[] parent;
-    private Teacher teacherTemp;
-    private List<Teacher> teachers = new ArrayList<Teacher>();
+    private Student std;
+    private Parent[] parent;    
     DefaultComboBoxModel<Teacher> comboBoxModel;
-    private static int countTeac;
-    private Course cs;
+    private Course course;
     private List<Course> courses = new ArrayList<>();
-    private static int countCourse;
     private Section sectionTemp;
-    private Grade gradeTemp;
-    private List<Grade> grades = new ArrayList<>();
-    private static int countGrade;
-    private List<Section> sections = new ArrayList<>();
-    private static int countSection;
+    
     List<Teacher> tesTeacher;
     /*PERSONALIZED VARIABLES DECLARATION END*/
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -3270,18 +3292,14 @@ public class Home extends javax.swing.JFrame {
         cmbSemester.setModel(new DefaultComboBoxModel<>(Semester.values()));
     }
 
-    private void loadCmbTeachers() {
+    private void loadCmbTeachers(List<Teacher> teachers) {
         clearComboBox(cmbTeachers);
-
         cmbTeachers.setModel(new DefaultComboBoxModel<>(teachers.toArray(new Teacher[0])));
-        //https://stackoverflow.com/questions/1291704/how-do-i-populate-a-jcombobox-with-an-arraylist/26347782
-        //to insert list of teachers in the combobox
     }
 
-    private void loadCmbCourses() {
+    private void loadCmbCourses(List<Course> courses) {
         clearComboBox(cmbCourses);
-
-        cmbCourses.setModel(new DefaultComboBoxModel<Course>(courses.toArray(new Course[0])));
+        cmbCourses.setModel(new DefaultComboBoxModel<>(courses.toArray(new Course[0])));
     }
 
     //change table header background, font, foreground
@@ -3304,4 +3322,6 @@ public class Home extends javax.swing.JFrame {
     }
 }
 //source to fill jtable with list: https://www.youtube.com/watch?v=GAl1FSKvoFY
-
+//j.setSelectedItem(anObject); //https://stackoverflow.com/questions/2777045/how-to-select-item-in-jcombobox
+//to insert list of teachers in the combobox: https://stackoverflow.com/questions/1291704/how-do-i-populate-a-jcombobox-with-an-arraylist/26347782
+        

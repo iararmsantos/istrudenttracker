@@ -8,6 +8,17 @@ CREATE DATABASE IF NOT EXISTS istracker;
 
 USE istracker;
 
+CREATE TABLE nextid(
+idtype CHAR(3) PRIMARY KEY,
+nextvalue INT NOT NULL
+);
+
+INSERT INTO nextid (idtype, nextvalue) VALUES
+('stu', 5),
+('tch', 5),
+('sec', 5),
+('crs', 5);
+
 CREATE TABLE Login
 (
 loginID INT PRIMARY KEY AUTO_INCREMENT,
