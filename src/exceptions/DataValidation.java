@@ -6,6 +6,7 @@
 package exceptions;
 
 import gui.Home;
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFrame;
@@ -22,9 +23,21 @@ public class DataValidation extends JFrame{
     public boolean isLoginValid(String name, String pass) {
         return isPresent(name, "Email") && isPresent(pass, "Password");
     }
+    public boolean isDouble(String num){
+        try
+    {
+        Double.parseDouble(num);
+    }
+    catch (NumberFormatException e)
+    {
+        return false;
+    }
+    return true;
+    }
+    
     public boolean isCourseValid(String title, String year){
         return isPresent(title, "Course Title") && isPresent(year, "Course Year")
-                && isNumber(year);
+                && isNumber(year) && isGreaterThan(year);
     }
     //verify if data is valid
     public boolean isSignUpValid(String fName, String lName, String phone, String email, String pass){
@@ -71,5 +84,11 @@ public class DataValidation extends JFrame{
             }
         }
         return true;
+    }
+    
+    private boolean isGreaterThan(String number){
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        int num = Integer.parseInt(number);
+        return num >= year;
     }
 }

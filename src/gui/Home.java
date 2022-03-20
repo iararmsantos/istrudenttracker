@@ -1035,6 +1035,7 @@ public class Home extends javax.swing.JFrame {
         txtTeacherId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtTeacherId.setForeground(new java.awt.Color(54, 33, 89));
         txtTeacherId.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(54, 33, 89)));
+        txtTeacherId.setEnabled(false);
 
         btnUpdateTeacher.setBackground(new java.awt.Color(54, 33, 89));
         btnUpdateTeacher.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -1306,6 +1307,7 @@ public class Home extends javax.swing.JFrame {
         txtCourseId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtCourseId.setForeground(new java.awt.Color(54, 33, 89));
         txtCourseId.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(54, 33, 89)));
+        txtCourseId.setEnabled(false);
         txtCourseId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCourseIdActionPerformed(evt);
@@ -2297,7 +2299,7 @@ public class Home extends javax.swing.JFrame {
         list = StudentManagerDB.getStudentsByCourse(course);
         if(list != null){
             //fill table with data found
-        fillGradesTable(list, tblGrades);
+            fillGradesTable(list, tblGrades);
         }
     }//GEN-LAST:event_btnSearchStdActionPerformed
 
@@ -2308,16 +2310,17 @@ public class Home extends javax.swing.JFrame {
         Course c = (Course) cmbCourses.getSelectedItem();
         list = StudentManagerDB.getStudentsByCourse(c);
         section = CourseManagerDB.getSection(c.getId());
-        if(list != null && section != null){
+        if (list != null && section != null) {
             c.setSection(section);
-        //update grades of all students
-        for (int i = 0; i < list.size(); i++) {
-            //pass student row , courseId, c data
-            updateGrades(i, list.get(i).getId(), c);
-        }
-        JOptionPane.showMessageDialog(null, "Grades Updated!");
-        }else{
-            JOptionPane.showMessageDialog(null, "Grades not found!");
+            //update grades of all students
+            int i = 0;
+            while ((i < list.size()) && updateGrades(i, list.get(i).getId(), c)) {
+                //pass student row , courseId, c data
+                i++;
+            }
+            if(i == list.size()){
+                JOptionPane.showMessageDialog(this, "Grades updated!");
+            }
         }
     }//GEN-LAST:event_btnUpdateGradesActionPerformed
 
@@ -2879,20 +2882,31 @@ public class Home extends javax.swing.JFrame {
     /*GET FORM DATA START*/
     
     //get grades to update database by studentid and sectionid
-    private void updateGrades(int row, int id, Course obj) {
+    //param: row that is being updated, student id and course data
+    private boolean updateGrades(int row, int id, Course obj) {        
         Double[] grade = new Double[6];
         DefaultTableModel model = (DefaultTableModel) tblGrades.getModel();
-        //rowCount = number of rows in the table
-        for (int i = 0; i < model.getRowCount(); i++) {
-            //get value at row and column to update
-            grade[0] = new Double(model.getValueAt(row, 1).toString());
-            grade[1] = new Double(model.getValueAt(row, 2).toString());
-            grade[2] = new Double(model.getValueAt(row, 3).toString());
-            grade[3] = new Double(model.getValueAt(row, 4).toString());
-            grade[4] = new Double(model.getValueAt(row, 5).toString());
-            grade[5] = new Double(model.getValueAt(row, 6).toString());
+        DataValidation dt = new DataValidation();
+        int i = 0;
+        String grd = "";
+        boolean isDouble = true;
+        
+        while(i < grade.length){ 
+            grd = model.getValueAt(row, i + 1).toString();
+            if (dt.isDouble(grd)) {
+                    grade[i] = Double.parseDouble(grd);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Number invalid at row " + (row + 1) + ".");
+                    isDouble = false;
+                }
+            i++;           
         }
-        CourseManagerDB.updateGradesDB(grade, id, obj);
+        
+        if(isDouble){
+            CourseManagerDB.updateGradesDB(grade, id, obj);
+            return isDouble;            
+        }
+        return isDouble;
     }
 
     //get c data to set to the object and add to the list

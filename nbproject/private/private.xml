@@ -5,9 +5,11 @@
         <group>
             <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/model/CoursesDB.java</file>
             <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/db/manager/CourseManagerDB.java</file>
+            <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/db/manager/StudentManagerDB.java</file>
             <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/exceptions/DataValidation.java</file>
             <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/db/manager/TeacherManagerDB.java</file>
             <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/gui/Home.java</file>
+            <file>file:/D:/Iara/Documents/6Semester/CIS354_Project/iStudentProject/src/model/StudentsDB.java</file>
         </group>
     </open-files>
 </project-private>
