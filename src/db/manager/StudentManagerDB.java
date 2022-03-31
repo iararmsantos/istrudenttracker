@@ -69,8 +69,12 @@ public class StudentManagerDB {
     public static void updateStudent(Student std) {
         //connect to database
         StudentsDB manager = new StudentsDB(DBMaria.getConnection());
-        manager.update(std);
-        JOptionPane.showMessageDialog(null, "Student Updated!");
+        if(manager.update(std)){
+            JOptionPane.showMessageDialog(null, "Student Updated!");
+        }else{
+            JOptionPane.showMessageDialog(null, "Something got wrong while trying update student. Try again!");
+        }
+        
     }
 
     //to save or update students into database
@@ -98,4 +102,32 @@ public class StudentManagerDB {
         list = manager.findStudentsByCourse(crs);
         return list;
     }
+
+    public static List<String> getStudentNotes(int stdId) {
+        StudentsDB manager = new StudentsDB(DBMaria.getConnection());
+        List<String> notes = new ArrayList<>();
+        notes = manager.findNoteById(stdId);
+        if(notes.size() > 0){
+            return notes;
+        }else{
+            return null;
+        }
+        
+    }
+
+//    public static void addStudentNotes(int id) {
+//        Student stu = new Student();
+//        //connect to database
+//        StudentsDB manager = new StudentsDB(DBMaria.getConnection());
+//        stu = getStudentByName(student.getfName(), student.getlName());
+//        int nextid = crs.findNextId("stu") + 1;
+//        if (stu.getfName() == null && stu.getlName() == null) {
+//            manager.insert(student);
+//            //update nextvalue for 'stu'
+//            crs.updateNextValue(nextid, "stu");
+//            JOptionPane.showMessageDialog(null, "Student Inserted!");
+//        } else {
+//            JOptionPane.showMessageDialog(null, "Student Already exist!");
+//        }
+//    }
 }

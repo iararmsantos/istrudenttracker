@@ -21,8 +21,11 @@ public class TeacherManagerDB {
     public static void updateTeacher(Teacher tec) {
         //connect to database
         TeachersDB manager = new TeachersDB(DBMaria.getConnection());
-        manager.update(tec);
-        JOptionPane.showMessageDialog(null, "Teacher Updated!");
+        if(manager.update(tec)){
+            JOptionPane.showMessageDialog(null, "Teacher Updated!");
+        }else{
+            JOptionPane.showMessageDialog(null, "Something got wrong while trying update teacher. Try again!");
+        }
     }
 
     //to save or update teachers into database

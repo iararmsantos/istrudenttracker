@@ -19,6 +19,18 @@ INSERT INTO nextid (idtype, nextvalue) VALUES
 ('sec', 5),
 ('crs', 5);
 
+CREATE TABLE notes
+(
+noteID INT PRIMARY KEY AUTO_INCREMENT,
+studentID INT,
+note VARCHAR(1000),
+FOREIGN KEY (studentID) REFERENCES Student(studentID)
+);
+
+INSERT INTO notes (studentID, note) VALUES
+(1, 'Student need help with Math'),
+(1, 'Student parents passed away');
+
 CREATE TABLE Login
 (
 loginID INT PRIMARY KEY AUTO_INCREMENT,

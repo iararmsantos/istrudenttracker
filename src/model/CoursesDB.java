@@ -160,7 +160,7 @@ public class CoursesDB {
     }
     
     //update dabase with edited data
-    public void update(Course obj) {
+    public boolean update(Course obj) {
         PreparedStatement st = null;
         String SQLSection = "UPDATE Section SET teacherID = ?, semester = ? WHERE sectionid = ?";
         String SQLCourse = "UPDATE Course SET sectionID = ?, title = ?, year = ? WHERE courseid = ?";
@@ -179,14 +179,18 @@ public class CoursesDB {
             st.setInt(3, obj.getYear());
             st.setInt(4, obj.getId());
             
-            st.executeUpdate();
+            int rowsAffected = st.executeUpdate();
+
+            if (rowsAffected < 1) {
+                return false;
+            }
             st.close();
             } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DBMaria.closeStatement(st);
-        
         }
+        return true;
     }
     
     //find all sections registered

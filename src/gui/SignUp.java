@@ -269,7 +269,6 @@ public class SignUp extends javax.swing.JFrame {
         String pass = new String(txtSignupPassword.getPassword());
         try {
             if (dt.isSignUpValid(fName, lName, phone, email, pass)) {
-
                 rs = login.findUser(email, pass);
                 if (rs.next()) {
                     JOptionPane.showMessageDialog(this, "User already exist.");
@@ -286,9 +285,10 @@ public class SignUp extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSignupActionPerformed
 
     private void newUser(String fName, String lName, String phone, String email, String pass) {
-        String SQL = "INSERT INTO Login(first_name, last_name, phone, email, password) VALUES (?, ?, ?, ?, ?)";
+        String SQL = "INSERT INTO login(first_name, last_name, phone, email, password) VALUES (?, ?, ?, ?, ?)";
         Connection conn = DBMaria.getConnection();
         PreparedStatement st = null;
+        ResultSet rs;
         try {
             st = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, fName);
@@ -296,6 +296,7 @@ public class SignUp extends javax.swing.JFrame {
             st.setString(3, phone);
             st.setString(4, email);
             st.setString(5, pass);
+            st.executeUpdate();
 
         } catch (SQLException ex) {
             Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);

@@ -229,11 +229,10 @@ public class StudentsDB {
         }
     }
 
-    public void update(Student obj) {
+    public boolean update(Student obj) {
         PreparedStatement st = null;
         String SQL = "UPDATE Student SET first_name = ?, last_name = ?, phone = ?, email = ? WHERE studentid = ?";
         String SQLParents = "UPDATE Parent SET first_name = ?, last_name = ?, phone = ?, email = ? WHERE parentid = ?";
-
         try {
             st = conn.prepareStatement(SQL);
 
@@ -260,13 +259,19 @@ public class StudentsDB {
             st.setString(3, obj.getParent()[1].getPhone());
             st.setString(4, obj.getParent()[1].getEmail());
             st.setInt(5, obj.getParent()[1].getId());
-            st.executeUpdate();
+            int rowsAffected = st.executeUpdate();
+
+            if (rowsAffected < 1) {
+                return false;
+            }
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DBMaria.closeStatement(st);
+            
         }
+        return true;
     }
 
     //search for courses student is enrolled by studentid
@@ -534,5 +539,33 @@ public class StudentsDB {
             DBMaria.closeResultSet(rs);
         }
         return false;
+    }
+
+    public List<String> findNoteById(int stdId) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        List<String> notes = new ArrayList<>();
+        try {
+            st = conn.prepareStatement(
+                    "SELECT * FROM notes WHERE studentId = ?");
+            st.setInt(1, stdId);
+            
+            rs = st.executeQuery();
+            //cria lista de resultados
+            String note = "";
+            while(rs.next()) {                
+                note = rs.getString("note");
+                notes.add(note);
+                notes.add("\n");
+            }
+            return notes;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBMaria.closeStatement(st);
+            DBMaria.closeResultSet(rs);
+        }
+        return null;
     }
 }

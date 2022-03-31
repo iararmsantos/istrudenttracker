@@ -48,12 +48,11 @@ public class TeachersDB {
         }
     }
     //update dabase with edited data
-    public void update(Teacher obj) {
+    public boolean update(Teacher obj) {
         PreparedStatement st = null;
         String SQL = "UPDATE Teacher SET first_name = ?, last_name = ?, phone = ?, email = ? WHERE teacherid = ?";
-        
         try {
-            st = conn.prepareStatement(SQL);
+            st = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
 
             st.setString(1, obj.getfName());
             st.setString(2, obj.getlName());
@@ -61,15 +60,18 @@ public class TeachersDB {
             st.setString(4, obj.getEmail());
             st.setInt(5, obj.getId());             
             
-            st.executeUpdate();            
-                
+            int rowsAffected = st.executeUpdate();
+
+            if (rowsAffected < 1) {
+                return false;
+            }
             st.close();
             } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DBMaria.closeStatement(st);
-        
         }
+        return true;
     }
     
     //find all teachers

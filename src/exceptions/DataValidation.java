@@ -20,24 +20,29 @@ import javax.swing.JTextField;
 public class DataValidation extends JFrame{
     Home home = new Home();
     
+    public boolean isGradeValid(String num, String grade){
+        return isPresent(num, grade) && isDouble(num, grade);
+    }
+    
     public boolean isLoginValid(String name, String pass) {
         return isPresent(name, "Email") && isPresent(pass, "Password");
     }
-    public boolean isDouble(String num){
+    public boolean isDouble(String num, String place){
         try
     {
         Double.parseDouble(num);
     }
     catch (NumberFormatException e)
     {
-        return false;
+        JOptionPane.showMessageDialog(this, "Number invalid: " + place + "!");
+        return false;        
     }
     return true;
     }
     
     public boolean isCourseValid(String title, String year){
         return isPresent(title, "Course Title") && isPresent(year, "Course Year")
-                && isNumber(year) && isGreaterThan(year);
+                && isNumber(year) ;//&& isGreaterThan(year)
     }
     //verify if data is valid
     public boolean isSignUpValid(String fName, String lName, String phone, String email, String pass){
@@ -55,7 +60,7 @@ public class DataValidation extends JFrame{
     }
 
     //verify if required fields are filled
-    private boolean isPresent(String txtField, String title) {
+    public boolean isPresent(String txtField, String title) {
         if ("".equals(txtField)) {
             JOptionPane.showMessageDialog(this, title + " is a required field");
             return false;
@@ -63,6 +68,7 @@ public class DataValidation extends JFrame{
             return true;
         }
     }
+       
 
     //verify if required fields are filled
     private boolean isEmail(String email) {

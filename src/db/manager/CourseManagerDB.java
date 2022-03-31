@@ -144,9 +144,10 @@ public class CourseManagerDB {
     public static void updateCourse(Course obj) {
         //connect to database
         CoursesDB manager = new CoursesDB(DBMaria.getConnection());
-        manager.update(obj);
-        JOptionPane.showMessageDialog(null, "Course Updated!");
+        if(manager.update(obj)){
+            JOptionPane.showMessageDialog(null, "Course Updated!");
+        }else{
+            JOptionPane.showMessageDialog(null, "Something got wrong while trying update course. Try again!");
+        }        
     }
-
-    
 }
