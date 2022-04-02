@@ -14,7 +14,6 @@ import entities.Teacher;
 import exceptions.DataValidation;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.TextArea;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -31,7 +30,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import model.CoursesDB;
-import model.GradesDB;
 
 /**
  *
@@ -224,7 +222,6 @@ public class Home extends javax.swing.JFrame {
         lstViewResults = new javax.swing.JList<>();
         btnClearView1 = new javax.swing.JButton();
         btnSaveNotes = new javax.swing.JButton();
-        btnUpdateNotes = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtNotes = new javax.swing.JTextArea();
         jLabel46 = new javax.swing.JLabel();
@@ -1951,20 +1948,6 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        btnUpdateNotes.setBackground(new java.awt.Color(54, 33, 89));
-        btnUpdateNotes.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnUpdateNotes.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdateNotes.setText("Update");
-        btnUpdateNotes.setBorder(null);
-        btnUpdateNotes.setMaximumSize(new java.awt.Dimension(37, 24));
-        btnUpdateNotes.setMinimumSize(new java.awt.Dimension(37, 24));
-        btnUpdateNotes.setPreferredSize(new java.awt.Dimension(37, 24));
-        btnUpdateNotes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateNotesActionPerformed(evt);
-            }
-        });
-
         txtNotes.setBackground(new java.awt.Color(255, 255, 255));
         txtNotes.setColumns(20);
         txtNotes.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -1991,30 +1974,32 @@ public class Home extends javax.swing.JFrame {
                         .addGap(266, 266, 266))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, viewDetailPanelLayout.createSequentialGroup()
                         .addGroup(viewDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(viewDetailPanelLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnClearView1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(64, 64, 64)
-                                .addComponent(btnSaveNotes, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(63, 63, 63)
-                                .addComponent(btnUpdateNotes, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(viewDetailPanelLayout.createSequentialGroup()
-                                .addGroup(viewDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel16)
-                                    .addComponent(txtByFName, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel25)
-                                    .addComponent(txtByLName, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel36)
-                                    .addComponent(txtByCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSearchView, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(viewDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel16)
+                                .addComponent(txtByFName, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel25)
+                                .addComponent(txtByLName, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel36)
+                                .addComponent(txtByCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(viewDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, viewDetailPanelLayout.createSequentialGroup()
                                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(51, 51, 51)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(53, 53, 53))))
+                                .addGap(51, 51, 51))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, viewDetailPanelLayout.createSequentialGroup()
+                                .addComponent(btnClearView1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(71, 71, 71)))
+                        .addGroup(viewDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(viewDetailPanelLayout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(53, 53, 53))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, viewDetailPanelLayout.createSequentialGroup()
+                                .addComponent(btnSaveNotes, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(103, 103, 103))))))
             .addGroup(viewDetailPanelLayout.createSequentialGroup()
                 .addGroup(viewDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel40)
-                    .addComponent(btnSearchView, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 922, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -2050,8 +2035,7 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(viewDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSearchView, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnClearView1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSaveNotes, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdateNotes, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSaveNotes, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel40)
                 .addGap(18, 18, 18)
@@ -2734,12 +2718,7 @@ public class Home extends javax.swing.JFrame {
                                 notes = StudentManagerDB.getStudentNotes(stdTemp.getId());
                                 if(notes.size() > 0){
                                     //fill list with notes
-                                    fillTxtNotes(notes, txtNotes);
-                                    btnSaveNotes.setEnabled(false);
-                                    btnUpdateNotes.setEnabled(true);
-                                }else{
-                                    btnSaveNotes.setEnabled(true);
-                                    btnUpdateNotes.setEnabled(false);
+                                    fillTxtNotes(notes, txtNotes);                      
                                 }
                             }
                         } else if (maybe.isInstance(crs)) {
@@ -2768,14 +2747,10 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearView1ActionPerformed
 
     private void btnSaveNotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveNotesActionPerformed
-        List<String> notes = new ArrayList<>();
-        //StudentManagerDB.addStudentNotes(stdTemp.getId());     
+        String note = txtNotes.getText();
+        StudentManagerDB.addStudentNotes(stdTemp.getId(), note);    
         
     }//GEN-LAST:event_btnSaveNotesActionPerformed
-
-    private void btnUpdateNotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateNotesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnUpdateNotesActionPerformed
     //fill view table with student data
     private void fillStudentsViewTable(List<Grade> list, List<Course> crs) {
         DefaultTableModel model = (DefaultTableModel) tblGradesAvg.getModel();
@@ -3172,6 +3147,7 @@ public class Home extends javax.swing.JFrame {
         txtByLName.setText("");
         txtByCourse.setText("");
         clearList(lstViewResults);
+        txtNotes.setText("");
     }
 
     //clear jtable
@@ -3303,7 +3279,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel btnTeacher;
     private javax.swing.JButton btnUpdateCourse;
     private javax.swing.JButton btnUpdateGrades;
-    private javax.swing.JButton btnUpdateNotes;
     private javax.swing.JButton btnUpdateStudent;
     private javax.swing.JButton btnUpdateTeacher;
     private javax.swing.JPanel btnViewPanel;

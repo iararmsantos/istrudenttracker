@@ -112,22 +112,17 @@ public class StudentManagerDB {
         }else{
             return null;
         }
-        
     }
 
-//    public static void addStudentNotes(int id) {
-//        Student stu = new Student();
-//        //connect to database
-//        StudentsDB manager = new StudentsDB(DBMaria.getConnection());
-//        stu = getStudentByName(student.getfName(), student.getlName());
-//        int nextid = crs.findNextId("stu") + 1;
-//        if (stu.getfName() == null && stu.getlName() == null) {
-//            manager.insert(student);
-//            //update nextvalue for 'stu'
-//            crs.updateNextValue(nextid, "stu");
-//            JOptionPane.showMessageDialog(null, "Student Inserted!");
-//        } else {
-//            JOptionPane.showMessageDialog(null, "Student Already exist!");
-//        }
-//    }
+    public static void addStudentNotes(int id, String note) {        
+        //connect to database
+        StudentsDB manager = new StudentsDB(DBMaria.getConnection());
+        if(manager.updateNote(id, note)){
+            JOptionPane.showMessageDialog(null, "Notes Saved!");
+        }else{
+            JOptionPane.showMessageDialog(null, "Something got wrong while trying save notes. Try again!");
+        }
+    }
+
+    
 }

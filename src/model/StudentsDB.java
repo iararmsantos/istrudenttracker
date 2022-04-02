@@ -196,6 +196,7 @@ public class StudentsDB {
         String stdSQL = "DELETE FROM Student WHERE studentid = ?";
         String parSQL = "DELETE FROM Parent WHERE parentid = ?";
         String parStdSQL = "DELETE FROM StudentParents WHERE studentid = ?";
+        String notesSQL = "DELETE FROM notes WHERE studentid = ?";
 
         try {
             st = conn.prepareStatement(gradeSQL);
@@ -220,6 +221,11 @@ public class StudentsDB {
 
             st = conn.prepareStatement(parSQL);
             st.setInt(1, obj.getParent()[1].getId());
+            st.executeUpdate();
+            st.close();
+            
+            st = conn.prepareStatement(notesSQL);
+            st.setInt(1, obj.getId());
             st.executeUpdate();
             st.close();
         } catch (SQLException e) {
@@ -370,6 +376,7 @@ public class StudentsDB {
         String SQL = "INSERT INTO Student (first_name, last_name, phone, email) VALUES (?, ?, ?, ?)";
         String SQLParents = "INSERT INTO Parent (first_name, last_name, phone, email) VALUES (?, ?, ?, ?)";
         String SQLStdPar = "INSERT INTO StudentParents (studentid, parentid) VALUES (?, ?)";
+        String SQLNotes = "INSERT INTO notes (studentid, note) VALUES (?, ?)";
         Parent[] parent = new Parent[2];
         parent = parentExist(obj);
         try {
@@ -432,9 +439,17 @@ public class StudentsDB {
 
             st = conn.prepareStatement(SQLStdPar, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, obj.getId());
+            st.setString(2, "");
+            st.executeUpdate();
+            st.close();
+            
+            st = conn.prepareStatement(SQLNotes, Statement.RETURN_GENERATED_KEYS);
+            st.setInt(1, obj.getId());
             st.setInt(2, obj.getParent()[1].getId());
             st.executeUpdate();
             st.close();
+            
+            
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -568,4 +583,24 @@ public class StudentsDB {
         }
         return null;
     }
+
+    public boolean updateNote(int id, String note) {
+        PreparedStatement st = null;
+        String SQL = "UPDATE notes SET note = ? WHERE studentid = ?";
+        try {
+            st = conn.prepareStatement(SQL);
+            st.setString(1, note);            
+            st.setInt(2, id);
+            st.executeUpdate();
+            st.close();
+            return true;
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }finally {
+            DBMaria.closeStatement(st);
+        }
+        return false;
+    }
+
+    
 }
