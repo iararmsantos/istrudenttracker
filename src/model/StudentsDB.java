@@ -379,6 +379,7 @@ public class StudentsDB {
         String SQLNotes = "INSERT INTO notes (studentid, note) VALUES (?, ?)";
         Parent[] parent = new Parent[2];
         parent = parentExist(obj);
+        
         try {
             st = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, obj.getfName());
@@ -397,7 +398,12 @@ public class StudentsDB {
                 rs.close();
                 st.close();
             }
-            if (parent == null) {
+            st = conn.prepareStatement(SQLNotes, Statement.RETURN_GENERATED_KEYS);
+            st.setInt(1, obj.getId());
+            st.setString(2, obj.getNotes());
+            st.executeUpdate();
+            st.close();
+            if (parent.length > 0) {
                 st = conn.prepareStatement(SQLParents, Statement.RETURN_GENERATED_KEYS);
 
                 st.setString(1, obj.getParent()[0].getfName());
@@ -439,18 +445,9 @@ public class StudentsDB {
 
             st = conn.prepareStatement(SQLStdPar, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, obj.getId());
-            st.setString(2, "");
-            st.executeUpdate();
-            st.close();
-            
-            st = conn.prepareStatement(SQLNotes, Statement.RETURN_GENERATED_KEYS);
-            st.setInt(1, obj.getId());
             st.setInt(2, obj.getParent()[1].getId());
             st.executeUpdate();
             st.close();
-            
-            
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

@@ -3114,6 +3114,9 @@ public class Home extends javax.swing.JFrame {
             String lNamep2 = txtParentLName2.getText();
             String phonep2 = txtParentPhone2.getText();
             String emailp2 = txtParentEmail2.getText();
+            
+            //TODO: pass text field as parameter
+            // then request focus when parameter is invalid or empty
             if (dt.isEntityValid(fName, lName, phone, email) && dt.isEntityValid(fNamep, lNamep, phonep, emailp) && dt.isEntityValid(fNamep2, lNamep2, phonep2, emailp2)) {
                 s.setfName(fName);
                 s.setlName(lName);

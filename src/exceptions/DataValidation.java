@@ -72,7 +72,7 @@ public class DataValidation extends JFrame{
 
     //verify if required fields are filled
     private boolean isEmail(String email) {
-        Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,10}$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(email);
         boolean matchFound = matcher.find();
         if (matchFound) {
@@ -82,13 +82,18 @@ public class DataValidation extends JFrame{
             return false;
         }
     }
-    private boolean isNumber(String number){
-        for(int i = 0; i < number.length(); i++){
+    private boolean isNumber(String number){  
+        if(number.length() == 10){
+            for(int i = 0; i < number.length(); i++){
             if(!Character.isDigit(number.charAt(i))){
                 JOptionPane.showMessageDialog(this, "Phone Number invalid!");
                 return false;
             }
         }
+        }else{
+            JOptionPane.showMessageDialog(this, "Phone Number should have 10 digits!");
+            return false;
+        }        
         return true;
     }
     
@@ -97,4 +102,11 @@ public class DataValidation extends JFrame{
         int num = Integer.parseInt(number);
         return num >= year;
     }
+    
+    public String focus(JTextField name){
+        name.requestFocus();
+        return name.getText();
+       
+    }
+    
 }

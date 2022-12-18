@@ -6,11 +6,8 @@
 package gui;
 
 import db.DBMaria;
-import db.manager.TeacherManagerDB;
-import entities.Teacher;
+import entities.Person;
 import exceptions.DataValidation;
-import java.awt.event.WindowEvent;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -262,28 +259,66 @@ public class SignUp extends javax.swing.JFrame {
         Login login = new Login();
         ResultSet rs;
         DataValidation dt = new DataValidation();
+        Person newUser = new Person();        
+        
         String fName = txtFNameSignup.getText();
         String lName = txtLNameSignup.getText();
         String phone = txtPhoneSignup.getText();
         String email = txtEmailSignup.getText();
         String pass = new String(txtSignupPassword.getPassword());
-        try {
+        
+        newUser = findUserByEmail(email);
+        if(newUser.getEmail() == null){
+            try {
             if (dt.isSignUpValid(fName, lName, phone, email, pass)) {
-                rs = login.findUser(email, pass);
-                if (rs.next()) {
-                    JOptionPane.showMessageDialog(this, "User already exist.");
-                } else {
+                rs = login.findUser(email, pass);                
                     newUser(fName, lName, phone, email, pass);
                     JOptionPane.showMessageDialog(this, "User registered successfully.");
                     lframe.setVisible(true);
-                    dispose();
-                }
+                    dispose();                
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
+        }else{
+            JOptionPane.showMessageDialog(this, "Email already registered.");
+            txtEmailSignup.setText("");
+            txtEmailSignup.requestFocus();
+        }        
     }//GEN-LAST:event_btnSignupActionPerformed
 
+    //TODO: verify if email already exist in the database
+    //find by email: select * from where email = "email"; 
+    private Person findUserByEmail(String email) {
+        String SQL = "SELECT * FROM login WHERE email = ?";
+        Connection conn = DBMaria.getConnection();
+        PreparedStatement st = null;
+        ResultSet rs;
+        try {
+            st = conn.prepareStatement(SQL);
+            
+            st.setString(1, email);
+            
+            Person user = new Person();
+            rs = st.executeQuery();
+            
+            int id = 0;
+            while(rs.next()){
+                id = rs.getInt(1);
+                user = instantiateUser(rs);
+            }
+            rs.close();
+            st.close();
+            return user;
+        } catch (SQLException ex) {
+            Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBMaria.closeStatement(st);
+        }
+        return null;
+    }
+      
+    
     private void newUser(String fName, String lName, String phone, String email, String pass) {
         String SQL = "INSERT INTO login(first_name, last_name, phone, email, password) VALUES (?, ?, ?, ?, ?)";
         Connection conn = DBMaria.getConnection();
@@ -304,6 +339,24 @@ public class SignUp extends javax.swing.JFrame {
             DBMaria.closeStatement(st);
         }
     }
+    
+    //create one Student object
+    public static Person instantiateUser(ResultSet rs) {
+        Person user = new Person();
+        try {
+            user.setId(rs.getInt("loginID"));
+            user.setfName(rs.getString("first_name"));
+            user.setlName(rs.getString("last_name"));
+            user.setEmail(rs.getString("email"));
+            user.setPhone(rs.getString("phone"));
+
+            return user;
+        } catch (SQLException ex) {
+            Logger.getLogger(Person.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     private void lblExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblExitMouseClicked
         lframe.setVisible(true);
         SignUp sFrame = new SignUp();

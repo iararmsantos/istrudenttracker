@@ -114,12 +114,10 @@ public class Login extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(54, 33, 89));
         jLabel5.setText("Password");
 
-        txtEmail.setBackground(new java.awt.Color(255, 255, 255));
         txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtEmail.setForeground(new java.awt.Color(54, 33, 89));
         txtEmail.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(54, 33, 89)));
 
-        txtPassword.setBackground(new java.awt.Color(255, 255, 255));
         txtPassword.setForeground(new java.awt.Color(54, 33, 89));
         txtPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(54, 33, 89)));
 
@@ -272,6 +270,9 @@ public class Login extends javax.swing.JFrame {
                         txtPassword.setText("");
                     }
                 } while (rs.wasNull());
+            }else{
+                txtEmail.setText("");
+                txtPassword.setText("");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());

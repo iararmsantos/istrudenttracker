@@ -19,18 +19,6 @@ INSERT INTO nextid (idtype, nextvalue) VALUES
 ('sec', 5),
 ('crs', 5);
 
-CREATE TABLE notes
-(
-noteID INT PRIMARY KEY AUTO_INCREMENT,
-studentID INT,
-note VARCHAR(1000),
-FOREIGN KEY (studentID) REFERENCES Student(studentID)
-);
-
-INSERT INTO notes (studentID, note) VALUES
-(1, 'Student need help with Math'),
-(1, 'Student parents passed away');
-
 CREATE TABLE Login
 (
 loginID INT PRIMARY KEY AUTO_INCREMENT,
@@ -84,6 +72,15 @@ last_Name  VARCHAR(45) NOT NULL,
 phone VARCHAR(45) NOT NULL,
 email VARCHAR(45)
 );
+
+CREATE TABLE notes
+(
+noteID INT PRIMARY KEY AUTO_INCREMENT,
+studentID INT,
+note VARCHAR(1000),
+FOREIGN KEY (studentID) REFERENCES Student(studentID)
+);
+
 
 CREATE TABLE StudentParents
 (
@@ -153,6 +150,10 @@ VALUES
 ('Ronny', 'Weasley', '1111111111', 'redhair@hotmail.com'),
 ('Gina', 'Weasley', '1111111111', 'redhair@hotmail.com'),
 ('Hermione', 'Granger', '1231231234', 'grangerfamily@gmail.com');
+
+INSERT INTO notes (studentID, note) VALUES
+(1, 'Student need help with Math'),
+(1, 'Student parents passed away');
 
 INSERT INTO StudentParents(parentID, studentID)
 VALUES

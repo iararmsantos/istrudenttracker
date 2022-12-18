@@ -12,6 +12,7 @@ public class Student extends Person{
     private static int count = 0;
     private Grade grades;
     private List<Enrollment> enroll;
+    private String notes;
 
     public Student() {
        setId(++count);
@@ -70,6 +71,14 @@ public class Student extends Person{
 
     public void setGrades(Grade grades) {
         this.grades = grades;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
     
 }

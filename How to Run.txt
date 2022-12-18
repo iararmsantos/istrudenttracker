@@ -1,0 +1,12 @@
+How to run
+
+To make this application work you will need:
+
+1 - Go to iStudentProject folder and Run the create_Istracker.sql content in a mysql database server
+
+2 - in the iStudentProject folder go to dist and execute the program clicking on iStudentProject_3.jar
+
+If you want to compile/build/install this project you need
+
+1 - Add Absolute Layout in the library
+2 - Add mariadb connector (mariadb-java-client-2.7.1.jar), this is in the build folder
